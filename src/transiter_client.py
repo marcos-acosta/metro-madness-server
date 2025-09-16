@@ -15,11 +15,10 @@ class TransiterClient:
 
     def get_trips(self, route_id: RouteId):
         trips_url = build_url(self.get_subway_url(), "routes", route_id, "trips")
-        print(trips_url)
         try:
             response = requests.get(trips_url)
             response.raise_for_status()
-            return response.json()
+            return response.json()["trips"]
         except Exception as e:
             print(f"Error calling Transiter: ${e}")
             return None

@@ -1,7 +1,8 @@
 from enum import StrEnum
+import os
 
 
-TRANSITER_URL = "http://localhost:8080"
+TRANSITER_URL = os.getenv("TRANSITER_URL", "http://localhost:8080")
 
 
 class RouteId(StrEnum):
