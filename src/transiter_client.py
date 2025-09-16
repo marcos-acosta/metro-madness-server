@@ -20,5 +20,5 @@ class TransiterClient:
             response.raise_for_status()
             return response.json()["trips"]
         except Exception as e:
-            print(f"Error calling Transiter: ${e}")
+            print(f"Error calling Transiter: {e}")
             return None
