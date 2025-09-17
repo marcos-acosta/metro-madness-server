@@ -1,16 +1,12 @@
 from game_engine import GameEngine
+import time
 
 
 def main():
-    # game_data_client = gdc.GameDataClient()
-    # transiter_client = tc.TransiterClient()
-    # trips = transiter_client.get_trips(RouteId.ROUTE_A)
-    # trip_ids = [trip["id"] for trip in trips]
-    # print(trip_ids)
-    # game_data_client.putItem("testBracketId", "testMatchId", {"testData": trip_ids})
-    # print(f"Completed test program at {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}.")
-    engine = GameEngine()
-    engine.update(bypass_hours=True)
+    engine = GameEngine(verbose=True)
+    while True:
+        engine.update(bypass_hours=True)
+        time.sleep(30)
 
 
 if __name__ == "__main__":

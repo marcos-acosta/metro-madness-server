@@ -73,6 +73,7 @@ class MatchData(TypedDict):
     matchStatus: MatchStatus
     matchResult: MatchResult | None
     competingTrips: list[TripData]
+    numStopsToFinish: int | None
 
 
 class Match(TypedDict):

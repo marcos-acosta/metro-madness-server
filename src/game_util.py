@@ -1,5 +1,6 @@
-from interfaces import Stop, TripData, TripStatus
+from interfaces import MatchData, Stop, TripData, TripStatus
 from game_time import epoch_time_to_seconds_since_midnight_est
+from constants import ALLOWED_NUM_STOPS_TO_FINISH
 
 
 def isTripComplete(trip: TripData) -> bool:
@@ -12,7 +13,7 @@ def isTripComplete(trip: TripData) -> bool:
 
 
 def hasTripAssigned(trip: TripData) -> bool:
-    return "tripId" in trip
+    return "tripId" in trip and "stops" in trip
 
 
 def isTripOnWayToFirstStation(transiterTripData: dict) -> bool:
