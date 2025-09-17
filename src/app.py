@@ -6,11 +6,7 @@ import time
 
 def main():
     engine = GameEngine(DEV_GAME_CONFIG)
-    while True:
-        print(f"[{datetime.now().strftime('%H:%M:%S')}] Update")
-        engine.update()
-        print()
-        time.sleep(30)
+    engine.run_game_loop()
 
 
 if __name__ == "__main__":

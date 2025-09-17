@@ -1,3 +1,5 @@
+from datetime import datetime
+import time
 from game_data_client import GameDataClient
 from game_time import epoch_time_to_seconds_since_midnight_est, get_est_hours_today
 from interfaces import GameEngineConfig, MatchData, MatchStatus, TripData, TripStatus
@@ -18,7 +20,7 @@ class GameEngine:
         self.matchesToUpdate = None
         self.config = config
 
-    def _isSetUp(self) -> bool:
+    def _is_set_up(self) -> bool:
         return self.matchesToUpdate is not None
 
     def _maybeAssignTrip(self, trip: TripData) -> None:
@@ -39,7 +41,7 @@ class GameEngine:
                     f"Assigned route {trip.get('routeId')} to trip id {trip.get('tripId')}"
                 )
 
-    def _maybeSetNumStopsToWin(self, matchData: MatchData):
+    def _maybe_set_num_stops_to_finish(self, matchData: MatchData):
         num_stops = [
             len(trip.get("stops", [])) if hasTripAssigned(trip) else None
             for trip in matchData.get("competingTrips", [])
@@ -57,7 +59,7 @@ class GameEngine:
                         )
                     return
 
-    def _updateStopTimes(self, tripData: TripData) -> None:
+    def _update_stop_times(self, tripData: TripData) -> None:
         trip_transiter_data = self.transiter_client.get_trip(
             tripData.get("routeId"), tripData.get("tripId")
         )
@@ -81,12 +83,14 @@ class GameEngine:
                 getArrivalOrDepartureTime(stop_time)
             )
             relevant_stop["actualTimeSeconds"] = actual_time_seconds
+            predicted_time_seconds = relevant_stop.get("predictedTimeSeconds")
+            relevant_stop["delay"] = actual_time_seconds - predicted_time_seconds
             if self.config.get("verbose"):
                 print(
                     f"Set actual arrival time on line {tripData.get('routeId')} for stop {relevant_stop.get('stopName')} to {actual_time_seconds}"
                 )
 
-    def setUp(self) -> None:
+    def set_up(self) -> None:
         self.matchesToUpdate = self.game_data_client.get_matches_for_today()
         for match in self.matchesToUpdate:
             match.get("matchData", {})["matchStatus"] = MatchStatus.ONGOING
@@ -103,8 +107,8 @@ class GameEngine:
             # clean up
             return
         else:
-            if not self._isSetUp():
-                self.setUp()
+            if not self._is_set_up():
+                self.set_up()
             for match in self.matchesToUpdate:
                 matchData = match.get("matchData", {})
                 if not matchData.get("matchStatus") == MatchStatus.ONGOING:
@@ -115,10 +119,22 @@ class GameEngine:
                     if not hasTripAssigned(trip):
                         self._maybeAssignTrip(trip)
                     if trip.get("tripStatus") == TripStatus.ONGOING:
-                        self._updateStopTimes(trip)
+                        self._update_stop_times(trip)
                     # maybeConcludeTrip -> maybeDisquality or maybeMarkAsFinished
                 if matchData.get("numStopsToFinish") is None:
-                    self._maybeSetNumStopsToWin(matchData)
+                    self._maybe_set_num_stops_to_finish(matchData)
                 # if numStopsToFinish is set and both are finished, declare winner and update brackets
                 if not self.config.get("skip_write_to_db"):
                     self.game_data_client.update_match(match)
+
+    def run_game_loop(self) -> None:
+        while True:
+            if self.config.get("verbose"):
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] Update")
+            try:
+                self.update()
+            except Exception as e:
+                print(f"ERROR IN UPDATE: {e}")
+            if self.config.get("verbose"):
+                print()
+            time.sleep(self.config.get("refresh_rate_seconds"))

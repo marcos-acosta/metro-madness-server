@@ -20,6 +20,7 @@ PROD_GAME_CONFIG: GameEngineConfig = {
     "allowed_num_stops_to_finish": [10, 15, 20, 25],
     "min_num_stops_in_trip": 11,
     "verbose": True,
+    "refresh_rate_seconds": 30,
 }
 
 DEV_GAME_CONFIG: GameEngineConfig = {
@@ -29,4 +30,5 @@ DEV_GAME_CONFIG: GameEngineConfig = {
     "ignore_game_time": True,
     "verbose": True,
     "skip_write_to_db": True,
+    "refresh_rate_seconds": 30,
 }

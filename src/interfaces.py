@@ -91,3 +91,4 @@ class GameEngineConfig(TypedDict):
     min_num_stops_in_trip: int
     allowed_num_stops_to_finish: list[int]
     skip_write_to_db: bool | None
+    refresh_rate_seconds: int

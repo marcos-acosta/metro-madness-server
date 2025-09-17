@@ -44,12 +44,11 @@ def isViableCompetingTrip(transiterTripData: dict, config: GameEngineConfig) -> 
     )
 
 
-def getArrivalOrDepartureTime(transiterStopTime: dict) -> int:
-    return int(
-        transiterStopTime.get("departure", {}).get("time")
-        if transiterStopTime.get("departure", {}).get("time") is not None
-        else transiterStopTime.get("arrival", {}).get("time")
-    )
+def getArrivalOrDepartureTime(transiterStopTime: dict) -> int | None:
+    stopTime = transiterStopTime.get("arrival", {}).get(
+        "time"
+    ) or transiterStopTime.get("departure", {}).get("time")
+    return int(stopTime) if stopTime is not None else None
 
 
 def convertTransiterStopTimeToStop(transiterStopTime: dict) -> Stop:
