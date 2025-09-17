@@ -1,49 +1,57 @@
-from constants import ALLOWED_NUM_STOPS_TO_FINISH, HOUR_5PM, HOUR_8PM
 from game_data_client import GameDataClient
 from game_time import epoch_time_to_seconds_since_midnight_est, get_est_hours_today
-from interfaces import MatchData, MatchStatus, TripData, TripStatus
+from interfaces import GameEngineConfig, MatchData, MatchStatus, TripData, TripStatus
 from game_util import (
     copyTransiterDataToTripData,
     getArrivalOrDepartureTime,
     hasTripAssigned,
     isTripComplete,
-    isTripOnWayToFirstStation,
+    isViableCompetingTrip,
 )
 from transiter_client import TransiterClient
 
 
 class GameEngine:
-    def __init__(self, verbose=False):
+    def __init__(self, config: GameEngineConfig):
         self.game_data_client = GameDataClient()
         self.transiter_client = TransiterClient()
         self.matchesToUpdate = None
-        self.verbose = verbose
+        self.config = config
 
     def _isSetUp(self) -> bool:
         return self.matchesToUpdate is not None
 
     def _maybeAssignTrip(self, trip: TripData) -> None:
-        current_trips = self.transiter_client.get_trips(trip["routeId"])
+        current_trips = self.transiter_client.get_trips(trip.get("routeId"))
         tripOnWayToFirstStation = next(
-            (trip for trip in current_trips if isTripOnWayToFirstStation(trip)), None
+            (
+                trip
+                for trip in current_trips
+                if isViableCompetingTrip(trip, self.config)
+            ),
+            None,
         )
         if tripOnWayToFirstStation:
             copyTransiterDataToTripData(tripOnWayToFirstStation, trip)
             trip["tripStatus"] = TripStatus.ONGOING
-            if self.verbose:
-                print(f"Assigned route {trip['routeId']} to trip id {trip['tripId']}")
+            if self.config.get("verbose"):
+                print(
+                    f"Assigned route {trip.get('routeId')} to trip id {trip.get('tripId')}"
+                )
 
     def _maybeSetNumStopsToWin(self, matchData: MatchData):
         num_stops = [
-            len(trip["stops"]) if hasTripAssigned(trip) else None
-            for trip in matchData["competingTrips"]
+            len(trip.get("stops", [])) if hasTripAssigned(trip) else None
+            for trip in matchData.get("competingTrips", [])
         ]
         if all(num_stops):
             min_num_stops = min(num_stops) - 1
-            for allowed_num_stops_to_finish in ALLOWED_NUM_STOPS_TO_FINISH[::-1]:
+            for allowed_num_stops_to_finish in self.config.get(
+                "allowed_num_stops_to_finish"
+            )[::-1]:
                 if min_num_stops >= allowed_num_stops_to_finish:
                     matchData["numStopsToFinish"] = allowed_num_stops_to_finish
-                    if self.verbose:
+                    if self.config.get("verbose"):
                         print(
                             f"Set minimum number of stops to finish at {allowed_num_stops_to_finish}"
                         )
@@ -51,56 +59,66 @@ class GameEngine:
 
     def _updateStopTimes(self, tripData: TripData) -> None:
         trip_transiter_data = self.transiter_client.get_trip(
-            tripData["routeId"], tripData["tripId"]
+            tripData.get("routeId"), tripData.get("tripId")
         )
-        for stop_time in trip_transiter_data["stopTimes"][::-1]:
-            if stop_time["future"] == True:
+        if trip_transiter_data is None:
+            # TODO: Disqualify
+            pass
+        for stop_time in trip_transiter_data.get("stopTimes", []):
+            if stop_time.get("future") == True:
                 continue
             relevant_stop = next(
                 (
                     stop
-                    for stop in tripData["stops"]
-                    if stop["stopId"] == stop_time["stop"]["id"]
+                    for stop in tripData.get("stops", [])
+                    if stop.get("stopId") == stop_time.get("stop", {}).get("id")
                 ),
                 None,
             )
-            if relevant_stop["actualTimeSeconds"] is not None:
+            if relevant_stop.get("actualTimeSeconds") is not None:
                 continue
             actual_time_seconds = epoch_time_to_seconds_since_midnight_est(
                 getArrivalOrDepartureTime(stop_time)
             )
             relevant_stop["actualTimeSeconds"] = actual_time_seconds
-            if self.verbose:
+            if self.config.get("verbose"):
                 print(
-                    f"Set actual arrival time on line {tripData['routeId']} for stop {relevant_stop['stopName']} to {actual_time_seconds}"
+                    f"Set actual arrival time on line {tripData.get('routeId')} for stop {relevant_stop.get('stopName')} to {actual_time_seconds}"
                 )
 
     def setUp(self) -> None:
         self.matchesToUpdate = self.game_data_client.get_matches_for_today()
         for match in self.matchesToUpdate:
-            match["matchData"]["matchStatus"] = MatchStatus.ONGOING
+            match.get("matchData", {})["matchStatus"] = MatchStatus.ONGOING
 
-    def update(self, bypass_hours=False) -> None:
+    def update(self) -> None:
         est_hours_today = get_est_hours_today()
-        if not bypass_hours and est_hours_today < HOUR_5PM:
+        if not self.config.get(
+            "ignore_game_time"
+        ) and est_hours_today < self.config.get("game_start_time_hours"):
             return
-        elif not bypass_hours and est_hours_today > HOUR_8PM:
+        elif not self.config.get(
+            "ignore_game_time"
+        ) and est_hours_today > self.config.get("game_end_time_hours"):
             # clean up
             return
         else:
             if not self._isSetUp():
                 self.setUp()
             for match in self.matchesToUpdate:
-                matchData = match["matchData"]
-                if not matchData["matchStatus"] == MatchStatus.ONGOING:
+                matchData = match.get("matchData", {})
+                if not matchData.get("matchStatus") == MatchStatus.ONGOING:
                     continue
-                for trip in matchData["competingTrips"]:
+                for trip in matchData.get("competingTrips", []):
                     if isTripComplete(trip):
                         continue
                     if not hasTripAssigned(trip):
                         self._maybeAssignTrip(trip)
-                    if trip["tripStatus"] == TripStatus.ONGOING:
+                    if trip.get("tripStatus") == TripStatus.ONGOING:
                         self._updateStopTimes(trip)
-                if "numStopsToFinish" not in matchData:
+                    # maybeConcludeTrip -> maybeDisquality or maybeMarkAsFinished
+                if matchData.get("numStopsToFinish") is None:
                     self._maybeSetNumStopsToWin(matchData)
-                self.game_data_client.update_match(match)
+                # if numStopsToFinish is set and both are finished, declare winner and update brackets
+                if not self.config.get("skip_write_to_db"):
+                    self.game_data_client.update_match(match)

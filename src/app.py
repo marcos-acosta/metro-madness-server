@@ -1,13 +1,14 @@
 from datetime import datetime
 from game_engine import GameEngine
+from constants import DEV_GAME_CONFIG
 import time
 
 
 def main():
-    engine = GameEngine(verbose=True)
+    engine = GameEngine(DEV_GAME_CONFIG)
     while True:
         print(f"[{datetime.now().strftime('%H:%M:%S')}] Update")
-        engine.update(bypass_hours=True)
+        engine.update()
         print()
         time.sleep(30)
 

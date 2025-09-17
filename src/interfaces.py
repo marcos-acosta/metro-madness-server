@@ -80,3 +80,14 @@ class Match(TypedDict):
     bracketId: str
     matchId: str
     matchData: MatchData
+
+
+class GameEngineConfig(TypedDict):
+    game_start_time_hours: float | None
+    game_end_time_hours: float | None
+    assignment_grace_period_minutes: int
+    verbose: bool | None
+    ignore_game_time: bool | None
+    min_num_stops_in_trip: int
+    allowed_num_stops_to_finish: list[int]
+    skip_write_to_db: bool | None

@@ -42,3 +42,7 @@ def get_today_date_est_str() -> str:
 
 def minutes_since_epoch_seconds(epoch_seconds: int) -> float:
     return (int(time.time()) - epoch_seconds) / 60
+
+
+def is_epoch_seconds_before_hour(epoch_seconds: int, hour: float) -> bool:
+    return epoch_time_to_seconds_since_midnight_est(epoch_seconds) < hour * 3600
