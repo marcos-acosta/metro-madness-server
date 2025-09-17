@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import time
 from zoneinfo import ZoneInfo
 import math
 
@@ -37,3 +38,7 @@ def get_current_week_str() -> str:
 
 def get_today_date_est_str() -> str:
     return datetime.now(ZoneInfo(NYC_TIME_ZONE)).strftime("%Y-%m-%d")
+
+
+def minutes_since_epoch_seconds(epoch_seconds: int) -> float:
+    return (int(time.time()) - epoch_seconds) / 60

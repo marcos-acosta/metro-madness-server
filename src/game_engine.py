@@ -1,13 +1,13 @@
 from constants import ALLOWED_NUM_STOPS_TO_FINISH, HOUR_5PM, HOUR_8PM
 from game_data_client import GameDataClient
-from game_time import get_est_hours_today
+from game_time import epoch_time_to_seconds_since_midnight_est, get_est_hours_today
 from interfaces import MatchData, MatchStatus, TripData, TripStatus
 from game_util import (
     copyTransiterDataToTripData,
+    getArrivalOrDepartureTime,
     hasTripAssigned,
     isTripComplete,
     isTripOnWayToFirstStation,
-    setFirstActualTimeToPredictedTime,
 )
 from transiter_client import TransiterClient
 
@@ -29,7 +29,6 @@ class GameEngine:
         )
         if tripOnWayToFirstStation:
             copyTransiterDataToTripData(tripOnWayToFirstStation, trip)
-            setFirstActualTimeToPredictedTime(trip)
             trip["tripStatus"] = TripStatus.ONGOING
             if self.verbose:
                 print(f"Assigned route {trip['routeId']} to trip id {trip['tripId']}")
@@ -49,6 +48,32 @@ class GameEngine:
                             f"Set minimum number of stops to finish at {allowed_num_stops_to_finish}"
                         )
                     return
+
+    def _updateStopTimes(self, tripData: TripData) -> None:
+        trip_transiter_data = self.transiter_client.get_trip(
+            tripData["routeId"], tripData["tripId"]
+        )
+        for stop_time in trip_transiter_data["stopTimes"][::-1]:
+            if stop_time["future"] == True:
+                continue
+            relevant_stop = next(
+                (
+                    stop
+                    for stop in tripData["stops"]
+                    if stop["stopId"] == stop_time["stop"]["id"]
+                ),
+                None,
+            )
+            if relevant_stop["actualTimeSeconds"] is not None:
+                continue
+            actual_time_seconds = epoch_time_to_seconds_since_midnight_est(
+                getArrivalOrDepartureTime(stop_time)
+            )
+            relevant_stop["actualTimeSeconds"] = actual_time_seconds
+            if self.verbose:
+                print(
+                    f"Set actual arrival time on line {tripData['routeId']} for stop {relevant_stop['stopName']} to {actual_time_seconds}"
+                )
 
     def setUp(self) -> None:
         self.matchesToUpdate = self.game_data_client.get_matches_for_today()
@@ -75,6 +100,7 @@ class GameEngine:
                     if not hasTripAssigned(trip):
                         self._maybeAssignTrip(trip)
                     if trip["tripStatus"] == TripStatus.ONGOING:
-                        pass
+                        self._updateStopTimes(trip)
                 if "numStopsToFinish" not in matchData:
                     self._maybeSetNumStopsToWin(matchData)
+                self.game_data_client.update_match(match)

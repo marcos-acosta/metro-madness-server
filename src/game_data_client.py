@@ -24,3 +24,8 @@ class GameDataClient:
             for match in matches_for_this_week
             if match["matchData"]["date"] == today_est_str
         ]
+
+    def update_match(self, match: Match):
+        self.dynamodb_client.putItem(
+            match["bracketId"], match["matchId"], matchData=match["matchData"]
+        )

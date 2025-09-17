@@ -23,3 +23,15 @@ class TransiterClient:
         except Exception as e:
             print(f"Error calling Transiter: {e}")
             return None
+
+    def get_trip(self, route_id: RouteId, trip_id: str):
+        trips_url = build_url(
+            self.get_subway_url(), "routes", route_id, "trips", trip_id
+        )
+        try:
+            response = requests.get(trips_url)
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            print(f"Error calling Transiter: {e}")
+            return None

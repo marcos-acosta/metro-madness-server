@@ -1,6 +1,9 @@
-from interfaces import MatchData, Stop, TripData, TripStatus
-from game_time import epoch_time_to_seconds_since_midnight_est
-from constants import ALLOWED_NUM_STOPS_TO_FINISH
+from interfaces import Stop, TripData, TripStatus
+from game_time import (
+    epoch_time_to_seconds_since_midnight_est,
+    minutes_since_epoch_seconds,
+)
+from constants import MAX_MINUTES_SINCE_FIRST_STOP, MIN_NUM_STOPS
 
 
 def isTripComplete(trip: TripData) -> bool:
@@ -19,14 +22,21 @@ def hasTripAssigned(trip: TripData) -> bool:
 def isTripOnWayToFirstStation(transiterTripData: dict) -> bool:
     stop_times = transiterTripData["stopTimes"]
     # Explicitly compare to boolean to avoid truthy / falsy nonsense
-    return stop_times[0]["future"] == False and stop_times[1]["future"] == True
+    return (
+        stop_times
+        and len(stop_times) >= MIN_NUM_STOPS
+        and stop_times[0]["future"] == False
+        and stop_times[1]["future"] == True
+        and minutes_since_epoch_seconds(getArrivalOrDepartureTime(stop_times[0]))
+        <= MAX_MINUTES_SINCE_FIRST_STOP
+    )
 
 
 def getArrivalOrDepartureTime(transiterStopTime: dict) -> int:
     return int(
-        transiterStopTime["arrival"]["time"]
-        if "time" in transiterStopTime["arrival"]
-        else transiterStopTime["departure"]["time"]
+        transiterStopTime["departure"]["time"]
+        if "time" in transiterStopTime["departure"]
+        else transiterStopTime["arrival"]["time"]
     )
 
 
@@ -37,6 +47,7 @@ def convertTransiterStopTimeToStop(transiterStopTime: dict) -> Stop:
         "predictedTimeSeconds": epoch_time_to_seconds_since_midnight_est(
             getArrivalOrDepartureTime(transiterStopTime)
         ),
+        "actualTimeSeconds": None,
     }
 
 
@@ -46,9 +57,3 @@ def copyTransiterDataToTripData(transiterTripData: dict, tripData: TripData) -> 
         convertTransiterStopTimeToStop(stopTime)
         for stopTime in transiterTripData["stopTimes"]
     ]
-
-
-def setFirstActualTimeToPredictedTime(tripData: TripData) -> None:
-    stops = tripData["stops"]
-    if stops and len(stops) > 0:
-        stops[0]["actualTimeSeconds"] = stops[0]["predictedTimeSeconds"]

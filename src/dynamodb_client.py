@@ -20,11 +20,11 @@ class DynamoDbClient:
         )
         return response.get("Items")
 
-    def putItem(self, partitionKey: str, sortKey: str, data):
+    def putItem(self, partitionKey: str, sortKey: str, **kwargs):
         item_data = {
             self.partitionKeyName: partitionKey,
             self.sortKeyName: sortKey,
-            "data": data,
+            **kwargs,
         }
         response = self.table.put_item(Item=item_data)
         return response
