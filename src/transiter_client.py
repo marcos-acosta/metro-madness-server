@@ -1,7 +1,8 @@
 import requests
 
-from constants import TRANSITER_URL, RouteId
+from constants import TRANSITER_URL
 
+from interfaces import RouteId
 from url_util import build_url
 
 

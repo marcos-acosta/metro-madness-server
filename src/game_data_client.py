@@ -1,17 +1,26 @@
-import boto3
+from dynamodb_client import DynamoDbClient
+from game_time import get_current_week_str, get_today_date_est_str
+from interfaces import Match
 
 
 class GameDataClient:
     def __init__(self):
-        self.dynamodb = boto3.resource("dynamodb")
-        self.game_data_table = self.dynamodb.Table("metrocard-madness-game-data")
+        self.dynamodb_client = DynamoDbClient(
+            table_name="metrocard-madness-game-data",
+            partitionKeyName="bracketId",
+            sortKeyName="matchId",
+        )
 
-    def getItem(self, bracketId: str, matchId: str):
-        key_data = {"bracketId": bracketId, "matchId": matchId}
-        response = self.game_data_table.get_item(Key=key_data)
-        return response.get("Item")
+    def get_matches_for_this_week(self) -> list[Match]:
+        current_week = get_current_week_str()
+        matches = self.dynamodb_client.getItems(current_week)
+        return matches
 
-    def putItem(self, bracketId: str, matchId: str, data):
-        item_data = {"bracketId": bracketId, "matchId": matchId, "data": data}
-        response = self.game_data_table.put_item(Item=item_data)
-        return response
+    def get_matches_for_today(self):
+        matches_for_this_week = self.get_matches_for_this_week()
+        today_est_str = get_today_date_est_str()
+        return [
+            match
+            for match in matches_for_this_week
+            if match["matchData"]["date"] == today_est_str
+        ]
