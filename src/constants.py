@@ -38,15 +38,3 @@ MATCH_CONNECTIONS = {
     20: [17, 18],
     21: [19, 20],
 }
-
-PROD_GAME_CONFIG = GameEngineConfig(
-    game_start_time_hours=HOUR_5PM,
-    game_end_time_hours=HOUR_8PM,
-    verbose=True,
-)
-
-DEV_GAME_CONFIG = GameEngineConfig(
-    verbose=True,
-    skip_write_to_db=True,
-    override_num_stops_to_finish=2,
-)
