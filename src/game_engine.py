@@ -10,8 +10,10 @@ from game_time import (
 )
 from interfaces import (
     GameEngineConfig,
+    Match,
     MatchData,
     MatchStatus,
+    RouteId,
     TripData,
     TripStatus,
     VictoryType,
@@ -170,7 +172,8 @@ class GameEngine:
         for match in self.matchesToUpdate:
             match.get("matchData", {})["matchStatus"] = MatchStatus.ONGOING
 
-    def _maybe_end_match(self, match_data: MatchData) -> bool:
+    def _maybe_end_match(self, match: Match) -> bool:
+        match_data = match.get("matchData")
         if (
             match_data.get("numStopsToFinish") is not None
             and len(match_data.get("competingTrips")) == 2
@@ -215,7 +218,7 @@ class GameEngine:
                 else:
                     winner = (
                         first_trip.get("routeId")
-                        if first_trip_delay > second_trip_delay
+                        if first_trip_delay < second_trip_delay
                         else second_trip.get("routeId")
                     )
                     match_data["matchResult"] = {
@@ -223,13 +226,31 @@ class GameEngine:
                         "winner": winner,
                     }
             match_data["matchStatus"] = MatchStatus.ENDED
+            match_result = match_data.get("matchResult", {})
+            winner = match_result.get("winner")
+            self._update_bracket_with_winner(match.get("matchId"), winner)
             if self.config.get("verbose"):
-                match_result = match_data.get("matchResult", {})
                 print(
-                    f"Match ended - Winner: {match_result.get('winner')}, Victory type: {match_result.get('victoryType')}"
+                    f"Match ended - Winner: {winner}, Victory type: {match_result.get('victoryType')}"
                 )
             return True
         return False
+
+    def _update_bracket_with_winner(self, match_id: str, winner: RouteId):
+        bracket = self.game_data_client.get_matches_for_this_week()
+        modified_match = None
+        for match in bracket:
+            for trip in match.get("matchData").get("competingTrips"):
+                if trip.get("winnerMatchId") == match_id:
+                    if self.config.get("verbose"):
+                        print(
+                            f"Updating a competing trip in match {match.get('matchId')} to the winner of this match, {winner}"
+                        )
+                    trip["routeId"] = winner
+                    modified_match = match
+                    break
+        if modified_match:
+            self.game_data_client.update_match(modified_match)
 
     def update(self) -> bool:
         est_hours_today = get_est_hours_today()
@@ -256,7 +277,7 @@ class GameEngine:
                         self._update_stop_times(trip)
                     self._maybe_end_trip(matchData, trip)
                 self._maybe_set_num_stops_to_finish(matchData)
-                self._maybe_end_match(matchData)
+                self._maybe_end_match(match)
                 if not self.config.get("skip_write_to_db"):
                     self.game_data_client.update_match(match)
         return all(

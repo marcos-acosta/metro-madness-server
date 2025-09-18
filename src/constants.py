@@ -28,5 +28,5 @@ DEV_GAME_CONFIG: GameEngineConfig = {
     "verbose": True,
     # "skip_write_to_db": True,
     "refresh_rate_seconds": 30,
-    "override_num_stops_to_finish": 3,
+    "override_num_stops_to_finish": 2,
 }
