@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import TypedDict
 from enum import StrEnum
 
@@ -86,13 +87,18 @@ class Match(TypedDict):
     matchData: MatchData
 
 
-class GameEngineConfig(TypedDict):
-    game_start_time_hours: float | None
-    game_end_time_hours: float | None
-    assignment_grace_period_minutes: int
-    verbose: bool | None
-    min_num_stops_in_trip: int
-    allowed_num_stops_to_finish: list[int]
-    skip_write_to_db: bool | None
-    refresh_rate_seconds: int
-    override_num_stops_to_finish: int | None
+@dataclass
+class GameEngineConfig:
+    assignment_grace_period_minutes: int = 30
+    allowed_num_stops_to_finish: list[int] = None
+    refresh_rate_seconds: int = 30
+    game_start_time_hours: float | None = None
+    game_end_time_hours: float | None = None
+    verbose: bool = False
+    min_num_stops_in_trip: int = 10
+    skip_write_to_db: bool = False
+    override_num_stops_to_finish: int | None = None
+
+    def __post_init__(self):
+        if self.allowed_num_stops_to_finish is None:
+            self.allowed_num_stops_to_finish = [10, 15, 20, 25]

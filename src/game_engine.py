@@ -26,7 +26,7 @@ from game_util import (
     isTripDisqualified,
     isViableCompetingTrip,
 )
-from src.constants import NUM_MATCHES_PER_BRACKET
+from constants import NUM_MATCHES_PER_BRACKET
 from transiter_client import TransiterClient
 import random
 import traceback
@@ -56,7 +56,7 @@ class GameEngine:
         if tripOnWayToFirstStation:
             copyTransiterDataToTripData(tripOnWayToFirstStation, trip)
             trip["tripStatus"] = TripStatus.ONGOING
-            if self.config.get("verbose"):
+            if self.config.verbose:
                 print(
                     f"Assigned route {trip.get('routeId')} to trip id {trip.get('tripId')}"
                 )
@@ -64,11 +64,9 @@ class GameEngine:
     def _maybe_set_num_stops_to_finish(self, matchData: MatchData):
         if matchData.get("numStopsToFinish") is not None:
             return
-        if self.config.get("override_num_stops_to_finish"):
-            matchData["numStopsToFinish"] = self.config.get(
-                "override_num_stops_to_finish"
-            )
-            if self.config.get("verbose"):
+        if self.config.override_num_stops_to_finish:
+            matchData["numStopsToFinish"] = self.config.override_num_stops_to_finish
+            if self.config.verbose:
                 print(
                     f"Set minimum number of stops to finish at {matchData['numStopsToFinish']} (overridden)"
                 )
@@ -79,12 +77,12 @@ class GameEngine:
         ]
         if all(num_stops):
             min_num_stops = min(num_stops) - 1
-            for allowed_num_stops_to_finish in self.config.get(
-                "allowed_num_stops_to_finish"
-            )[::-1]:
+            for allowed_num_stops_to_finish in self.config.allowed_num_stops_to_finish[
+                ::-1
+            ]:
                 if min_num_stops >= allowed_num_stops_to_finish:
                     matchData["numStopsToFinish"] = allowed_num_stops_to_finish
-                    if self.config.get("verbose"):
+                    if self.config.verbose:
                         print(
                             f"Set minimum number of stops to finish at {allowed_num_stops_to_finish}"
                         )
@@ -116,7 +114,7 @@ class GameEngine:
             relevant_stop["actualTimeSeconds"] = actual_time_seconds
             predicted_time_seconds = relevant_stop.get("predictedTimeSeconds")
             relevant_stop["delay"] = actual_time_seconds - predicted_time_seconds
-            if self.config.get("verbose"):
+            if self.config.verbose:
                 print(
                     f"Set actual arrival time on line {tripData.get('routeId')} for stop {relevant_stop.get('stopName')} to {actual_time_seconds}"
                 )
@@ -135,7 +133,7 @@ class GameEngine:
         if len(stops_after_terminal_with_delay) >= stops_to_finish:
             trip_data["tripStatus"] = TripStatus.FINISHED
             trip_data["finalDelay"] = stops_after_terminal_with_delay[-1].get("delay")
-            if self.config.get("verbose"):
+            if self.config.verbose:
                 print(
                     f"Marked route {trip_data.get('routeId')} as finished with final delay of {trip_data.get('finalDelay')} seconds"
                 )
@@ -149,16 +147,17 @@ class GameEngine:
             self.config
         ):
             trip_data["tripStatus"] = TripStatus.DQ_NEVER_ASSIGNED
-            if self.config.get("verbose"):
+            if self.config.verbose:
                 print(
                     f"Disqualified route {trip_data.get('routeId')} for never being assigned"
                 )
             return True
-        elif self.config.get(
-            "game_end_time_hours"
-        ) and get_est_hours_today() > self.config.get("game_end_time_hours"):
+        elif (
+            self.config.game_end_time_hours
+            and get_est_hours_today() > self.config.game_end_time_hours
+        ):
             trip_data["tripStatus"] = TripStatus.DQ_TOOK_TOO_LONG
-            if self.config.get("verbose"):
+            if self.config.verbose:
                 print(
                     f"Disqualified route {trip_data.get('routeId')} for taking too long"
                 )
@@ -236,7 +235,7 @@ class GameEngine:
             match_result = match_data.get("matchResult", {})
             winner = match_result.get("winner")
             self._update_bracket_with_winner(match.get("matchId"), winner)
-            if self.config.get("verbose"):
+            if self.config.verbose:
                 print(
                     f"Match ended - Winner: {winner}, Victory type: {match_result.get('victoryType')}"
                 )
@@ -246,7 +245,7 @@ class GameEngine:
     def _update_bracket_with_winner(self, match_id: str, winner: RouteId):
         # If last match of the bracket
         if match_id == NUM_MATCHES_PER_BRACKET:
-            if self.config.get("verbose"):
+            if self.config.verbose:
                 print(f"Last match of this week's bracket, writing next week's bracket")
             self._write_next_week_brackets()
         else:
@@ -255,7 +254,7 @@ class GameEngine:
             for match in bracket:
                 for trip in match.get("matchData").get("competingTrips"):
                     if trip.get("winnerMatchId") == match_id:
-                        if self.config.get("verbose"):
+                        if self.config.verbose:
                             print(
                                 f"Updating a competing trip in match {match.get('matchId')} to the winner of this match, {winner}"
                             )
@@ -267,9 +266,10 @@ class GameEngine:
 
     def update(self) -> bool:
         est_hours_today = get_est_hours_today()
-        if self.config.get(
-            "game_start_time_hours"
-        ) and est_hours_today < self.config.get("game_start_time_hours"):
+        if (
+            self.config.game_start_time_hours
+            and est_hours_today < self.config.game_start_time_hours
+        ):
             return
         else:
             if not self._is_set_up():
@@ -291,7 +291,7 @@ class GameEngine:
                     self._maybe_end_trip(matchData, trip)
                 self._maybe_set_num_stops_to_finish(matchData)
                 self._maybe_end_match(match)
-                if not self.config.get("skip_write_to_db"):
+                if not self.config.skip_write_to_db:
                     self.game_data_client.update_match(match)
         return all(
             match.get("matchData", {}).get("matchStatus") == MatchStatus.ENDED
@@ -300,17 +300,17 @@ class GameEngine:
 
     def run_game_loop(self) -> None:
         while True:
-            if self.config.get("verbose"):
+            if self.config.verbose:
                 print(f"[{datetime.now().strftime('%H:%M:%S')}] Update")
             try:
                 all_matches_finished = self.update()
                 if all_matches_finished:
-                    if self.config.get("verbose"):
+                    if self.config.verbose:
                         print("All matches completed, exiting...")
                     break
             except Exception as e:
                 print(f"[ERROR] In update(): {e}")
                 traceback.print_exc()
-            if self.config.get("verbose"):
+            if self.config.verbose:
                 print()
-            time.sleep(self.config.get("refresh_rate_seconds"))
+            time.sleep(self.config.refresh_rate_seconds)

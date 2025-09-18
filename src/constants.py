@@ -39,20 +39,14 @@ MATCH_CONNECTIONS = {
     21: [19, 20],
 }
 
-PROD_GAME_CONFIG: GameEngineConfig = {
-    "game_start_time_hours": HOUR_5PM,
-    "game_end_time_hours": HOUR_8PM,
-    "assignment_grace_period_minutes": 30,
-    "allowed_num_stops_to_finish": [10, 15, 20, 25],
-    "verbose": True,
-    "refresh_rate_seconds": 30,
-}
+PROD_GAME_CONFIG = GameEngineConfig(
+    game_start_time_hours=HOUR_5PM,
+    game_end_time_hours=HOUR_8PM,
+    verbose=True,
+)
 
-DEV_GAME_CONFIG: GameEngineConfig = {
-    "assignment_grace_period_minutes": 30,
-    "allowed_num_stops_to_finish": [10, 15, 20, 25],
-    "verbose": True,
-    # "skip_write_to_db": True,
-    "refresh_rate_seconds": 30,
-    "override_num_stops_to_finish": 2,
-}
+DEV_GAME_CONFIG = GameEngineConfig(
+    verbose=True,
+    skip_write_to_db=True,
+    override_num_stops_to_finish=2,
+)
