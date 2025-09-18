@@ -1,12 +1,10 @@
 from datetime import datetime
-import random
-import traceback
-import time
 from game_data_client import GameDataClient
 from game_time import (
     epoch_time_to_seconds_since_midnight_est,
     get_est_hours_today,
     get_est_seconds_since_midnight,
+    get_next_week_str,
 )
 from interfaces import (
     GameEngineConfig,
@@ -20,6 +18,7 @@ from interfaces import (
 )
 from game_util import (
     copyTransiterDataToTripData,
+    create_random_bracket,
     get_latest_assignment_time_seconds_est,
     getArrivalOrDepartureTime,
     hasTripAssigned,
@@ -27,7 +26,11 @@ from game_util import (
     isTripDisqualified,
     isViableCompetingTrip,
 )
+from src.constants import NUM_MATCHES_PER_BRACKET
 from transiter_client import TransiterClient
+import random
+import traceback
+import time
 
 
 class GameEngine:
@@ -172,6 +175,10 @@ class GameEngine:
         for match in self.matchesToUpdate:
             match.get("matchData", {})["matchStatus"] = MatchStatus.ONGOING
 
+    def _write_next_week_brackets(self) -> None:
+        new_bracket = create_random_bracket(get_next_week_str())
+        self.game_data_client.add_matches(new_bracket)
+
     def _maybe_end_match(self, match: Match) -> bool:
         match_data = match.get("matchData")
         if (
@@ -237,20 +244,26 @@ class GameEngine:
         return False
 
     def _update_bracket_with_winner(self, match_id: str, winner: RouteId):
-        bracket = self.game_data_client.get_matches_for_this_week()
-        modified_match = None
-        for match in bracket:
-            for trip in match.get("matchData").get("competingTrips"):
-                if trip.get("winnerMatchId") == match_id:
-                    if self.config.get("verbose"):
-                        print(
-                            f"Updating a competing trip in match {match.get('matchId')} to the winner of this match, {winner}"
-                        )
-                    trip["routeId"] = winner
-                    modified_match = match
-                    break
-        if modified_match:
-            self.game_data_client.update_match(modified_match)
+        # If last match of the bracket
+        if match_id == NUM_MATCHES_PER_BRACKET:
+            if self.config.get("verbose"):
+                print(f"Last match of this week's bracket, writing next week's bracket")
+            self._write_next_week_brackets()
+        else:
+            bracket = self.game_data_client.get_matches_for_this_week()
+            modified_match = None
+            for match in bracket:
+                for trip in match.get("matchData").get("competingTrips"):
+                    if trip.get("winnerMatchId") == match_id:
+                        if self.config.get("verbose"):
+                            print(
+                                f"Updating a competing trip in match {match.get('matchId')} to the winner of this match, {winner}"
+                            )
+                        trip["routeId"] = winner
+                        modified_match = match
+                        break
+            if modified_match:
+                self.game_data_client.update_match(modified_match)
 
     def update(self) -> bool:
         est_hours_today = get_est_hours_today()

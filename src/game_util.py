@@ -1,10 +1,25 @@
-from interfaces import GameEngineConfig, Stop, TripData, TripStatus
+from random import sample
+from interfaces import (
+    GameEngineConfig,
+    Match,
+    MatchStatus,
+    RouteId,
+    Stop,
+    TripData,
+    TripStatus,
+)
 from game_time import (
+    add_n_days,
     epoch_time_to_seconds_since_midnight_est,
     is_epoch_seconds_before_hour,
     minutes_since_epoch_seconds,
 )
-from constants import MAX_MINUTES_SINCE_FIRST_STOP
+from constants import (
+    MATCH_CONNECTIONS,
+    MATCH_ID_DAY_CUTOFFS,
+    MAX_MINUTES_SINCE_FIRST_STOP,
+    NUM_MATCHES_PER_BRACKET,
+)
 
 
 def isTripDisqualified(trip: TripData) -> bool:
@@ -86,3 +101,45 @@ def get_latest_assignment_time_seconds_est(config: GameEngineConfig) -> int:
         config.get("game_start_time_hours") * 3600
         + config.get("assignment_grace_period_minutes") * 60
     )
+
+
+def create_random_bracket(week) -> list[Match]:
+    route_ids = sample(list(RouteId), len(RouteId))
+    route_index = 0
+    matches = []
+    for match_id in range(1, 1 + NUM_MATCHES_PER_BRACKET):
+        num_days_to_add = 0
+        for i, cutoff in enumerate(MATCH_ID_DAY_CUTOFFS):
+            if match_id >= cutoff:
+                num_days_to_add = 5 - i
+                break
+        date = add_n_days(week, num_days_to_add)
+        match_connections = MATCH_CONNECTIONS[match_id]
+        competing_trips: list[TripData] = []
+        for connection in match_connections:
+            if connection:
+                competing_trips.append(
+                    {
+                        "winnerMatchId": str(connection),
+                        "tripStatus": TripStatus.NOT_ASSIGNED,
+                    }
+                )
+            else:
+                competing_trips.append(
+                    {
+                        "routeId": route_ids[route_index],
+                        "tripStatus": TripStatus.NOT_ASSIGNED,
+                    }
+                )
+                route_index += 1
+        match: Match = {
+            "bracketId": week,
+            "matchId": str(match_id),
+            "matchData": {
+                "competingTrips": competing_trips,
+                "date": date,
+                "matchStatus": MatchStatus.NOT_YET_STARTED,
+            },
+        }
+        matches.append(match)
+    return matches

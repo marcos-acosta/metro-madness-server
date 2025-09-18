@@ -29,3 +29,15 @@ class GameDataClient:
         self.dynamodb_client.putItem(
             match["bracketId"], match["matchId"], matchData=match["matchData"]
         )
+
+    def add_matches(self, matches: list[Match]):
+        self.dynamodb_client.batchPutItems(
+            [
+                (
+                    match.get("bracketId"),
+                    match.get("matchId"),
+                    {"matchData": match.get("matchData")},
+                )
+                for match in matches
+            ]
+        )

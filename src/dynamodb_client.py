@@ -1,5 +1,5 @@
-import boto3
 from boto3.dynamodb.conditions import Key
+import boto3
 
 
 class DynamoDbClient:
@@ -28,3 +28,14 @@ class DynamoDbClient:
         }
         response = self.table.put_item(Item=item_data)
         return response
+
+    def batchPutItems(self, data: list[tuple]):
+        with self.table.batch_writer() as batch:
+            for entry in data:
+                batch.put_item(
+                    Item={
+                        self.partitionKeyName: entry[0],
+                        self.sortKeyName: entry[1],
+                        **entry[2],
+                    }
+                )

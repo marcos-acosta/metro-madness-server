@@ -1,7 +1,5 @@
-from datetime import datetime
 from game_engine import GameEngine
 from constants import DEV_GAME_CONFIG
-import time
 
 
 def main():

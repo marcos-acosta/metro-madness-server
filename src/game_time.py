@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-import time
 from zoneinfo import ZoneInfo
+import time
 import math
 
 from constants import NYC_TIME_ZONE
@@ -36,6 +36,13 @@ def get_current_week_str() -> str:
     return latest_monday_est.strftime("%Y-%m-%d")
 
 
+def get_next_week_str() -> str:
+    now_est = datetime.now(ZoneInfo(NYC_TIME_ZONE))
+    days_since_monday = now_est.weekday()
+    next_monday_est = now_est + timedelta(days=(7 - days_since_monday))
+    return next_monday_est.strftime("%Y-%m-%d")
+
+
 def get_today_date_est_str() -> str:
     return datetime.now(ZoneInfo(NYC_TIME_ZONE)).strftime("%Y-%m-%d")
 
@@ -46,3 +53,9 @@ def minutes_since_epoch_seconds(epoch_seconds: int) -> float:
 
 def is_epoch_seconds_before_hour(epoch_seconds: int, hour: float) -> bool:
     return epoch_time_to_seconds_since_midnight_est(epoch_seconds) < hour * 3600
+
+
+def add_n_days(date_str, n_days):
+    date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+    new_date_obj = date_obj + timedelta(days=n_days)
+    return new_date_obj.strftime("%Y-%m-%d")
