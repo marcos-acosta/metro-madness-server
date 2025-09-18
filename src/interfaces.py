@@ -34,7 +34,9 @@ class MatchStatus(StrEnum):
 
 
 class VictoryType(StrEnum):
-    COIN_TOSS = "COIN_TOSS"
+    COIN_TOSS_BOTH_DQ = "COIN_TOSS_BOTH_DQ"
+    COIN_TOSS_SAME_DELAY = "COIN_TOSS_SAME_DELAY"
+    ONE_DQ = "ONE_DQ"
     FAIR_AND_SQUARE = "FAIR_AND_SQUARE"
 
 
@@ -87,8 +89,8 @@ class GameEngineConfig(TypedDict):
     game_end_time_hours: float | None
     assignment_grace_period_minutes: int
     verbose: bool | None
-    ignore_game_time: bool | None
     min_num_stops_in_trip: int
     allowed_num_stops_to_finish: list[int]
     skip_write_to_db: bool | None
     refresh_rate_seconds: int
+    override_num_stops_to_finish: int | None

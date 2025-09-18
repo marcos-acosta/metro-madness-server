@@ -7,13 +7,20 @@ from game_time import (
 from constants import MAX_MINUTES_SINCE_FIRST_STOP
 
 
-def isTripComplete(trip: TripData) -> bool:
+def isTripDisqualified(trip: TripData) -> bool:
     return trip.get("tripStatus") in [
         TripStatus.DQ_DISAPPEARED,
         TripStatus.DQ_NEVER_ASSIGNED,
         TripStatus.DQ_TOOK_TOO_LONG,
-        TripStatus.FINISHED,
     ]
+
+
+def isTripFinished(trip: TripData) -> bool:
+    return trip.get("tripStatus") == TripStatus.FINISHED
+
+
+def isTripComplete(trip: TripData) -> bool:
+    return isTripFinished(trip) or isTripDisqualified(trip)
 
 
 def hasTripAssigned(trip: TripData) -> bool:
@@ -26,19 +33,22 @@ def isViableCompetingTrip(transiterTripData: dict, config: GameEngineConfig) -> 
     first_stop_time = getArrivalOrDepartureTime(stop_times[0])
     return (
         stop_times
-        and len(stop_times) >= config.get("min_num_stops_in_trip")
+        and len(stop_times[1:]) >= config.get("allowed_num_stops_to_finish")[0]
         and stop_times[0].get("future") == False
         and stop_times[1].get("future") == True
         and (
             (
-                config.get("ignore_game_time")
+                not config.get("game_start_time_hours")
                 and minutes_since_epoch_seconds(
                     first_stop_time <= MAX_MINUTES_SINCE_FIRST_STOP
                 )
             )
-            or is_epoch_seconds_before_hour(
-                first_stop_time,
-                config.get("game_start_time_hours"),
+            or (
+                config.get("game_start_time_hours")
+                and is_epoch_seconds_before_hour(
+                    first_stop_time,
+                    config.get("game_start_time_hours"),
+                )
             )
         )
     )
@@ -68,3 +78,10 @@ def copyTransiterDataToTripData(transiterTripData: dict, tripData: TripData) -> 
         convertTransiterStopTimeToStop(stopTime)
         for stopTime in transiterTripData.get("stopTimes", [])
     ]
+
+
+def get_latest_assignment_time_seconds_est(config: GameEngineConfig) -> int:
+    return (
+        config.get("game_start_time_hours") * 3600
+        + config.get("assignment_grace_period_minutes") * 60
+    )

@@ -18,7 +18,6 @@ PROD_GAME_CONFIG: GameEngineConfig = {
     "game_end_time_hours": HOUR_8PM,
     "assignment_grace_period_minutes": 30,
     "allowed_num_stops_to_finish": [10, 15, 20, 25],
-    "min_num_stops_in_trip": 11,
     "verbose": True,
     "refresh_rate_seconds": 30,
 }
@@ -26,9 +25,8 @@ PROD_GAME_CONFIG: GameEngineConfig = {
 DEV_GAME_CONFIG: GameEngineConfig = {
     "assignment_grace_period_minutes": 30,
     "allowed_num_stops_to_finish": [10, 15, 20, 25],
-    "min_num_stops_in_trip": 11,
-    "ignore_game_time": True,
     "verbose": True,
-    "skip_write_to_db": True,
+    # "skip_write_to_db": True,
     "refresh_rate_seconds": 30,
+    "override_num_stops_to_finish": 3,
 }
