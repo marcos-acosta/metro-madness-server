@@ -245,6 +245,9 @@ class GameEngine:
                 if not matchData.get("matchStatus") == MatchStatus.ONGOING:
                     continue
                 for trip in matchData.get("competingTrips", []):
+                    if not trip.get("routeId"):
+                        trip["tripStatus"] = TripStatus.DQ_NO_COMPETITOR
+                        continue
                     if isTripComplete(trip):
                         continue
                     if not hasTripAssigned(trip):

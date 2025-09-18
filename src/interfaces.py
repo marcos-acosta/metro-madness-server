@@ -46,6 +46,7 @@ class TripStatus(StrEnum):
     DQ_NEVER_ASSIGNED = "DQ_NEVER_ASSIGNED"
     DQ_TOOK_TOO_LONG = "DQ_TOOK_TOO_LONG"
     DQ_DISAPPEARED = "DQ_DISAPPEARED"
+    DQ_NO_COMPETITOR = "DQ_NO_COMPETITOR"
     FINISHED = "FINISHED"
 
 
@@ -63,8 +64,9 @@ class Stop(TypedDict):
 
 
 class TripData(TypedDict):
-    routeId: str
-    tripStatus: TripStatus
+    routeId: str | None
+    winnerMatchId: str | None
+    tripStatus: TripStatus | None
     tripId: str | None
     stops: list[Stop] | None
     finalDelay: int | None

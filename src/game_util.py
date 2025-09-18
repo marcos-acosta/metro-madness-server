@@ -12,6 +12,7 @@ def isTripDisqualified(trip: TripData) -> bool:
         TripStatus.DQ_DISAPPEARED,
         TripStatus.DQ_NEVER_ASSIGNED,
         TripStatus.DQ_TOOK_TOO_LONG,
+        TripStatus.DQ_NO_COMPETITOR,
     ]
 
 
