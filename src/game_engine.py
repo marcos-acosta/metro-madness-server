@@ -26,7 +26,7 @@ from game_util import (
     isTripDisqualified,
     isViableCompetingTrip,
 )
-from constants import NUM_MATCHES_PER_BRACKET
+from constants import NUM_MATCHES_PER_BRACKET, PRE_START_REFRESH_TIME_SECONDS
 from transiter_client import TransiterClient
 import random
 import traceback
@@ -265,34 +265,27 @@ class GameEngine:
                 self.game_data_client.update_match(modified_match)
 
     def update(self) -> bool:
-        est_hours_today = get_est_hours_today()
-        if (
-            self.config.game_start_time_hours
-            and est_hours_today < self.config.game_start_time_hours
-        ):
-            return
-        else:
-            if not self._is_set_up():
-                self._set_up()
-            for match in self.matchesToUpdate:
-                matchData = match.get("matchData", {})
-                if not matchData.get("matchStatus") == MatchStatus.ONGOING:
+        if not self._is_set_up():
+            self._set_up()
+        for match in self.matchesToUpdate:
+            matchData = match.get("matchData", {})
+            if not matchData.get("matchStatus") == MatchStatus.ONGOING:
+                continue
+            for trip in matchData.get("competingTrips", []):
+                if not trip.get("routeId"):
+                    trip["tripStatus"] = TripStatus.DQ_NO_COMPETITOR
                     continue
-                for trip in matchData.get("competingTrips", []):
-                    if not trip.get("routeId"):
-                        trip["tripStatus"] = TripStatus.DQ_NO_COMPETITOR
-                        continue
-                    if isTripComplete(trip):
-                        continue
-                    if not hasTripAssigned(trip):
-                        self._maybeAssignTrip(trip)
-                    if trip.get("tripStatus") == TripStatus.ONGOING:
-                        self._update_stop_times(trip)
-                    self._maybe_end_trip(matchData, trip)
-                self._maybe_set_num_stops_to_finish(matchData)
-                self._maybe_end_match(match)
-                if not self.config.skip_write_to_db:
-                    self.game_data_client.update_match(match)
+                if isTripComplete(trip):
+                    continue
+                if not hasTripAssigned(trip):
+                    self._maybeAssignTrip(trip)
+                if trip.get("tripStatus") == TripStatus.ONGOING:
+                    self._update_stop_times(trip)
+                self._maybe_end_trip(matchData, trip)
+            self._maybe_set_num_stops_to_finish(matchData)
+            self._maybe_end_match(match)
+            if not self.config.skip_write_to_db:
+                self.game_data_client.update_match(match)
         return all(
             match.get("matchData", {}).get("matchStatus") == MatchStatus.ENDED
             for match in self.matchesToUpdate
@@ -300,17 +293,28 @@ class GameEngine:
 
     def run_game_loop(self) -> None:
         while True:
-            if self.config.verbose:
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] Update")
-            try:
-                all_matches_finished = self.update()
-                if all_matches_finished:
-                    if self.config.verbose:
-                        print("All matches completed, exiting...")
-                    break
-            except Exception as e:
-                print(f"[ERROR] In update(): {e}")
-                traceback.print_exc()
-            if self.config.verbose:
-                print()
-            time.sleep(self.config.refresh_rate_seconds)
+            est_hours_today = get_est_hours_today()
+            if (
+                self.config.game_start_time_hours
+                and est_hours_today < self.config.game_start_time_hours
+            ):
+                if self.config.verbose:
+                    print(
+                        f"[{datetime.now().strftime('%H:%M:%S')}] Not time to start yet, sleeping for {PRE_START_REFRESH_TIME_SECONDS} seconds"
+                    )
+                time.sleep(PRE_START_REFRESH_TIME_SECONDS)
+            else:
+                if self.config.verbose:
+                    print(f"[{datetime.now().strftime('%H:%M:%S')}] Update")
+                try:
+                    all_matches_finished = self.update()
+                    if all_matches_finished:
+                        if self.config.verbose:
+                            print("All matches completed, exiting...")
+                        break
+                except Exception as e:
+                    print(f"[ERROR] In update(): {e}")
+                    traceback.print_exc()
+                if self.config.verbose:
+                    print()
+                time.sleep(self.config.refresh_rate_seconds)
