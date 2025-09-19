@@ -5,10 +5,32 @@ from interfaces import GameEngineConfig
 
 def parse_comma_separated_ints(value):
     """Parse comma-separated integers from a string."""
+    if value.lower() in ("none", "null"):
+        return None
     try:
         return [int(x.strip()) for x in value.split(",")]
     except ValueError:
         raise argparse.ArgumentTypeError(f"Invalid comma-separated integers: '{value}'")
+
+
+def parse_nullable_float(value):
+    """Parse a float that can be explicitly set to None."""
+    if value.lower() in ("none", "null"):
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"Invalid float value: '{value}'")
+
+
+def parse_nullable_int(value):
+    """Parse an integer that can be explicitly set to None."""
+    if value.lower() in ("none", "null"):
+        return None
+    try:
+        return int(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"Invalid integer value: '{value}'")
 
 
 def create_argument_parser():
@@ -21,14 +43,14 @@ def create_argument_parser():
     parser.add_argument(
         "--game-start-time-hours",
         "-s",
-        type=float,
-        help="Hour to start the game (24-hour format, e.g. 17.0 for 5 PM)",
+        type=parse_nullable_float,
+        help="Hour to start the game (24-hour format, e.g. 17.0 for 5 PM). Use 'none' to disable.",
     )
     parser.add_argument(
         "--game-end-time-hours",
         "-e",
-        type=float,
-        help="Hour to end the game (24-hour format, e.g. 20.0 for 8 PM)",
+        type=parse_nullable_float,
+        help="Hour to end the game (24-hour format, e.g. 20.0 for 8 PM). Use 'none' to disable.",
     )
     parser.add_argument(
         "--assignment-grace-period-minutes",
@@ -44,7 +66,7 @@ def create_argument_parser():
         "-a",
         type=parse_comma_separated_ints,
         default="10,15,20,25",
-        help="Comma-separated list of allowed number of stops to finish (e.g., '5,10,15')",
+        help="Comma-separated list of allowed number of stops to finish (e.g., '5,10,15'). Use 'none' to disable.",
     )
     parser.add_argument(
         "--min-num-stops-in-trip",
@@ -56,8 +78,8 @@ def create_argument_parser():
     parser.add_argument(
         "--override-num-stops-to-finish",
         "-o",
-        type=int,
-        help="Override the calculated number of stops to finish",
+        type=parse_nullable_int,
+        help="Override the calculated number of stops to finish. Use 'none' to disable override.",
     )
 
     # Runtime arguments
