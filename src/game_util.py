@@ -7,6 +7,7 @@ from interfaces import (
     Stop,
     TripData,
     TripStatus,
+    VictoryType,
 )
 from game_time import (
     add_n_days,
@@ -139,6 +140,60 @@ def create_random_bracket(week) -> list[Match]:
                 "competingTrips": competing_trips,
                 "date": date,
                 "matchStatus": MatchStatus.NOT_YET_STARTED,
+            },
+        }
+        matches.append(match)
+    return matches
+
+
+def create_random_complete_bracket(week) -> list[Match]:
+    route_ids = sample(list(RouteId), len(RouteId))
+    route_index = 0
+    matches: list[Match] = []
+    for match_id in range(1, 1 + NUM_MATCHES_PER_BRACKET):
+        num_days_to_add = 0
+        for i, cutoff in enumerate(MATCH_ID_DAY_CUTOFFS):
+            if match_id >= cutoff:
+                num_days_to_add = 5 - i
+                break
+        date = add_n_days(week, num_days_to_add)
+        match_connections = MATCH_CONNECTIONS[match_id]
+        competing_trips: list[TripData] = []
+        for connection in match_connections:
+            if connection:
+                competing_trips.append(
+                    {
+                        "winnerMatchId": str(connection),
+                        "routeId": next(
+                            (
+                                match["matchData"]["matchResult"]["winner"]
+                                for match in matches
+                                if match["matchId"] == str(connection)
+                            ),
+                            None,
+                        ),
+                        "tripStatus": TripStatus.FINISHED,
+                    }
+                )
+            else:
+                competing_trips.append(
+                    {
+                        "routeId": route_ids[route_index],
+                        "tripStatus": TripStatus.FINISHED,
+                    }
+                )
+                route_index += 1
+        match: Match = {
+            "bracketId": week,
+            "matchId": str(match_id),
+            "matchData": {
+                "competingTrips": competing_trips,
+                "date": date,
+                "matchStatus": MatchStatus.ENDED,
+                "matchResult": {
+                    "winner": competing_trips[0]["routeId"],
+                    "victoryType": sample(list(VictoryType), 1)[0],
+                },
             },
         }
         matches.append(match)
