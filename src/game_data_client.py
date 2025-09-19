@@ -26,7 +26,7 @@ class GameDataClient:
         ]
 
     def update_match(self, match: Match):
-        self.dynamodb_client.putItem(
+        return self.dynamodb_client.putItem(
             match["bracketId"], match["matchId"], matchData=match["matchData"]
         )
 

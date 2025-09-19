@@ -287,7 +287,11 @@ class GameEngine:
             self._maybe_set_num_stops_to_finish(matchData)
             self._maybe_end_match(match)
             if not self.config.skip_write_to_db:
+                if self.config.verbose:
+                    print("Writing data to DynamoDB...")
                 self.game_data_client.update_match(match)
+            if self.config.verbose:
+                print()
         return all(
             match.get("matchData", {}).get("matchStatus") == MatchStatus.ENDED
             for match in self.matchesToUpdate
