@@ -49,23 +49,19 @@ def isViableCompetingTrip(transiterTripData: dict, config: GameEngineConfig) -> 
     # Explicitly compare to boolean to avoid truthy / falsy nonsense
     first_stop_time = getArrivalOrDepartureTime(stop_times[0])
     return (
-        stop_times
+        len(stop_times) > 0
         and len(stop_times[1:]) >= config.allowed_num_stops_to_finish[0]
         and stop_times[0].get("future") == False
         and stop_times[1].get("future") == True
         and (
-            (
-                not config.game_start_time_hours
-                and minutes_since_epoch_seconds(
-                    first_stop_time <= MAX_MINUTES_SINCE_FIRST_STOP
-                )
+            not is_epoch_seconds_before_hour(
+                first_stop_time,
+                config.game_start_time_hours,
             )
-            or (
-                config.game_start_time_hours
-                and is_epoch_seconds_before_hour(
-                    first_stop_time,
-                    config.game_start_time_hours,
-                )
+            if config.game_start_time_hours
+            else (
+                minutes_since_epoch_seconds(first_stop_time)
+                <= MAX_MINUTES_SINCE_FIRST_STOP
             )
         )
     )
