@@ -142,7 +142,7 @@ class GameEngine:
 
     def _maybe_disqualify_trip(self, trip_data: TripData) -> bool:
         if (
-            self.config.config.game_start_time_hours is not None
+            self.config.game_start_time_hours is not None
             and self.config.assignment_grace_period_minutes is not None
             and trip_data.get("tripStatus") == TripStatus.NOT_ASSIGNED
             and get_est_seconds_since_midnight()
