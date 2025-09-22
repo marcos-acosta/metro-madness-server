@@ -270,26 +270,30 @@ class GameEngine:
         if not self._is_set_up():
             self._set_up()
         for match in self.matchesToUpdate:
-            matchData = match.get("matchData", {})
-            if not matchData.get("matchStatus") == MatchStatus.ONGOING:
-                continue
-            for trip in matchData.get("competingTrips", []):
-                if not trip.get("routeId"):
-                    trip["tripStatus"] = TripStatus.DQ_NO_COMPETITOR
+            try:
+                matchData = match.get("matchData", {})
+                if not matchData.get("matchStatus") == MatchStatus.ONGOING:
                     continue
-                if isTripComplete(trip):
-                    continue
-                if not hasTripAssigned(trip):
-                    self._maybeAssignTrip(trip)
-                if trip.get("tripStatus") == TripStatus.ONGOING:
-                    self._update_stop_times(trip)
-                self._maybe_end_trip(matchData, trip)
-            self._maybe_set_num_stops_to_finish(matchData)
-            self._maybe_end_match(match)
-            if not self.config.skip_write_to_db:
-                if self.config.verbose:
-                    print("Writing data to DynamoDB...")
-                self.game_data_client.update_match(match)
+                for trip in matchData.get("competingTrips", []):
+                    if not trip.get("routeId"):
+                        trip["tripStatus"] = TripStatus.DQ_NO_COMPETITOR
+                        continue
+                    if isTripComplete(trip):
+                        continue
+                    if not hasTripAssigned(trip):
+                        self._maybeAssignTrip(trip)
+                    if trip.get("tripStatus") == TripStatus.ONGOING:
+                        self._update_stop_times(trip)
+                    self._maybe_end_trip(matchData, trip)
+                self._maybe_set_num_stops_to_finish(matchData)
+                self._maybe_end_match(match)
+                if not self.config.skip_write_to_db:
+                    if self.config.verbose:
+                        print("Writing data to DynamoDB...")
+                    self.game_data_client.update_match(match)
+            except Exception as e:
+                print(f"[ERROR] In update() loop, in match {match['matchId']}: {e}")
+                traceback.print_exc()
             if self.config.verbose:
                 print()
         return all(
@@ -312,15 +316,11 @@ class GameEngine:
             else:
                 if self.config.verbose:
                     print(f"[{datetime.now().strftime('%H:%M:%S')}] Update")
-                try:
-                    all_matches_finished = self.update()
-                    if all_matches_finished:
-                        if self.config.verbose:
-                            print("All matches completed, exiting...")
-                        break
-                except Exception as e:
-                    print(f"[ERROR] In update(): {e}")
-                    traceback.print_exc()
+                all_matches_finished = self.update()
+                if all_matches_finished:
+                    if self.config.verbose:
+                        print("All matches completed, exiting...")
+                    break
                 if self.config.verbose:
                     print()
                 time.sleep(self.config.refresh_rate_seconds)
