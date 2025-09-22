@@ -246,7 +246,7 @@ class GameEngine:
 
     def _update_bracket_with_winner(self, match_id: str, winner: RouteId):
         # If last match of the bracket
-        if match_id == NUM_MATCHES_PER_BRACKET:
+        if match_id == str(NUM_MATCHES_PER_BRACKET):
             if self.config.verbose:
                 print(f"Last match of this week's bracket, writing next week's bracket")
             self._write_next_week_brackets()

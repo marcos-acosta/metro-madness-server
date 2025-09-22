@@ -46,11 +46,12 @@ def hasTripAssigned(trip: TripData) -> bool:
 
 def isViableCompetingTrip(transiterTripData: dict, config: GameEngineConfig) -> bool:
     stop_times = transiterTripData.get("stopTimes", [])
-    # Explicitly compare to boolean to avoid truthy / falsy nonsense
+    if len(stop_times) == 0:
+        return False
     first_stop_time = getArrivalOrDepartureTime(stop_times[0])
     return (
-        len(stop_times) > 0
-        and len(stop_times[1:]) >= config.allowed_num_stops_to_finish[0]
+        len(stop_times[1:]) >= config.allowed_num_stops_to_finish[0]
+        # Explicitly compare to boolean to avoid truthy / falsy nonsense
         and stop_times[0].get("future") == False
         and stop_times[1].get("future") == True
         and (
