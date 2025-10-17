@@ -1,0 +1,135 @@
+edition = "2023";
+
+package headway;
+
+enum RouteId {
+  ROUTE_ID_UNSPECIFIED = 0;
+  ROUTE_ID_1 = 1;
+  ROUTE_ID_2 = 2;
+  ROUTE_ID_3 = 3;
+  ROUTE_ID_4 = 4;
+  ROUTE_ID_5 = 5;
+  ROUTE_ID_6 = 6;
+  ROUTE_ID_7 = 7;
+  ROUTE_ID_A = 8;
+  ROUTE_ID_B = 9;
+  ROUTE_ID_C = 10;
+  ROUTE_ID_D = 11;
+  ROUTE_ID_E = 12;
+  ROUTE_ID_F = 13;
+  ROUTE_ID_G = 14;
+  ROUTE_ID_J = 15;
+  ROUTE_ID_L = 16;
+  ROUTE_ID_M = 17;
+  ROUTE_ID_N = 18;
+  ROUTE_ID_Q = 19;
+  ROUTE_ID_R = 20;
+  ROUTE_ID_W = 21;
+  ROUTE_ID_Z = 22;
+}
+
+message User {
+  string user_id = 1;
+  string username = 2;
+  string user_password_hashed = 3;
+  // The routes that the user self-identifies as being their local routes.
+  repeated RouteId local_routes = 4;
+  string date_joined_iso = 5;
+  int32 num_tokens = 6;
+}
+
+enum GameType {
+  GAME_TYPE_UNSPECIFIED = 0;
+  // All IRT trains
+  GAME_TYPE_IRT_SYSTEM = 1;
+  // All BMT trains
+  GAME_TYPE_BMT_SYSTEM = 2;
+  // All IND trains
+  GAME_TYPE_IND_SYSTEM = 3;
+  // Best of each system competes
+  GAME_TYPE_SYSTEM_CHAMPIONSHIP = 4;
+  // All trains compete
+  GAME_TYPE_FREE_FOR_ALL = 5;
+}
+
+enum GameVariant {
+  GAME_VARIANT_UNSPECIFIED = 0;
+  GAME_VARIANT_WEEKDAY = 1;
+  GAME_VARIANT_WEEKEND = 2;
+}
+
+enum GameStatus {
+  GAME_STATUS_UNSPECIFIED = 0;
+  GAME_STATUS_NOT_STARTED = 1;
+  GAME_STATUS_UNDERWAY = 2;
+  GAME_STATUS_FINISHED = 3;
+}
+
+enum TripStatus {
+  TRIP_STATUS_UNSPECIFIED = 0;
+  TRIP_STATUS_NOT_SEEN_YET = 1;
+  TRIP_STATUS_UNDERWAY = 2;
+  // The trip appeared at some point, but no longer exists
+  TRIP_STATUS_DISAPPEARED = 3;
+  TRIP_STATUS_REACHED_TARGET = 4;
+}
+
+message Stop {
+  string stop_id = 1;
+  string stop_name = 2;
+  int32 scheduled_arrival_time_s = 3;
+  int32 actual_arrival_time_s = 4;
+}
+
+message TripData {
+  string trip_id = 1;
+  TripStatus trip_status = 2;
+  repeated Stop stops = 3;
+  string target_stop_id = 4;
+  // Duplicated from within `stops` for quick access.
+  int32 actual_target_arrival_time_s = 5;
+}
+
+enum RankingStatus {
+  RANKING_STATUS_UNSPECIFIED = 0;
+  RANKING_STATUS_PENDING = 1;
+  RANKING_STATUS_RANKED = 2;
+  RANKING_STATUS_DISQUALIFIED = 3;
+}
+
+message Ranking {
+  // 1 = first, 2 = second, etc.
+  int32 rank = 1;
+  RankingStatus ranking_status = 2;
+}
+
+message Train {
+  RouteId route_id = 1;
+  TripData trip_data = 2;
+  Ranking ranking = 3;
+}
+
+message Game {
+  string game_id = 1;
+  string date_iso = 2;
+  string week_numer = 3;
+  GameType game_type = 4;
+  GameVariant game_variant = 5;
+  GameStatus game_status = 6;
+  int32 scheduled_arrival_time_s = 7;
+  repeated Train trains = 8;
+}
+
+message Stake {
+  string user_id = 1;
+  string game_id = 2;
+  RouteId predicted_winner = 3;
+  int32 stake_amount = 4;
+}
+
+message Pot {
+  string game_id = 1;
+  repeated Stake stakes = 2;
+  bool paid_out = 3;
+  bool locked = 4;
+}

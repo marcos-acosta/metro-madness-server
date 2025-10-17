@@ -2,6 +2,5 @@ __pycache__
 venv
 scripts
 todo.txt
-.ipynb*
-**/*.ipynb
+.ipynb_checkpoints*
 gtfs*
