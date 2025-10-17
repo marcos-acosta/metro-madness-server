@@ -1,4 +1,4 @@
-from interfaces import GameEngineConfig
+from interfaces import GameEngineConfig, RouteId
 import os
 
 TRANSITER_URL = os.getenv("TRANSITER_URL", "http://localhost:8080")
@@ -39,4 +39,26 @@ MATCH_CONNECTIONS = {
     19: [15, 16],
     20: [17, 18],
     21: [19, 20],
+}
+
+VALID_STARTING_STARTING_IDS = {
+    RouteId.ROUTE_1: [
+        "101",
+        "140",
+        "142",
+    ],
+    RouteId.ROUTE_2: [],
+    RouteId.ROUTE_A: [
+        "A02",
+        "A65",
+        "H11",
+    ],
+    RouteId.ROUTE_C: [
+        "112",
+        "A55",
+    ],
+    RouteId.ROUTE_E: [
+        "E01",
+        "G05",
+    ],
 }

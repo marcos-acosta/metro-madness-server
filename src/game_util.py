@@ -44,6 +44,10 @@ def hasTripAssigned(trip: TripData) -> bool:
     return trip.get("tripId") is not None and trip.get("stops") is not None
 
 
+def isValidStartingStation(stationName: str | None) -> bool:
+    return True
+
+
 def isViableCompetingTrip(transiterTripData: dict, config: GameEngineConfig) -> bool:
     stop_times = transiterTripData.get("stopTimes", [])
     if len(stop_times) == 0:
@@ -54,6 +58,7 @@ def isViableCompetingTrip(transiterTripData: dict, config: GameEngineConfig) -> 
         # Explicitly compare to boolean to avoid truthy / falsy nonsense
         and stop_times[0].get("future") == False
         and stop_times[1].get("future") == True
+        and isValidStartingStation(stop_times[0].get("stop", {}).get("name"))
         and (
             not is_epoch_seconds_before_hour(
                 first_stop_time,
