@@ -1,5 +1,5 @@
-from interfaces import GameEngineConfig, RouteId
 import os
+
 
 TRANSITER_URL = os.getenv("TRANSITER_URL", "http://localhost:8080")
 
@@ -16,6 +16,10 @@ NUM_MATCHES_PER_BRACKET = 21
 MATCH_ID_DAY_CUTOFFS = [22, 21, 19, 15, 7]
 
 PRE_START_REFRESH_TIME_SECONDS = 60
+
+SUPPLEMENTED_STATIC_GTFS_URL = (
+    "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip"
+)
 
 MATCH_CONNECTIONS = {
     1: [None, None],
@@ -39,26 +43,4 @@ MATCH_CONNECTIONS = {
     19: [15, 16],
     20: [17, 18],
     21: [19, 20],
-}
-
-VALID_STARTING_STARTING_IDS = {
-    RouteId.ROUTE_1: [
-        "101",
-        "140",
-        "142",
-    ],
-    RouteId.ROUTE_2: [],
-    RouteId.ROUTE_A: [
-        "A02",
-        "A65",
-        "H11",
-    ],
-    RouteId.ROUTE_C: [
-        "112",
-        "A55",
-    ],
-    RouteId.ROUTE_E: [
-        "E01",
-        "G05",
-    ],
 }

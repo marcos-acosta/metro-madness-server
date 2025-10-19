@@ -3,4 +3,6 @@ venv
 scripts
 todo.txt
 .ipynb_checkpoints*
-gtfs*
+gtfs_subway
+gtfs_supplemented
+tmp
