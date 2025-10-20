@@ -135,12 +135,15 @@ class Game(TypedDict):
 
     game_id: str
     date_iso: str
-    week_number: str
+    week_number: int
     game_type: GameType
     game_variant: GameVariant
     game_status: GameStatus
     scheduled_arrival_time_s: int
-    trains: list[Train]
+    trains: NotRequired[list[Train]]
+    winners_from_game_ids: NotRequired[list[str]]
+    start_time_s: int
+    end_time_s: int
 
 
 class Stake(TypedDict):
@@ -165,3 +168,7 @@ GameConfig = namedtuple(
     "GameTypeAndVariant",
     ["game_type", "game_variant", "start_time_hhmmss", "end_time_hhmmss"],
 )
+
+
+class GameEngineConfig(TypedDict):
+    verbose: bool

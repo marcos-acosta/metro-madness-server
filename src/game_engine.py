@@ -1,326 +1,62 @@
-from datetime import datetime
-from game_data_client import GameDataClient
-from game_time import (
-    epoch_time_to_seconds_since_midnight_est,
-    get_est_hours_today,
-    get_est_seconds_since_midnight,
-    get_next_week_str,
+import datetime
+import json
+from choose_stops import populate_trains
+from game_config import GAME_TYPE_TO_ROUTE_IDS
+from games_client import GamesClient
+from interface import Game, GameEngineConfig, GameStatus, GameType, RouteId
+from time_util import (
+    get_current_seconds_since_midnight_est,
 )
-from interfaces import (
-    GameEngineConfig,
-    Match,
-    MatchData,
-    MatchStatus,
-    RouteId,
-    TripData,
-    TripStatus,
-    VictoryType,
-)
-from game_util import (
-    copyTransiterDataToTripData,
-    create_random_bracket,
-    get_latest_assignment_time_seconds_est,
-    getArrivalOrDepartureTime,
-    hasTripAssigned,
-    isTripComplete,
-    isTripDisqualified,
-    isViableCompetingTrip,
-)
-from constants import NUM_MATCHES_PER_BRACKET, PRE_START_REFRESH_TIME_SECONDS
 from transiter_client import TransiterClient
-import random
-import traceback
-import time
 
 
 class GameEngine:
     def __init__(self, config: GameEngineConfig):
-        self.game_data_client = GameDataClient()
+        self.game_data_client = GamesClient()
         self.transiter_client = TransiterClient()
-        self.matchesToUpdate = None
+        self.game_to_update: Game | None = None
         self.config = config
+        self._setup()
+        self._select_trains()
 
-    def _is_set_up(self) -> bool:
-        return self.matchesToUpdate is not None
+    def _log(self, message):
+        if self.config.get("verbose"):
+            print(f"[{datetime.datetime.now()}] {message}")
 
-    def _maybeAssignTrip(self, trip: TripData) -> None:
-        current_trips = self.transiter_client.get_trips(trip.get("routeId"))
-        tripOnWayToFirstStation = next(
-            (
-                trip
-                for trip in current_trips
-                if isViableCompetingTrip(trip, self.config)
-            ),
-            None,
+    def _setup(self):
+        games_today = self.game_data_client.get_games_for_today()
+        upcoming_games = sorted(
+            [
+                g
+                for g in games_today
+                if (
+                    g.get("start_time_s") > get_current_seconds_since_midnight_est()
+                    and g.get("game_status") == GameStatus.GAME_STATUS_NOT_STARTED
+                )
+            ],
+            key=lambda g: g.get("start_time_s"),
         )
-        if tripOnWayToFirstStation:
-            copyTransiterDataToTripData(tripOnWayToFirstStation, trip)
-            trip["tripStatus"] = TripStatus.ONGOING
-            if self.config.verbose:
-                print(
-                    f"Assigned route {trip.get('routeId')} to trip id {trip.get('tripId')}"
-                )
-
-    def _maybe_set_num_stops_to_finish(self, matchData: MatchData):
-        if matchData.get("numStopsToFinish") is not None:
-            return
-        if self.config.override_num_stops_to_finish:
-            matchData["numStopsToFinish"] = self.config.override_num_stops_to_finish
-            if self.config.verbose:
-                print(
-                    f"Set minimum number of stops to finish at {matchData['numStopsToFinish']} (overridden)"
-                )
-            return
-        num_stops = [
-            len(trip.get("stops", [])) if hasTripAssigned(trip) else None
-            for trip in matchData.get("competingTrips", [])
-        ]
-        if all(num_stops):
-            min_num_stops = min(num_stops) - 1
-            for allowed_num_stops_to_finish in self.config.allowed_num_stops_to_finish[
-                ::-1
-            ]:
-                if min_num_stops >= allowed_num_stops_to_finish:
-                    matchData["numStopsToFinish"] = allowed_num_stops_to_finish
-                    if self.config.verbose:
-                        print(
-                            f"Set minimum number of stops to finish at {allowed_num_stops_to_finish}"
-                        )
-                    return
-
-    def _update_stop_times(self, tripData: TripData) -> None:
-        trip_transiter_data = self.transiter_client.get_trip(
-            tripData.get("routeId"), tripData.get("tripId")
-        )
-        if trip_transiter_data is None:
-            tripData["tripStatus"] = TripStatus.DQ_DISAPPEARED
-            return
-        for stop_time in trip_transiter_data.get("stopTimes", []):
-            if stop_time.get("future") == True:
-                continue
-            relevant_stop = next(
-                (
-                    stop
-                    for stop in tripData.get("stops", [])
-                    if stop.get("stopId") == stop_time.get("stop", {}).get("id")
-                ),
-                None,
-            )
-            if relevant_stop.get("actualTimeSeconds") is not None:
-                continue
-            actual_time_seconds = epoch_time_to_seconds_since_midnight_est(
-                getArrivalOrDepartureTime(stop_time)
-            )
-            relevant_stop["actualTimeSeconds"] = actual_time_seconds
-            predicted_time_seconds = relevant_stop.get("predictedTimeSeconds")
-            relevant_stop["delay"] = actual_time_seconds - predicted_time_seconds
-            if self.config.verbose:
-                print(
-                    f"Set actual arrival time on line {tripData.get('routeId')} for stop {relevant_stop.get('stopName')} to {actual_time_seconds}"
-                )
-
-    def _maybe_mark_trip_as_completed(
-        self, match_data: MatchData, trip_data: TripData
-    ) -> bool:
-        stops_to_finish = match_data.get("numStopsToFinish")
-        if stops_to_finish is None or trip_data.get("stops") is None:
-            return False
-        stops_after_terminal_with_delay = [
-            stop
-            for i, stop in enumerate(trip_data.get("stops"))
-            if i > 0 and stop.get("delay") is not None
-        ]
-        if len(stops_after_terminal_with_delay) >= stops_to_finish:
-            trip_data["tripStatus"] = TripStatus.FINISHED
-            trip_data["finalDelay"] = stops_after_terminal_with_delay[-1].get("delay")
-            if self.config.verbose:
-                print(
-                    f"Marked route {trip_data.get('routeId')} as finished with final delay of {trip_data.get('finalDelay')} seconds"
-                )
-            return True
-        return False
-
-    def _maybe_disqualify_trip(self, trip_data: TripData) -> bool:
-        if (
-            self.config.game_start_time_hours is not None
-            and self.config.assignment_grace_period_minutes is not None
-            and trip_data.get("tripStatus") == TripStatus.NOT_ASSIGNED
-            and get_est_seconds_since_midnight()
-            > get_latest_assignment_time_seconds_est(self.config)
-        ):
-            trip_data["tripStatus"] = TripStatus.DQ_NEVER_ASSIGNED
-            if self.config.verbose:
-                print(
-                    f"Disqualified route {trip_data.get('routeId')} for never being assigned"
-                )
-            return True
-        elif (
-            self.config.game_end_time_hours
-            and get_est_hours_today() > self.config.game_end_time_hours
-        ):
-            trip_data["tripStatus"] = TripStatus.DQ_TOOK_TOO_LONG
-            if self.config.verbose:
-                print(
-                    f"Disqualified route {trip_data.get('routeId')} for taking too long"
-                )
-            return True
-        return False
-
-    def _maybe_end_trip(self, match_data: MatchData, trip_data: TripData):
-        finished = self._maybe_mark_trip_as_completed(match_data, trip_data)
-        if not finished:
-            self._maybe_disqualify_trip(trip_data)
-
-    def _set_up(self) -> None:
-        self.matchesToUpdate = self.game_data_client.get_matches_for_today()
-        for match in self.matchesToUpdate:
-            match.get("matchData", {})["matchStatus"] = MatchStatus.ONGOING
-
-    def _write_next_week_brackets(self) -> None:
-        new_bracket = create_random_bracket(get_next_week_str())
-        self.game_data_client.add_matches(new_bracket)
-
-    def _maybe_end_match(self, match: Match) -> bool:
-        match_data = match.get("matchData")
-        if (
-            match_data.get("numStopsToFinish") is not None
-            and len(match_data.get("competingTrips")) == 2
-            and all(
-                (
-                    isTripComplete(trip_data)
-                    for trip_data in match_data.get("competingTrips")
-                )
-            )
-        ):
-            first_trip = match_data.get("competingTrips")[0]
-            second_trip = match_data.get("competingTrips")[1]
-            random_route_id = (
-                first_trip.get("routeId")
-                if random.random() > 0.5
-                else second_trip.get("routeId")
-            )
-            if isTripDisqualified(first_trip) or isTripDisqualified(second_trip):
-                if isTripDisqualified(first_trip) and isTripDisqualified(second_trip):
-                    match_data["matchResult"] = {
-                        "victoryType": VictoryType.COIN_TOSS_BOTH_DQ,
-                        "winner": random_route_id,
-                    }
-                else:
-                    winner = (
-                        first_trip.get("routeId")
-                        if isTripDisqualified(second_trip)
-                        else second_trip.get("routeId")
-                    )
-                    match_data["matchResult"] = {
-                        "victoryType": VictoryType.ONE_DQ,
-                        "winner": winner,
-                    }
-            else:
-                first_trip_delay = first_trip.get("finalDelay")
-                second_trip_delay = second_trip.get("finalDelay")
-                if first_trip_delay == second_trip_delay:
-                    match_data["matchResult"] = {
-                        "victoryType": VictoryType.COIN_TOSS_SAME_DELAY,
-                        "winner": random_route_id,
-                    }
-                else:
-                    winner = (
-                        first_trip.get("routeId")
-                        if first_trip_delay < second_trip_delay
-                        else second_trip.get("routeId")
-                    )
-                    match_data["matchResult"] = {
-                        "victoryType": VictoryType.FAIR_AND_SQUARE,
-                        "winner": winner,
-                    }
-            match_data["matchStatus"] = MatchStatus.ENDED
-            match_result = match_data.get("matchResult", {})
-            winner = match_result.get("winner")
-            self._update_bracket_with_winner(match.get("matchId"), winner)
-            if self.config.verbose:
-                print(
-                    f"Match ended - Winner: {winner}, Victory type: {match_result.get('victoryType')}"
-                )
-            return True
-        return False
-
-    def _update_bracket_with_winner(self, match_id: str, winner: RouteId):
-        # If last match of the bracket
-        if match_id == str(NUM_MATCHES_PER_BRACKET):
-            if self.config.verbose:
-                print(f"Last match of this week's bracket, writing next week's bracket")
-            self._write_next_week_brackets()
+        if len(upcoming_games):
+            self.game_to_update = upcoming_games[0]
+            self._log(f"Set current game to: {self.game_to_update.get('game_id')}.")
         else:
-            bracket = self.game_data_client.get_matches_for_this_week()
-            modified_match = None
-            for match in bracket:
-                for trip in match.get("matchData").get("competingTrips"):
-                    if trip.get("winnerMatchId") == match_id:
-                        if self.config.verbose:
-                            print(
-                                f"Updating a competing trip in match {match.get('matchId')} to the winner of this match, {winner}"
-                            )
-                        trip["routeId"] = winner
-                        modified_match = match
-                        break
-            if modified_match:
-                self.game_data_client.update_match(modified_match)
+            self._log("No upcoming games found for today.")
 
-    def update(self) -> bool:
-        if not self._is_set_up():
-            self._set_up()
-        for match in self.matchesToUpdate:
-            try:
-                matchData = match.get("matchData", {})
-                if not matchData.get("matchStatus") == MatchStatus.ONGOING:
-                    continue
-                for trip in matchData.get("competingTrips", []):
-                    if not trip.get("routeId"):
-                        trip["tripStatus"] = TripStatus.DQ_NO_COMPETITOR
-                        continue
-                    if isTripComplete(trip):
-                        continue
-                    if not hasTripAssigned(trip):
-                        self._maybeAssignTrip(trip)
-                    if trip.get("tripStatus") == TripStatus.ONGOING:
-                        self._update_stop_times(trip)
-                    self._maybe_end_trip(matchData, trip)
-                self._maybe_set_num_stops_to_finish(matchData)
-                self._maybe_end_match(match)
-                if not self.config.skip_write_to_db:
-                    if self.config.verbose:
-                        print("Writing data to DynamoDB...")
-                    self.game_data_client.update_match(match)
-            except Exception as e:
-                print(f"[ERROR] In update() loop, in match {match['matchId']}: {e}")
-                traceback.print_exc()
-            if self.config.verbose:
-                print()
-        return all(
-            match.get("matchData", {}).get("matchStatus") == MatchStatus.ENDED
-            for match in self.matchesToUpdate
-        )
+    def _get_routes_for_game(self, game: Game) -> list[RouteId]:
+        route_ids = []
+        if game.get("game_type") == GameType.GAME_TYPE_SYSTEM_CHAMPIONSHIP:
+            # TODO: implement
+            pass
+        else:
+            route_ids = GAME_TYPE_TO_ROUTE_IDS[game.get("game_type")]
+        return route_ids
 
-    def run_game_loop(self) -> None:
-        while True:
-            est_hours_today = get_est_hours_today()
-            if (
-                self.config.game_start_time_hours
-                and est_hours_today < self.config.game_start_time_hours
-            ):
-                if self.config.verbose:
-                    print(
-                        f"[{datetime.now().strftime('%H:%M:%S')}] Not time to start yet, sleeping for {PRE_START_REFRESH_TIME_SECONDS} seconds"
-                    )
-                time.sleep(PRE_START_REFRESH_TIME_SECONDS)
-            else:
-                if self.config.verbose:
-                    print(f"[{datetime.now().strftime('%H:%M:%S')}] Update")
-                all_matches_finished = self.update()
-                if all_matches_finished:
-                    if self.config.verbose:
-                        print("All matches completed, exiting...")
-                    break
-                if self.config.verbose:
-                    print()
-                time.sleep(self.config.refresh_rate_seconds)
+    def _select_trains(self):
+        if not self.game_to_update:
+            self._log("Can't select trains because there's no game to update.")
+            return
+        route_ids = self._get_routes_for_game(self.game_to_update)
+        self.game_to_update = populate_trains(self.game_to_update, route_ids)
+        self.game_to_update["game_status"] = GameStatus.GAME_STATUS_UNDERWAY
+        # with open("game_to_update.json", "w") as f:
+        #     json.dump(self.game_to_update, f, indent=2)

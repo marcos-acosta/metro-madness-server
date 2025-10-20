@@ -1,15 +1,12 @@
-from game_config import GAME_SCHEDULE, GAME_TYPE_TO_ROUTE_IDS
-from game_constants import ALL_ROUTE_IDS, WEEKDAY_NAMES
+from game_constants import WEEKDAY_NAMES
 from gtfs_loader import GTFSLoader
 from pathlib import Path
 from datetime import date
 from collections import defaultdict, namedtuple
 import random
 import pandas as pd
-import json
 
 from interface import (
-    GameConfig,
     RouteId,
     Stop,
     TripStatus,
@@ -122,7 +119,7 @@ def get_possible_scheduled_times_in_window(start_time_s, end_time_s):
 
 
 def get_candidate_stop_times(
-    stop_times: pd.DataFrame, start_time_s, end_time_s
+    stop_times: pd.DataFrame, start_time_s: int, end_time_s: int
 ) -> list[CandidateStopTime]:
     candidate_times = []
     for scheduled_time in get_possible_scheduled_times_in_window(
@@ -199,12 +196,6 @@ def convert_selected_time_to_game_dict(
         trains.append(train)
 
     game: Game = {
-        "game_id": "",
-        "date_iso": "",
-        "week_number": "",
-        "game_type": GameType.GAME_TYPE_UNSPECIFIED,
-        "game_variant": GameVariant.GAME_VARIANT_UNSPECIFIED,
-        "game_status": GameStatus.GAME_STATUS_NOT_STARTED,
         "scheduled_arrival_time_s": stop_time.scheduled_arrival_s,
         "trains": trains,
     }
@@ -212,13 +203,13 @@ def convert_selected_time_to_game_dict(
 
 
 def construct_game(
-    game_date: date,
+    game: Game,
     gtfs_loader: GTFSLoader,
     route_ids: list[RouteId],
-    game_config: GameConfig,
 ):
-    start_time = hhmmss_to_seconds(game_config.start_time_hhmmss)
-    end_time = hhmmss_to_seconds(game_config.end_time_hhmmss)
+    game_date = date.fromisoformat(game.get("date_iso"))
+    start_time = game.get("start_time_s")
+    end_time = game.get("end_time_s")
     trips = gtfs_loader.load_csv_as_dataframe("trips.txt", dtype={"route_id": str})
     print(f":: Num trips at load: {len(trips)}")
 
@@ -283,36 +274,12 @@ def construct_game(
     game_dict = convert_selected_time_to_game_dict(
         selected_candidate_time, stop_times, stops_data
     )
-    game_dict["date_iso"] = game_date.strftime("%Y-%m-%d")
-    game_dict["game_type"] = game_config.game_type
-    game_dict["game_variant"] = game_config.game_variant
-    return game_dict
+    return game | game_dict
 
 
-def get_game_config(game_date: date) -> GameConfig | None:
-    return GAME_SCHEDULE[game_date.weekday()]
-
-
-def main():
-    game_date = date(2025, 10, 20)
-    config = get_game_config(game_date)
-    if config is None:
-        return
-    route_ids = []
-    if config.game_type == GameType.GAME_TYPE_SYSTEM_CHAMPIONSHIP:
-        # TODO: Get winners from conferences
-        pass
-    else:
-        route_ids = GAME_TYPE_TO_ROUTE_IDS[config.game_type]
+def populate_trains(game: Game, route_ids: list[RouteId]):
     save_path = Path("./tmp/static_gtfs")
     gtfs_loader = GTFSLoader(save_path, verbose=False)
     gtfs_loader.fetch_static_supplemented_gtfs_data(skip_if_exists=True)
-    game = construct_game(game_date, gtfs_loader, route_ids, config)
-    output_path = Path(f"game_{game_date.strftime('%Y%m%d')}.json")
-
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(game, f, ensure_ascii=False, indent=2)
-
-
-if __name__ == "__main__":
-    main()
+    game = construct_game(game, gtfs_loader, route_ids)
+    return game

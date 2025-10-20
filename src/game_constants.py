@@ -1,3 +1,4 @@
+import datetime
 from interface import RouteId
 
 WEEKDAY_NAMES = [
@@ -42,3 +43,5 @@ BMT_ROUTE_IDS = [
     RouteId.ROUTE_ID_W,
     RouteId.ROUTE_ID_Z,
 ]
+
+WEEK_1_START_DATE = datetime.date(2025, 10, 20)

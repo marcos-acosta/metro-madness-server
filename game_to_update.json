@@ -1,0 +1,3069 @@
+{
+  "week_number": 0,
+  "end_time_s": 86340,
+  "game_status": "GAME_STATUS_NOT_STARTED",
+  "date_iso": "2025-10-19",
+  "game_id": "abc",
+  "game_variant": "GAME_VARIANT_WEEKEND",
+  "game_type": "GAME_TYPE_FREE_FOR_ALL",
+  "start_time_s": 81000,
+  "scheduled_arrival_time_s": 81630,
+  "trains": [
+    {
+      "route_id": "1",
+      "trip_data": {
+        "trip_id": "L0S2-1-3038-S01_131150_1..S03R",
+        "trip_id_short": "131150_1..S03R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "101S",
+            "stop_name": "Van Cortlandt Park-242 St",
+            "scheduled_arrival_time_s": 78690
+          },
+          {
+            "stop_id": "103S",
+            "stop_name": "238 St",
+            "scheduled_arrival_time_s": 78780
+          },
+          {
+            "stop_id": "104S",
+            "stop_name": "231 St",
+            "scheduled_arrival_time_s": 78870
+          },
+          {
+            "stop_id": "106S",
+            "stop_name": "Marble Hill-225 St",
+            "scheduled_arrival_time_s": 78960
+          },
+          {
+            "stop_id": "107S",
+            "stop_name": "215 St",
+            "scheduled_arrival_time_s": 79050
+          },
+          {
+            "stop_id": "108S",
+            "stop_name": "207 St",
+            "scheduled_arrival_time_s": 79110
+          },
+          {
+            "stop_id": "109S",
+            "stop_name": "Dyckman St",
+            "scheduled_arrival_time_s": 79200
+          },
+          {
+            "stop_id": "110S",
+            "stop_name": "191 St",
+            "scheduled_arrival_time_s": 79290
+          },
+          {
+            "stop_id": "111S",
+            "stop_name": "181 St",
+            "scheduled_arrival_time_s": 79380
+          },
+          {
+            "stop_id": "112S",
+            "stop_name": "168 St-Washington Hts",
+            "scheduled_arrival_time_s": 79500
+          },
+          {
+            "stop_id": "113S",
+            "stop_name": "157 St",
+            "scheduled_arrival_time_s": 79590
+          },
+          {
+            "stop_id": "114S",
+            "stop_name": "145 St",
+            "scheduled_arrival_time_s": 79710
+          },
+          {
+            "stop_id": "115S",
+            "stop_name": "137 St-City College",
+            "scheduled_arrival_time_s": 79800
+          },
+          {
+            "stop_id": "116S",
+            "stop_name": "125 St",
+            "scheduled_arrival_time_s": 79890
+          },
+          {
+            "stop_id": "117S",
+            "stop_name": "116 St-Columbia University",
+            "scheduled_arrival_time_s": 80040
+          },
+          {
+            "stop_id": "118S",
+            "stop_name": "Cathedral Pkwy (110 St)",
+            "scheduled_arrival_time_s": 80100
+          },
+          {
+            "stop_id": "119S",
+            "stop_name": "103 St",
+            "scheduled_arrival_time_s": 80160
+          },
+          {
+            "stop_id": "120S",
+            "stop_name": "96 St",
+            "scheduled_arrival_time_s": 80280
+          },
+          {
+            "stop_id": "121S",
+            "stop_name": "86 St",
+            "scheduled_arrival_time_s": 80400
+          },
+          {
+            "stop_id": "122S",
+            "stop_name": "79 St",
+            "scheduled_arrival_time_s": 80460
+          },
+          {
+            "stop_id": "123S",
+            "stop_name": "72 St",
+            "scheduled_arrival_time_s": 80550
+          },
+          {
+            "stop_id": "124S",
+            "stop_name": "66 St-Lincoln Center",
+            "scheduled_arrival_time_s": 80640
+          },
+          {
+            "stop_id": "125S",
+            "stop_name": "59 St-Columbus Circle",
+            "scheduled_arrival_time_s": 80730
+          },
+          {
+            "stop_id": "126S",
+            "stop_name": "50 St",
+            "scheduled_arrival_time_s": 80850
+          },
+          {
+            "stop_id": "127S",
+            "stop_name": "Times Sq-42 St",
+            "scheduled_arrival_time_s": 80940
+          },
+          {
+            "stop_id": "128S",
+            "stop_name": "34 St-Penn Station",
+            "scheduled_arrival_time_s": 81030
+          },
+          {
+            "stop_id": "129S",
+            "stop_name": "28 St",
+            "scheduled_arrival_time_s": 81090
+          },
+          {
+            "stop_id": "130S",
+            "stop_name": "23 St",
+            "scheduled_arrival_time_s": 81150
+          },
+          {
+            "stop_id": "131S",
+            "stop_name": "18 St",
+            "scheduled_arrival_time_s": 81210
+          },
+          {
+            "stop_id": "132S",
+            "stop_name": "14 St",
+            "scheduled_arrival_time_s": 81270
+          },
+          {
+            "stop_id": "133S",
+            "stop_name": "Christopher St-Stonewall",
+            "scheduled_arrival_time_s": 81360
+          },
+          {
+            "stop_id": "134S",
+            "stop_name": "Houston St",
+            "scheduled_arrival_time_s": 81450
+          },
+          {
+            "stop_id": "135S",
+            "stop_name": "Canal St",
+            "scheduled_arrival_time_s": 81570
+          },
+          {
+            "stop_id": "136S",
+            "stop_name": "Franklin St",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "137S",
+            "stop_name": "Chambers St",
+            "scheduled_arrival_time_s": 81690
+          },
+          {
+            "stop_id": "138S",
+            "stop_name": "WTC Cortlandt",
+            "scheduled_arrival_time_s": 81900
+          },
+          {
+            "stop_id": "139S",
+            "stop_name": "Rector St",
+            "scheduled_arrival_time_s": 81990
+          },
+          {
+            "stop_id": "142S",
+            "stop_name": "South Ferry",
+            "scheduled_arrival_time_s": 82110
+          }
+        ],
+        "target_stop_id": "136S"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "2",
+      "trip_data": {
+        "trip_id": "L0S2-2-3048-S304_133950_2..N01X004",
+        "trip_id_short": "133950_2..N01X004",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "247N",
+            "stop_name": "Flatbush Av-Brooklyn College",
+            "scheduled_arrival_time_s": 80370
+          },
+          {
+            "stop_id": "246N",
+            "stop_name": "Newkirk Av-Little Haiti",
+            "scheduled_arrival_time_s": 80490
+          },
+          {
+            "stop_id": "245N",
+            "stop_name": "Beverly Rd",
+            "scheduled_arrival_time_s": 80550
+          },
+          {
+            "stop_id": "244N",
+            "stop_name": "Church Av",
+            "scheduled_arrival_time_s": 80640
+          },
+          {
+            "stop_id": "243N",
+            "stop_name": "Winthrop St",
+            "scheduled_arrival_time_s": 80700
+          },
+          {
+            "stop_id": "242N",
+            "stop_name": "Sterling St",
+            "scheduled_arrival_time_s": 80790
+          },
+          {
+            "stop_id": "241N",
+            "stop_name": "President St-Medgar Evers College",
+            "scheduled_arrival_time_s": 80850
+          },
+          {
+            "stop_id": "239N",
+            "stop_name": "Franklin Av-Medgar Evers College",
+            "scheduled_arrival_time_s": 81030
+          },
+          {
+            "stop_id": "235N",
+            "stop_name": "Atlantic Av-Barclays Ctr",
+            "scheduled_arrival_time_s": 81270
+          },
+          {
+            "stop_id": "234N",
+            "stop_name": "Nevins St",
+            "scheduled_arrival_time_s": 81360
+          },
+          {
+            "stop_id": "233N",
+            "stop_name": "Hoyt St",
+            "scheduled_arrival_time_s": 81450
+          },
+          {
+            "stop_id": "232N",
+            "stop_name": "Borough Hall",
+            "scheduled_arrival_time_s": 81540
+          },
+          {
+            "stop_id": "231N",
+            "stop_name": "Clark St",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "230N",
+            "stop_name": "Wall St",
+            "scheduled_arrival_time_s": 81810
+          },
+          {
+            "stop_id": "229N",
+            "stop_name": "Fulton St",
+            "scheduled_arrival_time_s": 81870
+          },
+          {
+            "stop_id": "228N",
+            "stop_name": "Park Place",
+            "scheduled_arrival_time_s": 81990
+          },
+          {
+            "stop_id": "137N",
+            "stop_name": "Chambers St",
+            "scheduled_arrival_time_s": 82050
+          },
+          {
+            "stop_id": "132N",
+            "stop_name": "14 St",
+            "scheduled_arrival_time_s": 82290
+          },
+          {
+            "stop_id": "128N",
+            "stop_name": "34 St-Penn Station",
+            "scheduled_arrival_time_s": 82440
+          },
+          {
+            "stop_id": "127N",
+            "stop_name": "Times Sq-42 St",
+            "scheduled_arrival_time_s": 82500
+          },
+          {
+            "stop_id": "123N",
+            "stop_name": "72 St",
+            "scheduled_arrival_time_s": 82740
+          },
+          {
+            "stop_id": "120N",
+            "stop_name": "96 St",
+            "scheduled_arrival_time_s": 82920
+          },
+          {
+            "stop_id": "227N",
+            "stop_name": "110 St-Malcolm X Plaza",
+            "scheduled_arrival_time_s": 83160
+          },
+          {
+            "stop_id": "226N",
+            "stop_name": "116 St",
+            "scheduled_arrival_time_s": 83220
+          },
+          {
+            "stop_id": "225N",
+            "stop_name": "125 St",
+            "scheduled_arrival_time_s": 83310
+          },
+          {
+            "stop_id": "224N",
+            "stop_name": "135 St",
+            "scheduled_arrival_time_s": 83400
+          },
+          {
+            "stop_id": "222N",
+            "stop_name": "149 St-Grand Concourse",
+            "scheduled_arrival_time_s": 83580
+          },
+          {
+            "stop_id": "221N",
+            "stop_name": "3 Av-149 St",
+            "scheduled_arrival_time_s": 83700
+          },
+          {
+            "stop_id": "220N",
+            "stop_name": "Jackson Av",
+            "scheduled_arrival_time_s": 83820
+          },
+          {
+            "stop_id": "219N",
+            "stop_name": "Prospect Av",
+            "scheduled_arrival_time_s": 83910
+          },
+          {
+            "stop_id": "218N",
+            "stop_name": "Intervale Av",
+            "scheduled_arrival_time_s": 83970
+          },
+          {
+            "stop_id": "217N",
+            "stop_name": "Simpson St",
+            "scheduled_arrival_time_s": 84030
+          },
+          {
+            "stop_id": "216N",
+            "stop_name": "Freeman St",
+            "scheduled_arrival_time_s": 84120
+          },
+          {
+            "stop_id": "215N",
+            "stop_name": "174 St",
+            "scheduled_arrival_time_s": 84240
+          },
+          {
+            "stop_id": "214N",
+            "stop_name": "West Farms Sq-E Tremont Av",
+            "scheduled_arrival_time_s": 84330
+          },
+          {
+            "stop_id": "213N",
+            "stop_name": "E 180 St",
+            "scheduled_arrival_time_s": 84420
+          },
+          {
+            "stop_id": "212N",
+            "stop_name": "Bronx Park East",
+            "scheduled_arrival_time_s": 84540
+          },
+          {
+            "stop_id": "211N",
+            "stop_name": "Pelham Pkwy",
+            "scheduled_arrival_time_s": 84660
+          },
+          {
+            "stop_id": "210N",
+            "stop_name": "Allerton Av",
+            "scheduled_arrival_time_s": 84780
+          },
+          {
+            "stop_id": "209N",
+            "stop_name": "Burke Av",
+            "scheduled_arrival_time_s": 84840
+          },
+          {
+            "stop_id": "208N",
+            "stop_name": "Gun Hill Rd",
+            "scheduled_arrival_time_s": 84930
+          },
+          {
+            "stop_id": "207N",
+            "stop_name": "219 St",
+            "scheduled_arrival_time_s": 85020
+          },
+          {
+            "stop_id": "206N",
+            "stop_name": "225 St",
+            "scheduled_arrival_time_s": 85110
+          },
+          {
+            "stop_id": "205N",
+            "stop_name": "233 St",
+            "scheduled_arrival_time_s": 85170
+          },
+          {
+            "stop_id": "204N",
+            "stop_name": "Nereid Av",
+            "scheduled_arrival_time_s": 85260
+          },
+          {
+            "stop_id": "201N",
+            "stop_name": "Wakefield-241 St",
+            "scheduled_arrival_time_s": 85470
+          }
+        ],
+        "target_stop_id": "231N"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "3",
+      "trip_data": {
+        "trip_id": "L0S2-3-3043-S07_130400_3..S01R",
+        "trip_id_short": "130400_3..S01R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "301S",
+            "stop_name": "Harlem-148 St",
+            "scheduled_arrival_time_s": 78240
+          },
+          {
+            "stop_id": "302S",
+            "stop_name": "145 St",
+            "scheduled_arrival_time_s": 78330
+          },
+          {
+            "stop_id": "224S",
+            "stop_name": "135 St",
+            "scheduled_arrival_time_s": 78450
+          },
+          {
+            "stop_id": "225S",
+            "stop_name": "125 St",
+            "scheduled_arrival_time_s": 78540
+          },
+          {
+            "stop_id": "226S",
+            "stop_name": "116 St",
+            "scheduled_arrival_time_s": 78630
+          },
+          {
+            "stop_id": "227S",
+            "stop_name": "110 St-Malcolm X Plaza",
+            "scheduled_arrival_time_s": 78690
+          },
+          {
+            "stop_id": "120S",
+            "stop_name": "96 St",
+            "scheduled_arrival_time_s": 78930
+          },
+          {
+            "stop_id": "123S",
+            "stop_name": "72 St",
+            "scheduled_arrival_time_s": 79080
+          },
+          {
+            "stop_id": "127S",
+            "stop_name": "Times Sq-42 St",
+            "scheduled_arrival_time_s": 79320
+          },
+          {
+            "stop_id": "128S",
+            "stop_name": "34 St-Penn Station",
+            "scheduled_arrival_time_s": 79380
+          },
+          {
+            "stop_id": "132S",
+            "stop_name": "14 St",
+            "scheduled_arrival_time_s": 79530
+          },
+          {
+            "stop_id": "137S",
+            "stop_name": "Chambers St",
+            "scheduled_arrival_time_s": 79800
+          },
+          {
+            "stop_id": "228S",
+            "stop_name": "Park Place",
+            "scheduled_arrival_time_s": 79860
+          },
+          {
+            "stop_id": "229S",
+            "stop_name": "Fulton St",
+            "scheduled_arrival_time_s": 79980
+          },
+          {
+            "stop_id": "230S",
+            "stop_name": "Wall St",
+            "scheduled_arrival_time_s": 80040
+          },
+          {
+            "stop_id": "231S",
+            "stop_name": "Clark St",
+            "scheduled_arrival_time_s": 80310
+          },
+          {
+            "stop_id": "232S",
+            "stop_name": "Borough Hall",
+            "scheduled_arrival_time_s": 80370
+          },
+          {
+            "stop_id": "233S",
+            "stop_name": "Hoyt St",
+            "scheduled_arrival_time_s": 80460
+          },
+          {
+            "stop_id": "234S",
+            "stop_name": "Nevins St",
+            "scheduled_arrival_time_s": 80520
+          },
+          {
+            "stop_id": "235S",
+            "stop_name": "Atlantic Av-Barclays Ctr",
+            "scheduled_arrival_time_s": 80610
+          },
+          {
+            "stop_id": "236S",
+            "stop_name": "Bergen St",
+            "scheduled_arrival_time_s": 80670
+          },
+          {
+            "stop_id": "237S",
+            "stop_name": "Grand Army Plaza",
+            "scheduled_arrival_time_s": 80760
+          },
+          {
+            "stop_id": "238S",
+            "stop_name": "Eastern Pkwy-Brooklyn Museum",
+            "scheduled_arrival_time_s": 80850
+          },
+          {
+            "stop_id": "239S",
+            "stop_name": "Franklin Av-Medgar Evers College",
+            "scheduled_arrival_time_s": 80940
+          },
+          {
+            "stop_id": "248S",
+            "stop_name": "Nostrand Av",
+            "scheduled_arrival_time_s": 81030
+          },
+          {
+            "stop_id": "249S",
+            "stop_name": "Kingston Av",
+            "scheduled_arrival_time_s": 81120
+          },
+          {
+            "stop_id": "250S",
+            "stop_name": "Crown Hts-Utica Av",
+            "scheduled_arrival_time_s": 81240
+          },
+          {
+            "stop_id": "251S",
+            "stop_name": "Sutter Av-Rutland Rd",
+            "scheduled_arrival_time_s": 81540
+          },
+          {
+            "stop_id": "252S",
+            "stop_name": "Saratoga Av",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "253S",
+            "stop_name": "Rockaway Av",
+            "scheduled_arrival_time_s": 81720
+          },
+          {
+            "stop_id": "254S",
+            "stop_name": "Junius St",
+            "scheduled_arrival_time_s": 81780
+          },
+          {
+            "stop_id": "255S",
+            "stop_name": "Pennsylvania Av",
+            "scheduled_arrival_time_s": 81870
+          },
+          {
+            "stop_id": "256S",
+            "stop_name": "Van Siclen Av",
+            "scheduled_arrival_time_s": 81960
+          },
+          {
+            "stop_id": "257S",
+            "stop_name": "New Lots Av",
+            "scheduled_arrival_time_s": 82020
+          }
+        ],
+        "target_stop_id": "252S"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "4",
+      "trip_data": {
+        "trip_id": "L0S2-4-3049-S293_131650_4..N06R",
+        "trip_id_short": "131650_4..N06R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "250N",
+            "stop_name": "Crown Hts-Utica Av",
+            "scheduled_arrival_time_s": 78990
+          },
+          {
+            "stop_id": "239N",
+            "stop_name": "Franklin Av-Medgar Evers College",
+            "scheduled_arrival_time_s": 79170
+          },
+          {
+            "stop_id": "235N",
+            "stop_name": "Atlantic Av-Barclays Ctr",
+            "scheduled_arrival_time_s": 79410
+          },
+          {
+            "stop_id": "234N",
+            "stop_name": "Nevins St",
+            "scheduled_arrival_time_s": 79500
+          },
+          {
+            "stop_id": "423N",
+            "stop_name": "Borough Hall",
+            "scheduled_arrival_time_s": 79590
+          },
+          {
+            "stop_id": "420N",
+            "stop_name": "Bowling Green",
+            "scheduled_arrival_time_s": 79890
+          },
+          {
+            "stop_id": "419N",
+            "stop_name": "Wall St",
+            "scheduled_arrival_time_s": 79950
+          },
+          {
+            "stop_id": "418N",
+            "stop_name": "Fulton St",
+            "scheduled_arrival_time_s": 80040
+          },
+          {
+            "stop_id": "640N",
+            "stop_name": "Brooklyn Bridge-City Hall",
+            "scheduled_arrival_time_s": 80130
+          },
+          {
+            "stop_id": "635N",
+            "stop_name": "14 St-Union Sq",
+            "scheduled_arrival_time_s": 80400
+          },
+          {
+            "stop_id": "631N",
+            "stop_name": "Grand Central-42 St",
+            "scheduled_arrival_time_s": 80610
+          },
+          {
+            "stop_id": "629N",
+            "stop_name": "59 St",
+            "scheduled_arrival_time_s": 80730
+          },
+          {
+            "stop_id": "626N",
+            "stop_name": "86 St",
+            "scheduled_arrival_time_s": 80940
+          },
+          {
+            "stop_id": "621N",
+            "stop_name": "125 St",
+            "scheduled_arrival_time_s": 81240
+          },
+          {
+            "stop_id": "416N",
+            "stop_name": "138 St-Grand Concourse",
+            "scheduled_arrival_time_s": 81390
+          },
+          {
+            "stop_id": "415N",
+            "stop_name": "149 St-Grand Concourse",
+            "scheduled_arrival_time_s": 81480
+          },
+          {
+            "stop_id": "414N",
+            "stop_name": "161 St-Yankee Stadium",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "413N",
+            "stop_name": "167 St",
+            "scheduled_arrival_time_s": 81750
+          },
+          {
+            "stop_id": "412N",
+            "stop_name": "170 St",
+            "scheduled_arrival_time_s": 81840
+          },
+          {
+            "stop_id": "411N",
+            "stop_name": "Mt Eden Av",
+            "scheduled_arrival_time_s": 81930
+          },
+          {
+            "stop_id": "410N",
+            "stop_name": "176 St",
+            "scheduled_arrival_time_s": 81990
+          },
+          {
+            "stop_id": "409N",
+            "stop_name": "Burnside Av",
+            "scheduled_arrival_time_s": 82080
+          },
+          {
+            "stop_id": "408N",
+            "stop_name": "183 St",
+            "scheduled_arrival_time_s": 82170
+          },
+          {
+            "stop_id": "407N",
+            "stop_name": "Fordham Rd",
+            "scheduled_arrival_time_s": 82230
+          },
+          {
+            "stop_id": "406N",
+            "stop_name": "Kingsbridge Rd",
+            "scheduled_arrival_time_s": 82290
+          },
+          {
+            "stop_id": "405N",
+            "stop_name": "Bedford Park Blvd-Lehman College",
+            "scheduled_arrival_time_s": 82410
+          },
+          {
+            "stop_id": "402N",
+            "stop_name": "Mosholu Pkwy",
+            "scheduled_arrival_time_s": 82500
+          },
+          {
+            "stop_id": "401N",
+            "stop_name": "Woodlawn",
+            "scheduled_arrival_time_s": 82620
+          }
+        ],
+        "target_stop_id": "414N"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "5",
+      "trip_data": {
+        "trip_id": "L0S2-5-3049-S60_135700_5..N01X003",
+        "trip_id_short": "135700_5..N01X003",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "213N",
+            "stop_name": "E 180 St",
+            "scheduled_arrival_time_s": 81420
+          },
+          {
+            "stop_id": "505N",
+            "stop_name": "Morris Park",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "504N",
+            "stop_name": "Pelham Pkwy",
+            "scheduled_arrival_time_s": 81690
+          },
+          {
+            "stop_id": "503N",
+            "stop_name": "Gun Hill Rd",
+            "scheduled_arrival_time_s": 81870
+          },
+          {
+            "stop_id": "502N",
+            "stop_name": "Baychester Av",
+            "scheduled_arrival_time_s": 81990
+          },
+          {
+            "stop_id": "501N",
+            "stop_name": "Eastchester-Dyre Av",
+            "scheduled_arrival_time_s": 82140
+          }
+        ],
+        "target_stop_id": "505N"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "6",
+      "trip_data": {
+        "trip_id": "L0S2-6-3031-S59_135600_6..N01R",
+        "trip_id_short": "135600_6..N01R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "640N",
+            "stop_name": "Brooklyn Bridge-City Hall",
+            "scheduled_arrival_time_s": 81360
+          },
+          {
+            "stop_id": "639N",
+            "stop_name": "Canal St",
+            "scheduled_arrival_time_s": 81480
+          },
+          {
+            "stop_id": "638N",
+            "stop_name": "Spring St",
+            "scheduled_arrival_time_s": 81570
+          },
+          {
+            "stop_id": "637N",
+            "stop_name": "Bleecker St",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "636N",
+            "stop_name": "Astor Pl",
+            "scheduled_arrival_time_s": 81720
+          },
+          {
+            "stop_id": "635N",
+            "stop_name": "14 St-Union Sq",
+            "scheduled_arrival_time_s": 81810
+          },
+          {
+            "stop_id": "634N",
+            "stop_name": "23 St-Baruch College",
+            "scheduled_arrival_time_s": 81930
+          },
+          {
+            "stop_id": "633N",
+            "stop_name": "28 St",
+            "scheduled_arrival_time_s": 81990
+          },
+          {
+            "stop_id": "632N",
+            "stop_name": "33 St",
+            "scheduled_arrival_time_s": 82050
+          },
+          {
+            "stop_id": "631N",
+            "stop_name": "Grand Central-42 St",
+            "scheduled_arrival_time_s": 82170
+          },
+          {
+            "stop_id": "630N",
+            "stop_name": "51 St",
+            "scheduled_arrival_time_s": 82260
+          },
+          {
+            "stop_id": "629N",
+            "stop_name": "59 St",
+            "scheduled_arrival_time_s": 82350
+          },
+          {
+            "stop_id": "628N",
+            "stop_name": "68 St-Hunter College",
+            "scheduled_arrival_time_s": 82470
+          },
+          {
+            "stop_id": "627N",
+            "stop_name": "77 St",
+            "scheduled_arrival_time_s": 82560
+          },
+          {
+            "stop_id": "626N",
+            "stop_name": "86 St",
+            "scheduled_arrival_time_s": 82650
+          },
+          {
+            "stop_id": "625N",
+            "stop_name": "96 St",
+            "scheduled_arrival_time_s": 82770
+          },
+          {
+            "stop_id": "624N",
+            "stop_name": "103 St",
+            "scheduled_arrival_time_s": 82860
+          },
+          {
+            "stop_id": "623N",
+            "stop_name": "110 St",
+            "scheduled_arrival_time_s": 82920
+          },
+          {
+            "stop_id": "622N",
+            "stop_name": "116 St",
+            "scheduled_arrival_time_s": 83010
+          },
+          {
+            "stop_id": "621N",
+            "stop_name": "125 St",
+            "scheduled_arrival_time_s": 83100
+          },
+          {
+            "stop_id": "619N",
+            "stop_name": "3 Av-138 St",
+            "scheduled_arrival_time_s": 83280
+          },
+          {
+            "stop_id": "618N",
+            "stop_name": "Brook Av",
+            "scheduled_arrival_time_s": 83370
+          },
+          {
+            "stop_id": "617N",
+            "stop_name": "Cypress Av",
+            "scheduled_arrival_time_s": 83430
+          },
+          {
+            "stop_id": "616N",
+            "stop_name": "E 143 St-St Mary's St",
+            "scheduled_arrival_time_s": 83550
+          },
+          {
+            "stop_id": "615N",
+            "stop_name": "E 149 St",
+            "scheduled_arrival_time_s": 83640
+          },
+          {
+            "stop_id": "614N",
+            "stop_name": "Longwood Av",
+            "scheduled_arrival_time_s": 83730
+          },
+          {
+            "stop_id": "613N",
+            "stop_name": "Hunts Point Av",
+            "scheduled_arrival_time_s": 83850
+          },
+          {
+            "stop_id": "612N",
+            "stop_name": "Whitlock Av",
+            "scheduled_arrival_time_s": 83940
+          },
+          {
+            "stop_id": "611N",
+            "stop_name": "Elder Av",
+            "scheduled_arrival_time_s": 84030
+          },
+          {
+            "stop_id": "610N",
+            "stop_name": "Morrison Av-Soundview",
+            "scheduled_arrival_time_s": 84090
+          },
+          {
+            "stop_id": "609N",
+            "stop_name": "St Lawrence Av",
+            "scheduled_arrival_time_s": 84180
+          },
+          {
+            "stop_id": "608N",
+            "stop_name": "Parkchester",
+            "scheduled_arrival_time_s": 84240
+          },
+          {
+            "stop_id": "607N",
+            "stop_name": "Castle Hill Av",
+            "scheduled_arrival_time_s": 84330
+          },
+          {
+            "stop_id": "606N",
+            "stop_name": "Zerega Av",
+            "scheduled_arrival_time_s": 84390
+          },
+          {
+            "stop_id": "604N",
+            "stop_name": "Westchester Sq-E Tremont Av",
+            "scheduled_arrival_time_s": 84450
+          },
+          {
+            "stop_id": "603N",
+            "stop_name": "Middletown Rd",
+            "scheduled_arrival_time_s": 84540
+          },
+          {
+            "stop_id": "602N",
+            "stop_name": "Buhre Av",
+            "scheduled_arrival_time_s": 84630
+          },
+          {
+            "stop_id": "601N",
+            "stop_name": "Pelham Bay Park",
+            "scheduled_arrival_time_s": 84780
+          }
+        ],
+        "target_stop_id": "637N"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "7",
+      "trip_data": {
+        "trip_id": "L0S2-7-3026-S33_135800_7..S35X002",
+        "trip_id_short": "135800_7..S35X002",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "701S",
+            "stop_name": "Flushing-Main St",
+            "scheduled_arrival_time_s": 81480
+          },
+          {
+            "stop_id": "702S",
+            "stop_name": "Mets-Willets Point",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "705S",
+            "stop_name": "111 St",
+            "scheduled_arrival_time_s": 81750
+          },
+          {
+            "stop_id": "706S",
+            "stop_name": "103 St-Corona Plaza",
+            "scheduled_arrival_time_s": 81810
+          },
+          {
+            "stop_id": "707S",
+            "stop_name": "Junction Blvd",
+            "scheduled_arrival_time_s": 81870
+          },
+          {
+            "stop_id": "708S",
+            "stop_name": "90 St-Elmhurst Av",
+            "scheduled_arrival_time_s": 81960
+          },
+          {
+            "stop_id": "709S",
+            "stop_name": "82 St-Jackson Hts",
+            "scheduled_arrival_time_s": 82020
+          },
+          {
+            "stop_id": "710S",
+            "stop_name": "74 St-Broadway",
+            "scheduled_arrival_time_s": 82080
+          }
+        ],
+        "target_stop_id": "702S"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "A",
+      "trip_data": {
+        "trip_id": "L0S2-A-3054-S01_130200_A..N54R",
+        "trip_id_short": "130200_A..N54R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "A65N",
+            "stop_name": "Ozone Park-Lefferts Blvd",
+            "scheduled_arrival_time_s": 78120
+          },
+          {
+            "stop_id": "A64N",
+            "stop_name": "111 St",
+            "scheduled_arrival_time_s": 78210
+          },
+          {
+            "stop_id": "A63N",
+            "stop_name": "104 St",
+            "scheduled_arrival_time_s": 78270
+          },
+          {
+            "stop_id": "A61N",
+            "stop_name": "Rockaway Blvd",
+            "scheduled_arrival_time_s": 78360
+          },
+          {
+            "stop_id": "A60N",
+            "stop_name": "88 St",
+            "scheduled_arrival_time_s": 78450
+          },
+          {
+            "stop_id": "A59N",
+            "stop_name": "80 St",
+            "scheduled_arrival_time_s": 78540
+          },
+          {
+            "stop_id": "A57N",
+            "stop_name": "Grant Av",
+            "scheduled_arrival_time_s": 78630
+          },
+          {
+            "stop_id": "A55N",
+            "stop_name": "Euclid Av",
+            "scheduled_arrival_time_s": 78720
+          },
+          {
+            "stop_id": "A51N",
+            "stop_name": "Broadway Junction",
+            "scheduled_arrival_time_s": 78960
+          },
+          {
+            "stop_id": "A48N",
+            "stop_name": "Utica Av",
+            "scheduled_arrival_time_s": 79170
+          },
+          {
+            "stop_id": "A46N",
+            "stop_name": "Nostrand Av",
+            "scheduled_arrival_time_s": 79350
+          },
+          {
+            "stop_id": "A42N",
+            "stop_name": "Hoyt-Schermerhorn Sts",
+            "scheduled_arrival_time_s": 79650
+          },
+          {
+            "stop_id": "A41N",
+            "stop_name": "Jay St-MetroTech",
+            "scheduled_arrival_time_s": 79740
+          },
+          {
+            "stop_id": "A40N",
+            "stop_name": "High St",
+            "scheduled_arrival_time_s": 79860
+          },
+          {
+            "stop_id": "A38N",
+            "stop_name": "Fulton St",
+            "scheduled_arrival_time_s": 80040
+          },
+          {
+            "stop_id": "A36N",
+            "stop_name": "Chambers St",
+            "scheduled_arrival_time_s": 80160
+          },
+          {
+            "stop_id": "A34N",
+            "stop_name": "Canal St",
+            "scheduled_arrival_time_s": 80250
+          },
+          {
+            "stop_id": "A32N",
+            "stop_name": "W 4 St-Wash Sq",
+            "scheduled_arrival_time_s": 80400
+          },
+          {
+            "stop_id": "A31N",
+            "stop_name": "14 St",
+            "scheduled_arrival_time_s": 80550
+          },
+          {
+            "stop_id": "A28N",
+            "stop_name": "34 St-Penn Station",
+            "scheduled_arrival_time_s": 80730
+          },
+          {
+            "stop_id": "A27N",
+            "stop_name": "42 St-Port Authority Bus Terminal",
+            "scheduled_arrival_time_s": 80820
+          },
+          {
+            "stop_id": "A24N",
+            "stop_name": "59 St-Columbus Circle",
+            "scheduled_arrival_time_s": 81000
+          },
+          {
+            "stop_id": "A15N",
+            "stop_name": "125 St",
+            "scheduled_arrival_time_s": 81480
+          },
+          {
+            "stop_id": "A12N",
+            "stop_name": "145 St",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "A09N",
+            "stop_name": "168 St",
+            "scheduled_arrival_time_s": 81810
+          },
+          {
+            "stop_id": "A07N",
+            "stop_name": "175 St",
+            "scheduled_arrival_time_s": 82080
+          },
+          {
+            "stop_id": "A06N",
+            "stop_name": "181 St",
+            "scheduled_arrival_time_s": 82140
+          },
+          {
+            "stop_id": "A05N",
+            "stop_name": "190 St",
+            "scheduled_arrival_time_s": 82260
+          },
+          {
+            "stop_id": "A03N",
+            "stop_name": "Dyckman St",
+            "scheduled_arrival_time_s": 82410
+          },
+          {
+            "stop_id": "A02N",
+            "stop_name": "Inwood-207 St",
+            "scheduled_arrival_time_s": 82650
+          }
+        ],
+        "target_stop_id": "A12N"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "C",
+      "trip_data": {
+        "trip_id": "L0S2-C-3028-S01_130800_C..N04R",
+        "trip_id_short": "130800_C..N04R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "A55N",
+            "stop_name": "Euclid Av",
+            "scheduled_arrival_time_s": 78480
+          },
+          {
+            "stop_id": "A54N",
+            "stop_name": "Shepherd Av",
+            "scheduled_arrival_time_s": 78570
+          },
+          {
+            "stop_id": "A53N",
+            "stop_name": "Van Siclen Av",
+            "scheduled_arrival_time_s": 78660
+          },
+          {
+            "stop_id": "A52N",
+            "stop_name": "Liberty Av",
+            "scheduled_arrival_time_s": 78750
+          },
+          {
+            "stop_id": "A51N",
+            "stop_name": "Broadway Junction",
+            "scheduled_arrival_time_s": 78870
+          },
+          {
+            "stop_id": "A50N",
+            "stop_name": "Rockaway Av",
+            "scheduled_arrival_time_s": 79050
+          },
+          {
+            "stop_id": "A49N",
+            "stop_name": "Ralph Av",
+            "scheduled_arrival_time_s": 79170
+          },
+          {
+            "stop_id": "A48N",
+            "stop_name": "Utica Av",
+            "scheduled_arrival_time_s": 79260
+          },
+          {
+            "stop_id": "A47N",
+            "stop_name": "Kingston-Throop Avs",
+            "scheduled_arrival_time_s": 79350
+          },
+          {
+            "stop_id": "A46N",
+            "stop_name": "Nostrand Av",
+            "scheduled_arrival_time_s": 79440
+          },
+          {
+            "stop_id": "A45N",
+            "stop_name": "Franklin Av",
+            "scheduled_arrival_time_s": 79500
+          },
+          {
+            "stop_id": "A44N",
+            "stop_name": "Clinton-Washington Avs",
+            "scheduled_arrival_time_s": 79590
+          },
+          {
+            "stop_id": "A43N",
+            "stop_name": "Lafayette Av",
+            "scheduled_arrival_time_s": 79680
+          },
+          {
+            "stop_id": "A42N",
+            "stop_name": "Hoyt-Schermerhorn Sts",
+            "scheduled_arrival_time_s": 79770
+          },
+          {
+            "stop_id": "A41N",
+            "stop_name": "Jay St-MetroTech",
+            "scheduled_arrival_time_s": 79860
+          },
+          {
+            "stop_id": "A40N",
+            "stop_name": "High St",
+            "scheduled_arrival_time_s": 79980
+          },
+          {
+            "stop_id": "A38N",
+            "stop_name": "Fulton St",
+            "scheduled_arrival_time_s": 80160
+          },
+          {
+            "stop_id": "A36N",
+            "stop_name": "Chambers St",
+            "scheduled_arrival_time_s": 80280
+          },
+          {
+            "stop_id": "A34N",
+            "stop_name": "Canal St",
+            "scheduled_arrival_time_s": 80370
+          },
+          {
+            "stop_id": "A33N",
+            "stop_name": "Spring St",
+            "scheduled_arrival_time_s": 80460
+          },
+          {
+            "stop_id": "A32N",
+            "stop_name": "W 4 St-Wash Sq",
+            "scheduled_arrival_time_s": 80580
+          },
+          {
+            "stop_id": "A31N",
+            "stop_name": "14 St",
+            "scheduled_arrival_time_s": 80700
+          },
+          {
+            "stop_id": "A30N",
+            "stop_name": "23 St",
+            "scheduled_arrival_time_s": 80790
+          },
+          {
+            "stop_id": "A28N",
+            "stop_name": "34 St-Penn Station",
+            "scheduled_arrival_time_s": 80910
+          },
+          {
+            "stop_id": "A27N",
+            "stop_name": "42 St-Port Authority Bus Terminal",
+            "scheduled_arrival_time_s": 80970
+          },
+          {
+            "stop_id": "A25N",
+            "stop_name": "50 St",
+            "scheduled_arrival_time_s": 81060
+          },
+          {
+            "stop_id": "A24N",
+            "stop_name": "59 St-Columbus Circle",
+            "scheduled_arrival_time_s": 81180
+          },
+          {
+            "stop_id": "A22N",
+            "stop_name": "72 St",
+            "scheduled_arrival_time_s": 81270
+          },
+          {
+            "stop_id": "A21N",
+            "stop_name": "81 St-Museum of Natural History",
+            "scheduled_arrival_time_s": 81360
+          },
+          {
+            "stop_id": "A20N",
+            "stop_name": "86 St",
+            "scheduled_arrival_time_s": 81450
+          },
+          {
+            "stop_id": "A19N",
+            "stop_name": "96 St",
+            "scheduled_arrival_time_s": 81540
+          },
+          {
+            "stop_id": "A18N",
+            "stop_name": "103 St",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "A17N",
+            "stop_name": "Cathedral Pkwy (110 St)",
+            "scheduled_arrival_time_s": 81690
+          },
+          {
+            "stop_id": "A16N",
+            "stop_name": "116 St",
+            "scheduled_arrival_time_s": 81780
+          },
+          {
+            "stop_id": "A15N",
+            "stop_name": "125 St",
+            "scheduled_arrival_time_s": 81870
+          },
+          {
+            "stop_id": "A14N",
+            "stop_name": "135 St",
+            "scheduled_arrival_time_s": 81960
+          },
+          {
+            "stop_id": "A12N",
+            "stop_name": "145 St",
+            "scheduled_arrival_time_s": 82050
+          },
+          {
+            "stop_id": "A11N",
+            "stop_name": "155 St",
+            "scheduled_arrival_time_s": 82440
+          },
+          {
+            "stop_id": "A10N",
+            "stop_name": "163 St-Amsterdam Av",
+            "scheduled_arrival_time_s": 82530
+          },
+          {
+            "stop_id": "A09N",
+            "stop_name": "168 St",
+            "scheduled_arrival_time_s": 82620
+          }
+        ],
+        "target_stop_id": "A18N"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "D",
+      "trip_data": {
+        "trip_id": "L0S2-D-3043-S05_128950_D..S07R",
+        "trip_id_short": "128950_D..S07R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "D01S",
+            "stop_name": "Norwood-205 St",
+            "scheduled_arrival_time_s": 77370
+          },
+          {
+            "stop_id": "D03S",
+            "stop_name": "Bedford Park Blvd",
+            "scheduled_arrival_time_s": 77490
+          },
+          {
+            "stop_id": "D04S",
+            "stop_name": "Kingsbridge Rd",
+            "scheduled_arrival_time_s": 77730
+          },
+          {
+            "stop_id": "D05S",
+            "stop_name": "Fordham Rd",
+            "scheduled_arrival_time_s": 77820
+          },
+          {
+            "stop_id": "D06S",
+            "stop_name": "182-183 Sts",
+            "scheduled_arrival_time_s": 77910
+          },
+          {
+            "stop_id": "D07S",
+            "stop_name": "Tremont Av",
+            "scheduled_arrival_time_s": 78000
+          },
+          {
+            "stop_id": "D08S",
+            "stop_name": "174-175 Sts",
+            "scheduled_arrival_time_s": 78090
+          },
+          {
+            "stop_id": "D09S",
+            "stop_name": "170 St",
+            "scheduled_arrival_time_s": 78240
+          },
+          {
+            "stop_id": "D10S",
+            "stop_name": "167 St",
+            "scheduled_arrival_time_s": 78360
+          },
+          {
+            "stop_id": "D11S",
+            "stop_name": "161 St-Yankee Stadium",
+            "scheduled_arrival_time_s": 78510
+          },
+          {
+            "stop_id": "D12S",
+            "stop_name": "155 St",
+            "scheduled_arrival_time_s": 78600
+          },
+          {
+            "stop_id": "D13S",
+            "stop_name": "145 St",
+            "scheduled_arrival_time_s": 78690
+          },
+          {
+            "stop_id": "A15S",
+            "stop_name": "125 St",
+            "scheduled_arrival_time_s": 78900
+          },
+          {
+            "stop_id": "A24S",
+            "stop_name": "59 St-Columbus Circle",
+            "scheduled_arrival_time_s": 79380
+          },
+          {
+            "stop_id": "D14S",
+            "stop_name": "7 Av",
+            "scheduled_arrival_time_s": 79500
+          },
+          {
+            "stop_id": "D15S",
+            "stop_name": "47-50 Sts-Rockefeller Ctr",
+            "scheduled_arrival_time_s": 79590
+          },
+          {
+            "stop_id": "D16S",
+            "stop_name": "42 St-Bryant Pk",
+            "scheduled_arrival_time_s": 79680
+          },
+          {
+            "stop_id": "D17S",
+            "stop_name": "34 St-Herald Sq",
+            "scheduled_arrival_time_s": 79770
+          },
+          {
+            "stop_id": "D20S",
+            "stop_name": "W 4 St-Wash Sq",
+            "scheduled_arrival_time_s": 79950
+          },
+          {
+            "stop_id": "D21S",
+            "stop_name": "Broadway-Lafayette St",
+            "scheduled_arrival_time_s": 80070
+          },
+          {
+            "stop_id": "D22S",
+            "stop_name": "Grand St",
+            "scheduled_arrival_time_s": 80190
+          },
+          {
+            "stop_id": "R31S",
+            "stop_name": "Atlantic Av-Barclays Ctr",
+            "scheduled_arrival_time_s": 80820
+          },
+          {
+            "stop_id": "R36S",
+            "stop_name": "36 St",
+            "scheduled_arrival_time_s": 81150
+          },
+          {
+            "stop_id": "B12S",
+            "stop_name": "9 Av",
+            "scheduled_arrival_time_s": 81390
+          },
+          {
+            "stop_id": "B13S",
+            "stop_name": "Fort Hamilton Pkwy",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "B14S",
+            "stop_name": "50 St",
+            "scheduled_arrival_time_s": 81720
+          },
+          {
+            "stop_id": "B15S",
+            "stop_name": "55 St",
+            "scheduled_arrival_time_s": 81840
+          },
+          {
+            "stop_id": "B16S",
+            "stop_name": "62 St",
+            "scheduled_arrival_time_s": 81930
+          },
+          {
+            "stop_id": "B17S",
+            "stop_name": "71 St",
+            "scheduled_arrival_time_s": 82050
+          },
+          {
+            "stop_id": "B18S",
+            "stop_name": "79 St",
+            "scheduled_arrival_time_s": 82170
+          },
+          {
+            "stop_id": "B19S",
+            "stop_name": "18 Av",
+            "scheduled_arrival_time_s": 82260
+          },
+          {
+            "stop_id": "B20S",
+            "stop_name": "20 Av",
+            "scheduled_arrival_time_s": 82350
+          },
+          {
+            "stop_id": "B21S",
+            "stop_name": "Bay Pkwy",
+            "scheduled_arrival_time_s": 82410
+          },
+          {
+            "stop_id": "B22S",
+            "stop_name": "25 Av",
+            "scheduled_arrival_time_s": 82590
+          },
+          {
+            "stop_id": "B23S",
+            "stop_name": "Bay 50 St",
+            "scheduled_arrival_time_s": 82740
+          },
+          {
+            "stop_id": "D43S",
+            "stop_name": "Coney Island-Stillwell Av",
+            "scheduled_arrival_time_s": 83070
+          }
+        ],
+        "target_stop_id": "B13S"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "E",
+      "trip_data": {
+        "trip_id": "L0S2-E-3049-S47_132700_E..N05R",
+        "trip_id_short": "132700_E..N05R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "E01N",
+            "stop_name": "World Trade Center",
+            "scheduled_arrival_time_s": 79620
+          },
+          {
+            "stop_id": "A34N",
+            "stop_name": "Canal St",
+            "scheduled_arrival_time_s": 79740
+          },
+          {
+            "stop_id": "A33N",
+            "stop_name": "Spring St",
+            "scheduled_arrival_time_s": 79830
+          },
+          {
+            "stop_id": "A32N",
+            "stop_name": "W 4 St-Wash Sq",
+            "scheduled_arrival_time_s": 79950
+          },
+          {
+            "stop_id": "A31N",
+            "stop_name": "14 St",
+            "scheduled_arrival_time_s": 80070
+          },
+          {
+            "stop_id": "A30N",
+            "stop_name": "23 St",
+            "scheduled_arrival_time_s": 80160
+          },
+          {
+            "stop_id": "A28N",
+            "stop_name": "34 St-Penn Station",
+            "scheduled_arrival_time_s": 80280
+          },
+          {
+            "stop_id": "A27N",
+            "stop_name": "42 St-Port Authority Bus Terminal",
+            "scheduled_arrival_time_s": 80340
+          },
+          {
+            "stop_id": "A25N",
+            "stop_name": "50 St",
+            "scheduled_arrival_time_s": 80460
+          },
+          {
+            "stop_id": "D14N",
+            "stop_name": "7 Av",
+            "scheduled_arrival_time_s": 80550
+          },
+          {
+            "stop_id": "F12N",
+            "stop_name": "5 Av/53 St",
+            "scheduled_arrival_time_s": 80610
+          },
+          {
+            "stop_id": "F11N",
+            "stop_name": "Lexington Av/53 St",
+            "scheduled_arrival_time_s": 80700
+          },
+          {
+            "stop_id": "F09N",
+            "stop_name": "Court Sq-23 St",
+            "scheduled_arrival_time_s": 80880
+          },
+          {
+            "stop_id": "G21N",
+            "stop_name": "Queens Plaza",
+            "scheduled_arrival_time_s": 80970
+          },
+          {
+            "stop_id": "G20N",
+            "stop_name": "36 St",
+            "scheduled_arrival_time_s": 81090
+          },
+          {
+            "stop_id": "G19N",
+            "stop_name": "Steinway St",
+            "scheduled_arrival_time_s": 81210
+          },
+          {
+            "stop_id": "G18N",
+            "stop_name": "46 St",
+            "scheduled_arrival_time_s": 81300
+          },
+          {
+            "stop_id": "G16N",
+            "stop_name": "Northern Blvd",
+            "scheduled_arrival_time_s": 81390
+          },
+          {
+            "stop_id": "G15N",
+            "stop_name": "65 St",
+            "scheduled_arrival_time_s": 81450
+          },
+          {
+            "stop_id": "G14N",
+            "stop_name": "Jackson Hts-Roosevelt Av",
+            "scheduled_arrival_time_s": 81540
+          },
+          {
+            "stop_id": "G13N",
+            "stop_name": "Elmhurst Av",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "G12N",
+            "stop_name": "Grand Av-Newtown",
+            "scheduled_arrival_time_s": 81720
+          },
+          {
+            "stop_id": "G11N",
+            "stop_name": "Woodhaven Blvd",
+            "scheduled_arrival_time_s": 81840
+          },
+          {
+            "stop_id": "G10N",
+            "stop_name": "63 Dr-Rego Park",
+            "scheduled_arrival_time_s": 81900
+          },
+          {
+            "stop_id": "G09N",
+            "stop_name": "67 Av",
+            "scheduled_arrival_time_s": 82020
+          },
+          {
+            "stop_id": "G08N",
+            "stop_name": "Forest Hills-71 Av",
+            "scheduled_arrival_time_s": 82110
+          },
+          {
+            "stop_id": "F07N",
+            "stop_name": "75 Av",
+            "scheduled_arrival_time_s": 82230
+          },
+          {
+            "stop_id": "F06N",
+            "stop_name": "Kew Gardens-Union Tpke",
+            "scheduled_arrival_time_s": 82320
+          },
+          {
+            "stop_id": "F05N",
+            "stop_name": "Briarwood",
+            "scheduled_arrival_time_s": 82440
+          },
+          {
+            "stop_id": "G07N",
+            "stop_name": "Jamaica-Van Wyck",
+            "scheduled_arrival_time_s": 82530
+          },
+          {
+            "stop_id": "G06N",
+            "stop_name": "Sutphin Blvd-Archer Av-JFK Airport",
+            "scheduled_arrival_time_s": 82680
+          },
+          {
+            "stop_id": "G05N",
+            "stop_name": "Jamaica Center-Parsons/Archer",
+            "scheduled_arrival_time_s": 83220
+          }
+        ],
+        "target_stop_id": "G13N"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "F",
+      "trip_data": {
+        "trip_id": "L0S2-F-3049-S46_132750_F..S69R",
+        "trip_id_short": "132750_F..S69R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "F01S",
+            "stop_name": "Jamaica-179 St",
+            "scheduled_arrival_time_s": 79650
+          },
+          {
+            "stop_id": "F02S",
+            "stop_name": "169 St",
+            "scheduled_arrival_time_s": 79740
+          },
+          {
+            "stop_id": "F03S",
+            "stop_name": "Parsons Blvd",
+            "scheduled_arrival_time_s": 79860
+          },
+          {
+            "stop_id": "F04S",
+            "stop_name": "Sutphin Blvd",
+            "scheduled_arrival_time_s": 79950
+          },
+          {
+            "stop_id": "F05S",
+            "stop_name": "Briarwood",
+            "scheduled_arrival_time_s": 80070
+          },
+          {
+            "stop_id": "F06S",
+            "stop_name": "Kew Gardens-Union Tpke",
+            "scheduled_arrival_time_s": 80190
+          },
+          {
+            "stop_id": "F07S",
+            "stop_name": "75 Av",
+            "scheduled_arrival_time_s": 80280
+          },
+          {
+            "stop_id": "G08S",
+            "stop_name": "Forest Hills-71 Av",
+            "scheduled_arrival_time_s": 80400
+          },
+          {
+            "stop_id": "G14S",
+            "stop_name": "Jackson Hts-Roosevelt Av",
+            "scheduled_arrival_time_s": 80820
+          },
+          {
+            "stop_id": "B04S",
+            "stop_name": "21 St-Queensbridge",
+            "scheduled_arrival_time_s": 81210
+          },
+          {
+            "stop_id": "B06S",
+            "stop_name": "Roosevelt Island",
+            "scheduled_arrival_time_s": 81330
+          },
+          {
+            "stop_id": "B08S",
+            "stop_name": "Lexington Av/63 St",
+            "scheduled_arrival_time_s": 81480
+          },
+          {
+            "stop_id": "B10S",
+            "stop_name": "57 St",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "D15S",
+            "stop_name": "47-50 Sts-Rockefeller Ctr",
+            "scheduled_arrival_time_s": 81720
+          },
+          {
+            "stop_id": "D16S",
+            "stop_name": "42 St-Bryant Pk",
+            "scheduled_arrival_time_s": 81810
+          },
+          {
+            "stop_id": "D17S",
+            "stop_name": "34 St-Herald Sq",
+            "scheduled_arrival_time_s": 81900
+          },
+          {
+            "stop_id": "D18S",
+            "stop_name": "23 St",
+            "scheduled_arrival_time_s": 81990
+          },
+          {
+            "stop_id": "D19S",
+            "stop_name": "14 St",
+            "scheduled_arrival_time_s": 82080
+          },
+          {
+            "stop_id": "D20S",
+            "stop_name": "W 4 St-Wash Sq",
+            "scheduled_arrival_time_s": 82170
+          },
+          {
+            "stop_id": "D21S",
+            "stop_name": "Broadway-Lafayette St",
+            "scheduled_arrival_time_s": 82320
+          },
+          {
+            "stop_id": "F14S",
+            "stop_name": "2 Av",
+            "scheduled_arrival_time_s": 82410
+          },
+          {
+            "stop_id": "F15S",
+            "stop_name": "Delancey St-Essex St",
+            "scheduled_arrival_time_s": 82500
+          },
+          {
+            "stop_id": "F16S",
+            "stop_name": "East Broadway",
+            "scheduled_arrival_time_s": 82590
+          },
+          {
+            "stop_id": "F18S",
+            "stop_name": "York St",
+            "scheduled_arrival_time_s": 82740
+          },
+          {
+            "stop_id": "A41S",
+            "stop_name": "Jay St-MetroTech",
+            "scheduled_arrival_time_s": 82830
+          },
+          {
+            "stop_id": "F20S",
+            "stop_name": "Bergen St",
+            "scheduled_arrival_time_s": 83010
+          },
+          {
+            "stop_id": "F21S",
+            "stop_name": "Carroll St",
+            "scheduled_arrival_time_s": 83100
+          },
+          {
+            "stop_id": "F22S",
+            "stop_name": "Smith-9 Sts",
+            "scheduled_arrival_time_s": 83190
+          },
+          {
+            "stop_id": "F23S",
+            "stop_name": "4 Av-9 St",
+            "scheduled_arrival_time_s": 83280
+          },
+          {
+            "stop_id": "F24S",
+            "stop_name": "7 Av",
+            "scheduled_arrival_time_s": 83370
+          },
+          {
+            "stop_id": "F25S",
+            "stop_name": "15 St-Prospect Park",
+            "scheduled_arrival_time_s": 83460
+          },
+          {
+            "stop_id": "F26S",
+            "stop_name": "Fort Hamilton Pkwy",
+            "scheduled_arrival_time_s": 83610
+          },
+          {
+            "stop_id": "F27S",
+            "stop_name": "Church Av",
+            "scheduled_arrival_time_s": 83700
+          },
+          {
+            "stop_id": "F29S",
+            "stop_name": "Ditmas Av",
+            "scheduled_arrival_time_s": 83820
+          },
+          {
+            "stop_id": "F30S",
+            "stop_name": "18 Av",
+            "scheduled_arrival_time_s": 83940
+          },
+          {
+            "stop_id": "F31S",
+            "stop_name": "Avenue I",
+            "scheduled_arrival_time_s": 84000
+          },
+          {
+            "stop_id": "F32S",
+            "stop_name": "Bay Pkwy",
+            "scheduled_arrival_time_s": 84060
+          },
+          {
+            "stop_id": "F33S",
+            "stop_name": "Avenue N",
+            "scheduled_arrival_time_s": 84180
+          },
+          {
+            "stop_id": "F34S",
+            "stop_name": "Avenue P",
+            "scheduled_arrival_time_s": 84270
+          },
+          {
+            "stop_id": "F35S",
+            "stop_name": "Kings Hwy",
+            "scheduled_arrival_time_s": 84360
+          },
+          {
+            "stop_id": "F36S",
+            "stop_name": "Avenue U",
+            "scheduled_arrival_time_s": 84750
+          },
+          {
+            "stop_id": "F38S",
+            "stop_name": "Avenue X",
+            "scheduled_arrival_time_s": 84870
+          },
+          {
+            "stop_id": "F39S",
+            "stop_name": "Neptune Av",
+            "scheduled_arrival_time_s": 85260
+          },
+          {
+            "stop_id": "D42S",
+            "stop_name": "W 8 St-NY Aquarium",
+            "scheduled_arrival_time_s": 85350
+          },
+          {
+            "stop_id": "D43S",
+            "stop_name": "Coney Island-Stillwell Av",
+            "scheduled_arrival_time_s": 85440
+          }
+        ],
+        "target_stop_id": "B10S"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "G",
+      "trip_data": {
+        "trip_id": "L0S2-G-3038-S01_134950_G..N16R",
+        "trip_id_short": "134950_G..N16R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "F27N",
+            "stop_name": "Church Av",
+            "scheduled_arrival_time_s": 80970
+          },
+          {
+            "stop_id": "F26N",
+            "stop_name": "Fort Hamilton Pkwy",
+            "scheduled_arrival_time_s": 81060
+          },
+          {
+            "stop_id": "F25N",
+            "stop_name": "15 St-Prospect Park",
+            "scheduled_arrival_time_s": 81210
+          },
+          {
+            "stop_id": "F24N",
+            "stop_name": "7 Av",
+            "scheduled_arrival_time_s": 81300
+          },
+          {
+            "stop_id": "F23N",
+            "stop_name": "4 Av-9 St",
+            "scheduled_arrival_time_s": 81420
+          },
+          {
+            "stop_id": "F22N",
+            "stop_name": "Smith-9 Sts",
+            "scheduled_arrival_time_s": 81510
+          },
+          {
+            "stop_id": "F21N",
+            "stop_name": "Carroll St",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "F20N",
+            "stop_name": "Bergen St",
+            "scheduled_arrival_time_s": 81720
+          },
+          {
+            "stop_id": "A42N",
+            "stop_name": "Hoyt-Schermerhorn Sts",
+            "scheduled_arrival_time_s": 81840
+          },
+          {
+            "stop_id": "G36N",
+            "stop_name": "Fulton St",
+            "scheduled_arrival_time_s": 81960
+          },
+          {
+            "stop_id": "G35N",
+            "stop_name": "Clinton-Washington Avs",
+            "scheduled_arrival_time_s": 82050
+          },
+          {
+            "stop_id": "G34N",
+            "stop_name": "Classon Av",
+            "scheduled_arrival_time_s": 82140
+          },
+          {
+            "stop_id": "G33N",
+            "stop_name": "Bedford-Nostrand Avs",
+            "scheduled_arrival_time_s": 82200
+          },
+          {
+            "stop_id": "G32N",
+            "stop_name": "Myrtle-Willoughby Avs",
+            "scheduled_arrival_time_s": 82320
+          },
+          {
+            "stop_id": "G31N",
+            "stop_name": "Flushing Av",
+            "scheduled_arrival_time_s": 82410
+          },
+          {
+            "stop_id": "G30N",
+            "stop_name": "Broadway",
+            "scheduled_arrival_time_s": 82500
+          },
+          {
+            "stop_id": "G29N",
+            "stop_name": "Metropolitan Av",
+            "scheduled_arrival_time_s": 82590
+          },
+          {
+            "stop_id": "G28N",
+            "stop_name": "Nassau Av",
+            "scheduled_arrival_time_s": 82770
+          },
+          {
+            "stop_id": "G26N",
+            "stop_name": "Greenpoint Av",
+            "scheduled_arrival_time_s": 82860
+          },
+          {
+            "stop_id": "G24N",
+            "stop_name": "21 St",
+            "scheduled_arrival_time_s": 83010
+          },
+          {
+            "stop_id": "G22N",
+            "stop_name": "Court Sq",
+            "scheduled_arrival_time_s": 83070
+          }
+        ],
+        "target_stop_id": "F21N"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "J",
+      "trip_data": {
+        "trip_id": "L0S2-J-3034-S01_133500_J..S12R",
+        "trip_id_short": "133500_J..S12R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "G05S",
+            "stop_name": "Jamaica Center-Parsons/Archer",
+            "scheduled_arrival_time_s": 80100
+          },
+          {
+            "stop_id": "G06S",
+            "stop_name": "Sutphin Blvd-Archer Av-JFK Airport",
+            "scheduled_arrival_time_s": 80160
+          },
+          {
+            "stop_id": "J12S",
+            "stop_name": "121 St",
+            "scheduled_arrival_time_s": 80400
+          },
+          {
+            "stop_id": "J13S",
+            "stop_name": "111 St",
+            "scheduled_arrival_time_s": 80490
+          },
+          {
+            "stop_id": "J14S",
+            "stop_name": "104 St",
+            "scheduled_arrival_time_s": 80610
+          },
+          {
+            "stop_id": "J15S",
+            "stop_name": "Woodhaven Blvd",
+            "scheduled_arrival_time_s": 80700
+          },
+          {
+            "stop_id": "J16S",
+            "stop_name": "85 St-Forest Pkwy",
+            "scheduled_arrival_time_s": 80790
+          },
+          {
+            "stop_id": "J17S",
+            "stop_name": "75 St-Elderts Ln",
+            "scheduled_arrival_time_s": 80880
+          },
+          {
+            "stop_id": "J19S",
+            "stop_name": "Cypress Hills",
+            "scheduled_arrival_time_s": 80970
+          },
+          {
+            "stop_id": "J20S",
+            "stop_name": "Crescent St",
+            "scheduled_arrival_time_s": 81060
+          },
+          {
+            "stop_id": "J21S",
+            "stop_name": "Norwood Av",
+            "scheduled_arrival_time_s": 81180
+          },
+          {
+            "stop_id": "J22S",
+            "stop_name": "Cleveland St",
+            "scheduled_arrival_time_s": 81240
+          },
+          {
+            "stop_id": "J23S",
+            "stop_name": "Van Siclen Av",
+            "scheduled_arrival_time_s": 81330
+          },
+          {
+            "stop_id": "J24S",
+            "stop_name": "Alabama Av",
+            "scheduled_arrival_time_s": 81420
+          },
+          {
+            "stop_id": "J27S",
+            "stop_name": "Broadway Junction",
+            "scheduled_arrival_time_s": 81540
+          },
+          {
+            "stop_id": "J28S",
+            "stop_name": "Chauncey St",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "J29S",
+            "stop_name": "Halsey St",
+            "scheduled_arrival_time_s": 81720
+          },
+          {
+            "stop_id": "J30S",
+            "stop_name": "Gates Av",
+            "scheduled_arrival_time_s": 81810
+          },
+          {
+            "stop_id": "J31S",
+            "stop_name": "Kosciuszko St",
+            "scheduled_arrival_time_s": 81900
+          },
+          {
+            "stop_id": "M11S",
+            "stop_name": "Myrtle Av",
+            "scheduled_arrival_time_s": 81990
+          },
+          {
+            "stop_id": "M12S",
+            "stop_name": "Flushing Av",
+            "scheduled_arrival_time_s": 82080
+          },
+          {
+            "stop_id": "M13S",
+            "stop_name": "Lorimer St",
+            "scheduled_arrival_time_s": 82170
+          },
+          {
+            "stop_id": "M14S",
+            "stop_name": "Hewes St",
+            "scheduled_arrival_time_s": 82230
+          },
+          {
+            "stop_id": "M16S",
+            "stop_name": "Marcy Av",
+            "scheduled_arrival_time_s": 82290
+          },
+          {
+            "stop_id": "M18S",
+            "stop_name": "Delancey St-Essex St",
+            "scheduled_arrival_time_s": 82740
+          },
+          {
+            "stop_id": "M19S",
+            "stop_name": "Bowery",
+            "scheduled_arrival_time_s": 82830
+          },
+          {
+            "stop_id": "M20S",
+            "stop_name": "Canal St",
+            "scheduled_arrival_time_s": 82920
+          },
+          {
+            "stop_id": "M21S",
+            "stop_name": "Chambers St",
+            "scheduled_arrival_time_s": 83010
+          },
+          {
+            "stop_id": "M22S",
+            "stop_name": "Fulton St",
+            "scheduled_arrival_time_s": 83100
+          },
+          {
+            "stop_id": "M23S",
+            "stop_name": "Broad St",
+            "scheduled_arrival_time_s": 83190
+          }
+        ],
+        "target_stop_id": "J28S"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "L",
+      "trip_data": {
+        "trip_id": "L0S2-L-3026-S26_135800_L..N04R",
+        "trip_id_short": "135800_L..N04R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "L22N",
+            "stop_name": "Broadway Junction",
+            "scheduled_arrival_time_s": 81480
+          },
+          {
+            "stop_id": "L21N",
+            "stop_name": "Bushwick Av-Aberdeen St",
+            "scheduled_arrival_time_s": 81540
+          },
+          {
+            "stop_id": "L20N",
+            "stop_name": "Wilson Av",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "L19N",
+            "stop_name": "Halsey St",
+            "scheduled_arrival_time_s": 81750
+          },
+          {
+            "stop_id": "L17N",
+            "stop_name": "Myrtle-Wyckoff Avs",
+            "scheduled_arrival_time_s": 81840
+          },
+          {
+            "stop_id": "L16N",
+            "stop_name": "DeKalb Av",
+            "scheduled_arrival_time_s": 81930
+          },
+          {
+            "stop_id": "L15N",
+            "stop_name": "Jefferson St",
+            "scheduled_arrival_time_s": 82020
+          },
+          {
+            "stop_id": "L14N",
+            "stop_name": "Morgan Av",
+            "scheduled_arrival_time_s": 82140
+          },
+          {
+            "stop_id": "L13N",
+            "stop_name": "Montrose Av",
+            "scheduled_arrival_time_s": 82230
+          },
+          {
+            "stop_id": "L12N",
+            "stop_name": "Grand St",
+            "scheduled_arrival_time_s": 82290
+          },
+          {
+            "stop_id": "L11N",
+            "stop_name": "Graham Av",
+            "scheduled_arrival_time_s": 82380
+          },
+          {
+            "stop_id": "L10N",
+            "stop_name": "Lorimer St",
+            "scheduled_arrival_time_s": 82440
+          },
+          {
+            "stop_id": "L08N",
+            "stop_name": "Bedford Av",
+            "scheduled_arrival_time_s": 82590
+          },
+          {
+            "stop_id": "L06N",
+            "stop_name": "1 Av",
+            "scheduled_arrival_time_s": 82830
+          },
+          {
+            "stop_id": "L05N",
+            "stop_name": "3 Av",
+            "scheduled_arrival_time_s": 82890
+          },
+          {
+            "stop_id": "L03N",
+            "stop_name": "14 St-Union Sq",
+            "scheduled_arrival_time_s": 82980
+          },
+          {
+            "stop_id": "L02N",
+            "stop_name": "6 Av",
+            "scheduled_arrival_time_s": 83220
+          },
+          {
+            "stop_id": "L01N",
+            "stop_name": "8 Av",
+            "scheduled_arrival_time_s": 83280
+          }
+        ],
+        "target_stop_id": "L20N"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "M",
+      "trip_data": {
+        "trip_id": "L0S2-M-3027-S01_136050_M..S37R",
+        "trip_id_short": "136050_M..S37R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "M18S",
+            "stop_name": "Delancey St-Essex St",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "M16S",
+            "stop_name": "Marcy Av",
+            "scheduled_arrival_time_s": 82080
+          },
+          {
+            "stop_id": "M14S",
+            "stop_name": "Hewes St",
+            "scheduled_arrival_time_s": 82260
+          },
+          {
+            "stop_id": "M13S",
+            "stop_name": "Lorimer St",
+            "scheduled_arrival_time_s": 82350
+          },
+          {
+            "stop_id": "M12S",
+            "stop_name": "Flushing Av",
+            "scheduled_arrival_time_s": 82440
+          },
+          {
+            "stop_id": "M11S",
+            "stop_name": "Myrtle Av",
+            "scheduled_arrival_time_s": 82500
+          },
+          {
+            "stop_id": "M10S",
+            "stop_name": "Central Av",
+            "scheduled_arrival_time_s": 82650
+          },
+          {
+            "stop_id": "M09S",
+            "stop_name": "Knickerbocker Av",
+            "scheduled_arrival_time_s": 82740
+          },
+          {
+            "stop_id": "M08S",
+            "stop_name": "Myrtle-Wyckoff Avs",
+            "scheduled_arrival_time_s": 82860
+          },
+          {
+            "stop_id": "M06S",
+            "stop_name": "Seneca Av",
+            "scheduled_arrival_time_s": 82950
+          },
+          {
+            "stop_id": "M05S",
+            "stop_name": "Forest Av",
+            "scheduled_arrival_time_s": 83040
+          },
+          {
+            "stop_id": "M04S",
+            "stop_name": "Fresh Pond Rd",
+            "scheduled_arrival_time_s": 83160
+          },
+          {
+            "stop_id": "M01S",
+            "stop_name": "Middle Village-Metropolitan Av",
+            "scheduled_arrival_time_s": 83280
+          }
+        ],
+        "target_stop_id": "M18S"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "N",
+      "trip_data": {
+        "trip_id": "L0S2-N-3060-S22_134950_N..N23R",
+        "trip_id_short": "134950_N..N23R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "D43N",
+            "stop_name": "Coney Island-Stillwell Av",
+            "scheduled_arrival_time_s": 80970
+          },
+          {
+            "stop_id": "N10N",
+            "stop_name": "86 St",
+            "scheduled_arrival_time_s": 81210
+          },
+          {
+            "stop_id": "N09N",
+            "stop_name": "Avenue U",
+            "scheduled_arrival_time_s": 81270
+          },
+          {
+            "stop_id": "N08N",
+            "stop_name": "Kings Hwy",
+            "scheduled_arrival_time_s": 81360
+          },
+          {
+            "stop_id": "N07N",
+            "stop_name": "Bay Pkwy",
+            "scheduled_arrival_time_s": 81540
+          },
+          {
+            "stop_id": "N06N",
+            "stop_name": "20 Av",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "N05N",
+            "stop_name": "18 Av",
+            "scheduled_arrival_time_s": 81690
+          },
+          {
+            "stop_id": "N04N",
+            "stop_name": "New Utrecht Av",
+            "scheduled_arrival_time_s": 81780
+          },
+          {
+            "stop_id": "N03N",
+            "stop_name": "Fort Hamilton Pkwy",
+            "scheduled_arrival_time_s": 81930
+          },
+          {
+            "stop_id": "N02N",
+            "stop_name": "8 Av",
+            "scheduled_arrival_time_s": 81990
+          },
+          {
+            "stop_id": "R41N",
+            "stop_name": "59 St",
+            "scheduled_arrival_time_s": 82170
+          },
+          {
+            "stop_id": "R40N",
+            "stop_name": "53 St",
+            "scheduled_arrival_time_s": 82260
+          },
+          {
+            "stop_id": "R39N",
+            "stop_name": "45 St",
+            "scheduled_arrival_time_s": 82350
+          },
+          {
+            "stop_id": "R36N",
+            "stop_name": "36 St",
+            "scheduled_arrival_time_s": 82500
+          },
+          {
+            "stop_id": "R35N",
+            "stop_name": "25 St",
+            "scheduled_arrival_time_s": 82620
+          },
+          {
+            "stop_id": "R34N",
+            "stop_name": "Prospect Av",
+            "scheduled_arrival_time_s": 82710
+          },
+          {
+            "stop_id": "R33N",
+            "stop_name": "4 Av-9 St",
+            "scheduled_arrival_time_s": 82830
+          },
+          {
+            "stop_id": "R32N",
+            "stop_name": "Union St",
+            "scheduled_arrival_time_s": 82920
+          },
+          {
+            "stop_id": "R31N",
+            "stop_name": "Atlantic Av-Barclays Ctr",
+            "scheduled_arrival_time_s": 83040
+          },
+          {
+            "stop_id": "R30N",
+            "stop_name": "DeKalb Av",
+            "scheduled_arrival_time_s": 83220
+          },
+          {
+            "stop_id": "Q01N",
+            "stop_name": "Canal St",
+            "scheduled_arrival_time_s": 83700
+          },
+          {
+            "stop_id": "R22N",
+            "stop_name": "Prince St",
+            "scheduled_arrival_time_s": 83820
+          },
+          {
+            "stop_id": "R21N",
+            "stop_name": "8 St-NYU",
+            "scheduled_arrival_time_s": 83910
+          },
+          {
+            "stop_id": "R20N",
+            "stop_name": "14 St-Union Sq",
+            "scheduled_arrival_time_s": 84000
+          },
+          {
+            "stop_id": "R19N",
+            "stop_name": "23 St",
+            "scheduled_arrival_time_s": 84090
+          },
+          {
+            "stop_id": "R18N",
+            "stop_name": "28 St",
+            "scheduled_arrival_time_s": 84150
+          },
+          {
+            "stop_id": "R17N",
+            "stop_name": "34 St-Herald Sq",
+            "scheduled_arrival_time_s": 84210
+          },
+          {
+            "stop_id": "R16N",
+            "stop_name": "Times Sq-42 St",
+            "scheduled_arrival_time_s": 84300
+          },
+          {
+            "stop_id": "R15N",
+            "stop_name": "49 St",
+            "scheduled_arrival_time_s": 84390
+          },
+          {
+            "stop_id": "R14N",
+            "stop_name": "57 St-7 Av",
+            "scheduled_arrival_time_s": 84480
+          },
+          {
+            "stop_id": "R13N",
+            "stop_name": "5 Av/59 St",
+            "scheduled_arrival_time_s": 84630
+          },
+          {
+            "stop_id": "R11N",
+            "stop_name": "Lexington Av/59 St",
+            "scheduled_arrival_time_s": 84720
+          },
+          {
+            "stop_id": "R09N",
+            "stop_name": "Queensboro Plaza",
+            "scheduled_arrival_time_s": 84990
+          },
+          {
+            "stop_id": "R08N",
+            "stop_name": "39 Av-Dutch Kills",
+            "scheduled_arrival_time_s": 85110
+          },
+          {
+            "stop_id": "R06N",
+            "stop_name": "36 Av",
+            "scheduled_arrival_time_s": 85170
+          },
+          {
+            "stop_id": "R05N",
+            "stop_name": "Broadway",
+            "scheduled_arrival_time_s": 85290
+          },
+          {
+            "stop_id": "R04N",
+            "stop_name": "30 Av",
+            "scheduled_arrival_time_s": 85380
+          },
+          {
+            "stop_id": "R03N",
+            "stop_name": "Astoria Blvd",
+            "scheduled_arrival_time_s": 85470
+          },
+          {
+            "stop_id": "R01N",
+            "stop_name": "Astoria-Ditmars Blvd",
+            "scheduled_arrival_time_s": 85560
+          }
+        ],
+        "target_stop_id": "N06N"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "Q",
+      "trip_data": {
+        "trip_id": "L0S2-Q-3024-S53_134500_Q..S16R",
+        "trip_id_short": "134500_Q..S16R",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "Q05S",
+            "stop_name": "96 St",
+            "scheduled_arrival_time_s": 80700
+          },
+          {
+            "stop_id": "Q04S",
+            "stop_name": "86 St",
+            "scheduled_arrival_time_s": 80820
+          },
+          {
+            "stop_id": "Q03S",
+            "stop_name": "72 St",
+            "scheduled_arrival_time_s": 80940
+          },
+          {
+            "stop_id": "B08S",
+            "stop_name": "Lexington Av/63 St",
+            "scheduled_arrival_time_s": 81060
+          },
+          {
+            "stop_id": "R14S",
+            "stop_name": "57 St-7 Av",
+            "scheduled_arrival_time_s": 81240
+          },
+          {
+            "stop_id": "R16S",
+            "stop_name": "Times Sq-42 St",
+            "scheduled_arrival_time_s": 81390
+          },
+          {
+            "stop_id": "R17S",
+            "stop_name": "34 St-Herald Sq",
+            "scheduled_arrival_time_s": 81480
+          },
+          {
+            "stop_id": "R20S",
+            "stop_name": "14 St-Union Sq",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "Q01S",
+            "stop_name": "Canal St",
+            "scheduled_arrival_time_s": 81870
+          },
+          {
+            "stop_id": "R30S",
+            "stop_name": "DeKalb Av",
+            "scheduled_arrival_time_s": 82350
+          },
+          {
+            "stop_id": "D24S",
+            "stop_name": "Atlantic Av-Barclays Ctr",
+            "scheduled_arrival_time_s": 82440
+          },
+          {
+            "stop_id": "D25S",
+            "stop_name": "7 Av",
+            "scheduled_arrival_time_s": 82590
+          },
+          {
+            "stop_id": "D26S",
+            "stop_name": "Prospect Park",
+            "scheduled_arrival_time_s": 82830
+          },
+          {
+            "stop_id": "D27S",
+            "stop_name": "Parkside Av",
+            "scheduled_arrival_time_s": 82920
+          },
+          {
+            "stop_id": "D28S",
+            "stop_name": "Church Av",
+            "scheduled_arrival_time_s": 83010
+          },
+          {
+            "stop_id": "D29S",
+            "stop_name": "Beverley Rd",
+            "scheduled_arrival_time_s": 83100
+          },
+          {
+            "stop_id": "D30S",
+            "stop_name": "Cortelyou Rd",
+            "scheduled_arrival_time_s": 83130
+          },
+          {
+            "stop_id": "D31S",
+            "stop_name": "Newkirk Plaza",
+            "scheduled_arrival_time_s": 83220
+          },
+          {
+            "stop_id": "D32S",
+            "stop_name": "Avenue H",
+            "scheduled_arrival_time_s": 83310
+          },
+          {
+            "stop_id": "D33S",
+            "stop_name": "Avenue J",
+            "scheduled_arrival_time_s": 83370
+          },
+          {
+            "stop_id": "D34S",
+            "stop_name": "Avenue M",
+            "scheduled_arrival_time_s": 83490
+          },
+          {
+            "stop_id": "D35S",
+            "stop_name": "Kings Hwy",
+            "scheduled_arrival_time_s": 83610
+          },
+          {
+            "stop_id": "D37S",
+            "stop_name": "Avenue U",
+            "scheduled_arrival_time_s": 83880
+          },
+          {
+            "stop_id": "D38S",
+            "stop_name": "Neck Rd",
+            "scheduled_arrival_time_s": 83940
+          },
+          {
+            "stop_id": "D39S",
+            "stop_name": "Sheepshead Bay",
+            "scheduled_arrival_time_s": 84090
+          },
+          {
+            "stop_id": "D40S",
+            "stop_name": "Brighton Beach",
+            "scheduled_arrival_time_s": 84210
+          },
+          {
+            "stop_id": "D41S",
+            "stop_name": "Ocean Pkwy",
+            "scheduled_arrival_time_s": 84330
+          },
+          {
+            "stop_id": "D42S",
+            "stop_name": "W 8 St-NY Aquarium",
+            "scheduled_arrival_time_s": 84450
+          },
+          {
+            "stop_id": "D43S",
+            "stop_name": "Coney Island-Stillwell Av",
+            "scheduled_arrival_time_s": 84540
+          }
+        ],
+        "target_stop_id": "R20S"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    },
+    {
+      "route_id": "R",
+      "trip_data": {
+        "trip_id": "L0S2-R-3052-S21_133850_R..N78X002",
+        "trip_id_short": "133850_R..N78X002",
+        "trip_status": "TRIP_STATUS_NOT_SEEN_YET",
+        "stops": [
+          {
+            "stop_id": "R45N",
+            "stop_name": "Bay Ridge-95 St",
+            "scheduled_arrival_time_s": 80310
+          },
+          {
+            "stop_id": "R44N",
+            "stop_name": "86 St",
+            "scheduled_arrival_time_s": 80430
+          },
+          {
+            "stop_id": "R43N",
+            "stop_name": "77 St",
+            "scheduled_arrival_time_s": 80550
+          },
+          {
+            "stop_id": "R42N",
+            "stop_name": "Bay Ridge Av",
+            "scheduled_arrival_time_s": 80640
+          },
+          {
+            "stop_id": "R41N",
+            "stop_name": "59 St",
+            "scheduled_arrival_time_s": 80760
+          },
+          {
+            "stop_id": "R40N",
+            "stop_name": "53 St",
+            "scheduled_arrival_time_s": 80850
+          },
+          {
+            "stop_id": "R39N",
+            "stop_name": "45 St",
+            "scheduled_arrival_time_s": 80940
+          },
+          {
+            "stop_id": "R36N",
+            "stop_name": "36 St",
+            "scheduled_arrival_time_s": 81090
+          },
+          {
+            "stop_id": "R35N",
+            "stop_name": "25 St",
+            "scheduled_arrival_time_s": 81210
+          },
+          {
+            "stop_id": "R34N",
+            "stop_name": "Prospect Av",
+            "scheduled_arrival_time_s": 81300
+          },
+          {
+            "stop_id": "R33N",
+            "stop_name": "4 Av-9 St",
+            "scheduled_arrival_time_s": 81390
+          },
+          {
+            "stop_id": "R32N",
+            "stop_name": "Union St",
+            "scheduled_arrival_time_s": 81510
+          },
+          {
+            "stop_id": "R31N",
+            "stop_name": "Atlantic Av-Barclays Ctr",
+            "scheduled_arrival_time_s": 81630
+          },
+          {
+            "stop_id": "R30N",
+            "stop_name": "DeKalb Av",
+            "scheduled_arrival_time_s": 81870
+          },
+          {
+            "stop_id": "Q01N",
+            "stop_name": "Canal St",
+            "scheduled_arrival_time_s": 82350
+          },
+          {
+            "stop_id": "R22N",
+            "stop_name": "Prince St",
+            "scheduled_arrival_time_s": 82470
+          },
+          {
+            "stop_id": "R21N",
+            "stop_name": "8 St-NYU",
+            "scheduled_arrival_time_s": 82590
+          },
+          {
+            "stop_id": "R20N",
+            "stop_name": "14 St-Union Sq",
+            "scheduled_arrival_time_s": 82680
+          },
+          {
+            "stop_id": "R19N",
+            "stop_name": "23 St",
+            "scheduled_arrival_time_s": 82770
+          },
+          {
+            "stop_id": "R18N",
+            "stop_name": "28 St",
+            "scheduled_arrival_time_s": 82830
+          },
+          {
+            "stop_id": "R17N",
+            "stop_name": "34 St-Herald Sq",
+            "scheduled_arrival_time_s": 82890
+          },
+          {
+            "stop_id": "R16N",
+            "stop_name": "Times Sq-42 St",
+            "scheduled_arrival_time_s": 82980
+          },
+          {
+            "stop_id": "R15N",
+            "stop_name": "49 St",
+            "scheduled_arrival_time_s": 83070
+          },
+          {
+            "stop_id": "R14N",
+            "stop_name": "57 St-7 Av",
+            "scheduled_arrival_time_s": 83160
+          },
+          {
+            "stop_id": "R13N",
+            "stop_name": "5 Av/59 St",
+            "scheduled_arrival_time_s": 83310
+          },
+          {
+            "stop_id": "R11N",
+            "stop_name": "Lexington Av/59 St",
+            "scheduled_arrival_time_s": 83400
+          },
+          {
+            "stop_id": "G21N",
+            "stop_name": "Queens Plaza",
+            "scheduled_arrival_time_s": 83730
+          }
+        ],
+        "target_stop_id": "R31N"
+      },
+      "ranking": {
+        "ranking_status": "RANKING_STATUS_PENDING"
+      }
+    }
+  ]
+}
