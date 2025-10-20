@@ -39,14 +39,8 @@ class DynamoDbClient:
         )
         return replace_decimals(response.get("Items"))
 
-    def putItem(self, partitionKey: str | int, sortKey: str | int, **kwargs):
-        item_data = {
-            self.partitionKeyName: partitionKey,
-            self.sortKeyName: sortKey,
-            **kwargs,
-        }
-        response = self.table.put_item(Item=item_data)
-        return response
+    def putItem(self, item):
+        return self.table.put_item(Item=item)
 
     def batchPutItems(self, data: list[tuple]):
         with self.table.batch_writer() as batch:

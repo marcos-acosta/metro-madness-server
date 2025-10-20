@@ -12,7 +12,7 @@ class GamesClient:
         )
 
     def get_game(self, week_number: int, game_id: str) -> Game:
-        game = self.dynamodb_client.getItems(week_number, game_id)
+        game = self.dynamodb_client.getItem(week_number, game_id)
         return game
 
     def get_games_for_week(self, week_number: int) -> list[Game]:
@@ -29,3 +29,6 @@ class GamesClient:
         return [
             game for game in games_for_this_week if game["date_iso"] == today_est_iso
         ]
+
+    def write_game(self, game: Game):
+        return self.dynamodb_client.putItem(game)

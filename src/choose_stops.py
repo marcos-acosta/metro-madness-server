@@ -140,6 +140,8 @@ def get_candidate_stop_times(
 
 
 def get_best_candidate_stop_times(candidates: list[CandidateStopTime]):
+    if len(candidates) == 0:
+        return []
     max_routes = max([len(candidate.trips_by_route) for candidate in candidates])
     return [
         candidate

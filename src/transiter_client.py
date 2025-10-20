@@ -7,9 +7,10 @@ from url_util import build_url
 
 
 class TransiterClient:
-    def __init__(self):
+    def __init__(self, verbose: bool = False):
         self.transiter_base_url = TRANSITER_URL
         self.system = "us-ny-subway"
+        self.verbose = verbose
 
     def get_subway_url(self) -> str:
         return build_url(self.transiter_base_url, "systems", self.system)
@@ -21,7 +22,8 @@ class TransiterClient:
             response.raise_for_status()
             return response.json()["trips"]
         except Exception as e:
-            print(f"Error calling Transiter: {e}")
+            if self.verbose:
+                print(f"Error calling Transiter: {e}")
             return None
 
     def get_trip(self, route_id: RouteId, trip_id: str):
@@ -33,5 +35,6 @@ class TransiterClient:
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"Error calling Transiter: {e}")
+            if self.verbose:
+                print(f"Error calling Transiter: {e}")
             return None

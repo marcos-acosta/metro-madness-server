@@ -172,3 +172,4 @@ GameConfig = namedtuple(
 
 class GameEngineConfig(TypedDict):
     verbose: bool
+    refresh_rate_s: int
