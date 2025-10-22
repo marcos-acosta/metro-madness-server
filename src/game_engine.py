@@ -1,9 +1,18 @@
+import datetime
 import time
 import traceback
 from train_recruiter import TrainRecruiter
 from game_config import DEFAULT_DEV_POPULATE_TRAINS_CONFIG, GAME_TYPE_TO_ROUTE_IDS
 from games_client import GamesClient
-from interface import Game, GameEngineConfig, GameStatus, GameType, RouteId, TripStatus
+from interface import (
+    Game,
+    GameEngineConfig,
+    GameStatus,
+    GameType,
+    RouteId,
+    TripData,
+    TripStatus,
+)
 from time_util import (
     get_current_seconds_since_midnight_est,
 )
@@ -21,12 +30,17 @@ class GameEngine:
         self._populate_routes()
 
     def _log(
-        self, message, route_id: RouteId | None = None, trip_id: str | None = None
+        self,
+        message,
+        route_id: RouteId | None = None,
+        trip_id: str | None = None,
+        prefix=True,
     ):
         route_id_prefix = f"[{route_id}] " if route_id else ""
         trip_id_prefix = f"[{trip_id}] " if trip_id else ""
+        prefix = "[game engine] " if prefix else ""
         if self.config.get("verbose"):
-            print("".join(["[game engine] ", route_id_prefix, trip_id_prefix, message]))
+            print("".join([prefix, route_id_prefix, trip_id_prefix, message]))
 
     def _setup(self):
         games_today = self.game_data_client.get_games_for_today()
@@ -83,6 +97,33 @@ class GameEngine:
         else:
             self._push_game()
 
+    def _process_trip(self, route_id: RouteId, trip: TripData):
+        """
+        Process a single trip by fetching realtime data and updating status.
+        Returns the trip snapshot from transiter, or None if no data available.
+        """
+        trip_id_short = trip.get("trip_id_short")
+        trip_snapshot = self.transiter_client.get_trip(route_id, trip_id_short)
+
+        if trip_snapshot is None:
+            self._log(
+                "Transiter did not return any trip data.",
+                route_id,
+                trip_id_short,
+            )
+            if trip.get("trip_status") == TripStatus.TRIP_STATUS_UNDERWAY:
+                self._log(
+                    "Trip was underway but now disappeared.",
+                    route_id,
+                    trip_id_short,
+                )
+                # TODO: Disqualify if destination was never reached
+                trip["trip_status"] = TripStatus.TRIP_STATUS_DISAPPEARED
+        else:
+            self._log("Realtime data fetched successfully.", route_id, trip_id_short)
+
+        return trip_snapshot
+
     def _refresh_game_data(self):
         if not self.game:
             return
@@ -95,46 +136,31 @@ class GameEngine:
             # Check that we have either selected_trip or candidate_trips
             if selected_trip is None and not candidate_trips:
                 self._log(
-                    "Route has neither selected_trip nor candidate_trips", route_id
+                    "Route has neither selected_trip nor candidate_trips.", route_id
                 )
                 continue
 
-            # If we have a selected trip, use that
+            # If we have a selected trip, process it
             if selected_trip is not None:
-                trip_id_short = selected_trip.get("trip_id_short")
-                trip_snapshot = self.transiter_client.get_trip(route_id, trip_id_short)
-                if trip_snapshot is None:
-                    self._log(
-                        "Transiter did not return any trip data.",
-                        route_id,
-                        trip_id_short,
-                    )
-                    if (
-                        selected_trip.get("trip_status")
-                        == TripStatus.TRIP_STATUS_UNDERWAY
-                    ):
-                        self._log(
-                            "Trip was underway but now disappeared.",
-                            route_id,
-                            trip_id_short,
-                        )
-                        # TODO: Disqualify if destination was never reached
-                        selected_trip["trip_status"] = (
-                            TripStatus.TRIP_STATUS_DISAPPEARED
-                        )
-                else:
-                    self._log(
-                        "Realtime data fetched successfully.", route_id, trip_id_short
-                    )
+                self._process_trip(route_id, selected_trip)
             else:
-                # Iterate through candidate_trips to check for realtime data
+                # Check candidate trips for realtime data
                 for candidate_trip in candidate_trips:
-                    # TODO: Implement logic to check for realtime data and promote to selected_trip
-                    pass
+                    trip_snapshot = self._process_trip(route_id, candidate_trip)
+                    if trip_snapshot is not None:
+                        self._log(
+                            f"Promoting candidate trip to selected_trip.",
+                            route_id,
+                            candidate_trip.get("trip_id_short"),
+                        )
+                        route["selected_trip"] = candidate_trip
+                        del route["candidate_trips"]
+                        break
 
     def run_game_loop(self):
         while True:
-            self._log("=== TICK ===")
+            now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self._log(f"\n=== {now_str} ===\n", prefix=False)
             if self.config.get("pull_before_push"):
                 self._pull_game()
             self._refresh_game_data()

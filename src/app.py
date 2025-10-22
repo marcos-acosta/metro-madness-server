@@ -9,7 +9,7 @@ def main():
         "pull_before_push": False,
     }
     game_engine = GameEngine(config)
-    # game_engine.run_game_loop()
+    game_engine.run_game_loop()
 
 
 if __name__ == "__main__":
