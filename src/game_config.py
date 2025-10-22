@@ -16,4 +16,5 @@ DEFAULT_DEV_POPULATE_TRAINS_CONFIG: PopulateTrainsConfig = {
     "verboseStaticDataLoader": False,
     "overwriteStaticFiles": True,
     "verboseRecruiter": True,
+    "maxTripsToKeep": 10,
 }

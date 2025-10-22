@@ -1,4 +1,5 @@
 import time
+import traceback
 from train_recruiter import TrainRecruiter
 from game_config import DEFAULT_DEV_POPULATE_TRAINS_CONFIG, GAME_TYPE_TO_ROUTE_IDS
 from games_client import GamesClient
@@ -75,7 +76,8 @@ class GameEngine:
         route_ids = self._get_routes_for_game(self.game)
         try:
             self.game = self.train_recruiter.recruit_trains(self.game, route_ids)
-        except:
+        except Exception:
+            traceback.print_exc()
             # TODO: Handle this case
             pass
         else:

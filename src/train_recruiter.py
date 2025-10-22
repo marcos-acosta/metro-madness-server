@@ -107,7 +107,7 @@ class TrainRecruiter:
             f"Num unique routes in selected candidate time: {len(selected_candidate_time.trips_by_route)}"
         )
         # Mutates the object
-        self._randomly_select_trip_for_each_route(selected_candidate_time)
+        self._select_trip_for_each_route(selected_candidate_time)
 
         # Convert to dict
         stops_data = self.gtfs_loader.load_csv_as_dataframe("stops.txt")
@@ -204,6 +204,11 @@ class TrainRecruiter:
     ):
         return range(start_time_s, end_time_s, 30)
 
+    def _sort_and_filter_trips_per_route(self, trips: list):
+        return sorted(trips, key=lambda t: t["stop_sequence"], reverse=True)[
+            : self.config.get("maxTripsToKeep")
+        ]
+
     def _get_candidate_stop_times(
         self, stop_times: pd.DataFrame, start_time_s: int, end_time_s: int
     ) -> list[CandidateStopTime]:
@@ -222,9 +227,11 @@ class TrainRecruiter:
                 continue
             trips_by_route = defaultdict(list)
             for _, row in matching_stop_times[
-                ["route_id", "trip_id", "stop_id"]
+                ["route_id", "trip_id", "stop_id", "stop_sequence"]
             ].iterrows():
                 trips_by_route[row["route_id"]].append(row.to_dict())
+            for route_id, trips in trips_by_route.items():
+                trips_by_route[route_id] = self._sort_and_filter_trips_per_route(trips)
             candidate_times.append(CandidateStopTime(scheduled_time, trips_by_route))
         return candidate_times
 
@@ -240,9 +247,10 @@ class TrainRecruiter:
             if len(candidate.trips_by_route) == max_routes
         ]
 
-    def _randomly_select_trip_for_each_route(self, stop_time: CandidateStopTime):
+    def _select_trip_for_each_route(self, stop_time: CandidateStopTime):
         for route_id, trips in stop_time.trips_by_route.items():
-            stop_time.trips_by_route[route_id] = random.choice(trips)
+            # stop_time.trips_by_route[route_id] = random.choice(trips)
+            stop_time.trips_by_route[route_id] = trips[0]
 
     def _get_stops_from_trip_id(
         self, trip_id: str, stop_times: pd.DataFrame, stops_data: pd.DataFrame

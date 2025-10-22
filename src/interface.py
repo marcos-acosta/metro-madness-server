@@ -183,3 +183,4 @@ class PopulateTrainsConfig(TypedDict):
     savedir: str
     minTargetStopSequence: int
     overwriteStaticFiles: bool
+    maxTripsToKeep: int
