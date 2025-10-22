@@ -100,6 +100,7 @@ class Stop(TypedDict):
 
     stop_id: str
     stop_name: str
+    stop_sequence: int
     scheduled_arrival_time_s: int
     actual_arrival_time_s: NotRequired[int]
 
@@ -111,7 +112,7 @@ class TripData(TypedDict):
     trip_id_short: str
     trip_status: TripStatus
     stops: list[Stop]
-    target_stop_id: str
+    target_stop: Stop
     actual_target_arrival_time_s: int  # Duplicated from within stops for quick access
 
 
@@ -173,3 +174,4 @@ GameConfig = namedtuple(
 class GameEngineConfig(TypedDict):
     verbose: bool
     refresh_rate_s: int
+    pull_before_push: bool

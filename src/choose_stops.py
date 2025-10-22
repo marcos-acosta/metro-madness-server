@@ -169,6 +169,7 @@ def get_stops_from_trip_id(
             {
                 "stop_id": row["stop_id"],
                 "stop_name": row["stop_name"],
+                "stop_sequence": int(row["stop_sequence"]),
                 "scheduled_arrival_time_s": row["scheduled_arrival_s"],
             }
         )
@@ -180,16 +181,16 @@ def convert_selected_time_to_game_dict(
 ) -> Game:
     trains: list[Train] = []
     for route_id, trip in stop_time.trips_by_route.items():
+        stops = get_stops_from_trip_id(trip["trip_id"], stop_times, stops_data)
+        target_stop = next((s for s in stops if s["stop_id"] == trip["stop_id"]), None)
         train: Train = {
             "route_id": route_id,
             "trip_data": {
                 "trip_id": trip["trip_id"],
                 "trip_id_short": get_short_trip_id_from_full_trip_id(trip["trip_id"]),
                 "trip_status": TripStatus.TRIP_STATUS_NOT_SEEN_YET,
-                "stops": get_stops_from_trip_id(
-                    trip["trip_id"], stop_times, stops_data
-                ),
-                "target_stop_id": trip["stop_id"],
+                "stops": stops,
+                "target_stop": target_stop,
             },
             "ranking": {
                 "ranking_status": RankingStatus.RANKING_STATUS_PENDING,

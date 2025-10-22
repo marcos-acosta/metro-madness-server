@@ -22,22 +22,38 @@ def replace_decimals(obj):
 
 
 class DynamoDbClient:
-    def __init__(self, table_name: str, partitionKeyName: str, sortKeyName: str):
+    def __init__(
+        self, table_name: str, partitionKeyName: str, sortKeyName: str | None = None
+    ):
         self.dynamodb = boto3.resource("dynamodb")
         self.table = self.dynamodb.Table(table_name)
         self.partitionKeyName = partitionKeyName
         self.sortKeyName = sortKeyName
 
-    def getItem(self, partitionKey: str | int, sortKey: str | int):
-        key_data = {self.partitionKeyName: partitionKey, self.sortKeyName: sortKey}
+    def getItem(self, partitionKey: str | int, sortKey: str | int | None = None):
+        key_data = {self.partitionKeyName: partitionKey}
+        if self.sortKeyName and sortKey:
+            key_data[self.sortKeyName] = sortKey
         response = self.table.get_item(Key=key_data)
         return response.get("Item")
 
-    def getItems(self, partitionKey: str | int):
+    def queryItemsWithIndex(
+        self,
+        indexName: str,
+        partitionKeyName: str,
+        partitionKey: str | int,
+        sortKeyName: str | None = None,
+        sortKey: str | int | None = None,
+    ):
+        """Query items using a secondary index (GSI or LSI)."""
+        key_condition = Key(partitionKeyName).eq(partitionKey)
+        if sortKey is not None and sortKeyName:
+            key_condition = key_condition & Key(sortKeyName).eq(sortKey)
+
         response = self.table.query(
-            KeyConditionExpression=Key(self.partitionKeyName).eq(partitionKey)
+            IndexName=indexName, KeyConditionExpression=key_condition
         )
-        return replace_decimals(response.get("Items"))
+        return replace_decimals(response.get("Items", []))
 
     def putItem(self, item):
         return self.table.put_item(Item=item)

@@ -104,7 +104,8 @@ class GameEngine:
     def run_game_loop(self):
         while True:
             self._log("=== TICK ===")
-            self._pull_game()
+            if self.config.get("pull_before_push"):
+                self._pull_game()
             self._refresh_game_data()
             self._push_game()
             time.sleep(self.config.get("refresh_rate_s"))
