@@ -127,7 +127,8 @@ class Train(TypedDict):
     """Complete information about a train in a game."""
 
     route_id: RouteId
-    trip_data: TripData
+    candidate_trips: NotRequired[list[TripData]]
+    selected_trip: NotRequired[TripData]
     ranking: Ranking
 
 

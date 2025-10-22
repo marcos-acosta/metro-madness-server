@@ -14,6 +14,7 @@ from interface import (
     RankingStatus,
     Game,
     Train,
+    TripData,
 )
 
 CandidateStopTime = namedtuple(
@@ -106,8 +107,6 @@ class TrainRecruiter:
         self._log(
             f"Num unique routes in selected candidate time: {len(selected_candidate_time.trips_by_route)}"
         )
-        # Mutates the object
-        self._select_trip_for_each_route(selected_candidate_time)
 
         # Convert to dict
         stops_data = self.gtfs_loader.load_csv_as_dataframe("stops.txt")
@@ -247,11 +246,6 @@ class TrainRecruiter:
             if len(candidate.trips_by_route) == max_routes
         ]
 
-    def _select_trip_for_each_route(self, stop_time: CandidateStopTime):
-        for route_id, trips in stop_time.trips_by_route.items():
-            # stop_time.trips_by_route[route_id] = random.choice(trips)
-            stop_time.trips_by_route[route_id] = trips[0]
-
     def _get_stops_from_trip_id(
         self, trip_id: str, stop_times: pd.DataFrame, stops_data: pd.DataFrame
     ) -> list[Stop]:
@@ -272,6 +266,23 @@ class TrainRecruiter:
             )
         return stops
 
+    def _create_trip_data(
+        self,
+        trip: dict,
+        stop_times: pd.DataFrame,
+        stops_data: pd.DataFrame,
+    ) -> TripData:
+        """Create a TripData object from a trip dict."""
+        stops = self._get_stops_from_trip_id(trip["trip_id"], stop_times, stops_data)
+        target_stop = next((s for s in stops if s["stop_id"] == trip["stop_id"]), None)
+        return {
+            "trip_id": trip["trip_id"],
+            "trip_id_short": self._get_short_trip_id_from_full_trip_id(trip["trip_id"]),
+            "trip_status": TripStatus.TRIP_STATUS_NOT_SEEN_YET,
+            "stops": stops,
+            "target_stop": target_stop,
+        }
+
     def _convert_selected_time_to_game_dict(
         self,
         stop_time: CandidateStopTime,
@@ -279,24 +290,16 @@ class TrainRecruiter:
         stops_data: pd.DataFrame,
     ) -> Game:
         trains: list[Train] = []
-        for route_id, trip in stop_time.trips_by_route.items():
-            stops = self._get_stops_from_trip_id(
-                trip["trip_id"], stop_times, stops_data
-            )
-            target_stop = next(
-                (s for s in stops if s["stop_id"] == trip["stop_id"]), None
-            )
+        for route_id, trips in stop_time.trips_by_route.items():
+            # trips is now a list of trip dicts, not a single trip
+            candidate_trips = []
+            for trip in trips:
+                trip_data = self._create_trip_data(trip, stop_times, stops_data)
+                candidate_trips.append(trip_data)
+
             train: Train = {
                 "route_id": route_id,
-                "trip_data": {
-                    "trip_id": trip["trip_id"],
-                    "trip_id_short": self._get_short_trip_id_from_full_trip_id(
-                        trip["trip_id"]
-                    ),
-                    "trip_status": TripStatus.TRIP_STATUS_NOT_SEEN_YET,
-                    "stops": stops,
-                    "target_stop": target_stop,
-                },
+                "candidate_trips": candidate_trips,
                 "ranking": {
                     "ranking_status": RankingStatus.RANKING_STATUS_PENDING,
                 },

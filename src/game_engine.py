@@ -89,20 +89,48 @@ class GameEngine:
         self.game["game_status"] = GameStatus.GAME_STATUS_UNDERWAY
         for train in self.game.get("trains"):
             route_id = train.get("route_id")
-            trip_data = train.get("trip_data")
-            if trip_data is None:
-                # TODO: Make sure train is DQed
+            selected_trip = train.get("selected_trip")
+            candidate_trips = train.get("candidate_trips")
+
+            # Check that we have either selected_trip or candidate_trips
+            if selected_trip is None and not candidate_trips:
+                self._log(
+                    "Train has neither selected_trip nor candidate_trips", route_id
+                )
                 continue
-            trip_id_short = trip_data.get("trip_id_short")
-            trip_snapshot = self.transiter_client.get_trip(route_id, trip_id_short)
-            if trip_snapshot is None:
-                self._log("Transiter did not return any trip data.")
-                if trip_data.get("trip_status") == TripStatus.TRIP_STATUS_UNDERWAY:
-                    self._log("Trip was underway but now disappeared.")
-                    # TODO: Disqualify if destination was never reached
-                    trip_data["trip_status"] = TripStatus.TRIP_STATUS_DISAPPEARED
+
+            # If we have a selected trip, use that
+            if selected_trip is not None:
+                trip_id_short = selected_trip.get("trip_id_short")
+                trip_snapshot = self.transiter_client.get_trip(route_id, trip_id_short)
+                if trip_snapshot is None:
+                    self._log(
+                        "Transiter did not return any trip data.",
+                        route_id,
+                        trip_id_short,
+                    )
+                    if (
+                        selected_trip.get("trip_status")
+                        == TripStatus.TRIP_STATUS_UNDERWAY
+                    ):
+                        self._log(
+                            "Trip was underway but now disappeared.",
+                            route_id,
+                            trip_id_short,
+                        )
+                        # TODO: Disqualify if destination was never reached
+                        selected_trip["trip_status"] = (
+                            TripStatus.TRIP_STATUS_DISAPPEARED
+                        )
+                else:
+                    self._log(
+                        "Realtime data fetched successfully.", route_id, trip_id_short
+                    )
             else:
-                self._log("Realtime data fetched successfully.")
+                # Iterate through candidate_trips to check for realtime data
+                for candidate_trip in candidate_trips:
+                    # TODO: Implement logic to check for realtime data and promote to selected_trip
+                    pass
 
     def run_game_loop(self):
         while True:
