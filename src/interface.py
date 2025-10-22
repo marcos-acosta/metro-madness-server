@@ -175,3 +175,10 @@ class GameEngineConfig(TypedDict):
     verbose: bool
     refresh_rate_s: int
     pull_before_push: bool
+
+
+class PopulateTrainsConfig(TypedDict):
+    verboseStaticDataLoader: bool
+    savedir: str
+    minTargetStopSequence: int
+    overwriteStaticFiles: bool

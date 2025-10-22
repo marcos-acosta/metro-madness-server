@@ -1,6 +1,6 @@
 import time
-from choose_stops import populate_trains
-from game_config import GAME_TYPE_TO_ROUTE_IDS
+from train_recruiter import TrainRecruiter
+from game_config import DEFAULT_DEV_POPULATE_TRAINS_CONFIG, GAME_TYPE_TO_ROUTE_IDS
 from games_client import GamesClient
 from interface import Game, GameEngineConfig, GameStatus, GameType, RouteId, TripStatus
 from time_util import (
@@ -13,6 +13,7 @@ class GameEngine:
     def __init__(self, config: GameEngineConfig):
         self.game_data_client = GamesClient()
         self.transiter_client = TransiterClient()
+        self.train_recruiter = TrainRecruiter(DEFAULT_DEV_POPULATE_TRAINS_CONFIG)
         self.game: Game | None = None
         self.config = config
         self._setup()
@@ -73,7 +74,7 @@ class GameEngine:
             return
         route_ids = self._get_routes_for_game(self.game)
         try:
-            self.game = populate_trains(self.game, route_ids)
+            self.game = self.train_recruiter.recruit_trains(self.game, route_ids)
         except:
             # TODO: Handle this case
             pass
