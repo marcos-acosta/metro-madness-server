@@ -22,10 +22,10 @@ class GameEngine:
     def _log(
         self, message, route_id: RouteId | None = None, trip_id: str | None = None
     ):
-        route_id_prefix = f"[{route_id}]" if route_id else ""
-        trip_id_prefix = f"[{trip_id}]" if trip_id else ""
+        route_id_prefix = f"[{route_id}] " if route_id else ""
+        trip_id_prefix = f"[{trip_id}] " if trip_id else ""
         if self.config.get("verbose"):
-            print(" ".join(["[game engine]", route_id_prefix, trip_id_prefix, message]))
+            print("".join(["[game engine] ", route_id_prefix, trip_id_prefix, message]))
 
     def _setup(self):
         games_today = self.game_data_client.get_games_for_today()
@@ -79,12 +79,12 @@ class GameEngine:
             # TODO: Handle this case
             pass
         else:
-            self.game["game_status"] = GameStatus.GAME_STATUS_UNDERWAY
             self._push_game()
 
     def _refresh_game_data(self):
         if not self.game:
             return
+        self.game["game_status"] = GameStatus.GAME_STATUS_UNDERWAY
         for train in self.game.get("trains"):
             route_id = train.get("route_id")
             trip_data = train.get("trip_data")

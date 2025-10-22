@@ -179,6 +179,7 @@ class GameEngineConfig(TypedDict):
 
 class PopulateTrainsConfig(TypedDict):
     verboseStaticDataLoader: bool
+    verboseRecruiter: bool
     savedir: str
     minTargetStopSequence: int
     overwriteStaticFiles: bool

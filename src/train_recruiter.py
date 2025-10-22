@@ -32,6 +32,10 @@ class TrainRecruiter:
             skip_if_exists=(not config.get("overwriteStaticFiles"))
         )
 
+    def _log(self, message: str):
+        if self.config.get("verboseRecruiter"):
+            print(f"[train recruiter] {message}")
+
     def recruit_trains(self, game: Game, route_ids: list[RouteId]) -> Game:
         game_date = date.fromisoformat(game.get("date_iso"))
         start_time = game.get("start_time_s")
@@ -39,11 +43,11 @@ class TrainRecruiter:
         trips = self.gtfs_loader.load_csv_as_dataframe(
             "trips.txt", dtype={"route_id": str}
         )
-        print(f":: Num trips at load: {len(trips)}")
+        self._log(f"Num trips at load: {len(trips)}")
 
         # Filter trips that aren't in our desired list of routes
         trips = self._filter_trips_by_route_id(trips, route_ids)
-        print(f":: Num trips after route id filter: {len(trips)}")
+        self._log(f"Num trips after route id filter: {len(trips)}")
 
         # Filter trips that have a regular schedule but don't cover the relevant day of the week
         calendar = self.gtfs_loader.load_csv_as_dataframe(
@@ -51,7 +55,7 @@ class TrainRecruiter:
         )
         trips_w_calendar = self._join_trips_with_calendar(trips, calendar)
         trips_w_calendar = self._filter_by_weekday(trips_w_calendar, game_date)
-        print(f":: Num trips after weekday filter: {len(trips_w_calendar)}")
+        self._log(f"Num trips after weekday filter: {len(trips_w_calendar)}")
 
         # Filter out trips that have removal exceptions on the game_date
         calendar_dates = self.gtfs_loader.load_csv_as_dataframe(
@@ -60,31 +64,31 @@ class TrainRecruiter:
         trips_filtered = self._filter_removed_trips(
             trips_w_calendar, calendar_dates, game_date
         )
-        print(f":: Num trips after filtering removed trips: {len(trips_filtered)}")
+        self._log(f"Num trips after filtering removed trips: {len(trips_filtered)}")
 
         # Filter out trips that don't have a regular schedule and were not added
         trips_filtered = self._filter_not_added_trips(
             trips_filtered, calendar_dates, game_date
         )
-        print(f":: Num trips after filtering dateless trips: {len(trips_filtered)}")
+        self._log(f"Num trips after filtering dateless trips: {len(trips_filtered)}")
 
         # Load stop times
         stop_times = self.gtfs_loader.load_csv_as_dataframe("stop_times.txt")
         stop_times = self._add_numeric_stop_times(stop_times)
-        print(f":: Num stop times at load: {len(stop_times)}")
+        self._log(f"Num stop times at load: {len(stop_times)}")
 
         # Filter stops by time
         stop_times_filtered = self._filter_stop_times_by_time(
             stop_times, start_time, end_time
         )
-        print(f":: Num stop times after time filter: {len(stop_times_filtered)}")
+        self._log(f"Num stop times after time filter: {len(stop_times_filtered)}")
 
         # Join stop times with remaining trips (implicit filter by inner join)
         stop_times_for_trips = self._join_trips_with_stop_times(
             trips_filtered, stop_times_filtered
         )
-        print(
-            f":: Num stop times after joining with trips: {len(stop_times_for_trips)}"
+        self._log(
+            f"Num stop times after joining with trips: {len(stop_times_for_trips)}"
         )
 
         # TODO: Check / filter out duplicate trips (e.g. are there duplicate short trip ids?
@@ -99,8 +103,8 @@ class TrainRecruiter:
             raise Exception("No candidate times found")
         # Randomly choose the time
         selected_candidate_time = random.choice(best_candidate_times)
-        print(
-            f":: Num unique routes in selected candidate time: {len(selected_candidate_time.trips_by_route)}"
+        self._log(
+            f"Num unique routes in selected candidate time: {len(selected_candidate_time.trips_by_route)}"
         )
         # Mutates the object
         self._randomly_select_trip_for_each_route(selected_candidate_time)
@@ -208,7 +212,11 @@ class TrainRecruiter:
             start_time_s, end_time_s
         ):
             matching_stop_times = stop_times[
-                stop_times["scheduled_arrival_s"] == scheduled_time
+                (stop_times["scheduled_arrival_s"] == scheduled_time)
+                & (
+                    stop_times["stop_sequence"]
+                    >= self.config.get("minTargetStopSequence")
+                )
             ]
             if len(matching_stop_times) == 0:
                 continue

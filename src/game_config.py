@@ -15,4 +15,5 @@ DEFAULT_DEV_POPULATE_TRAINS_CONFIG: PopulateTrainsConfig = {
     "minTargetStopSequence": 5,
     "verboseStaticDataLoader": False,
     "overwriteStaticFiles": True,
+    "verboseRecruiter": True,
 }
