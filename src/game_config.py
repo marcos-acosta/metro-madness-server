@@ -12,7 +12,7 @@ GAME_TYPE_TO_ROUTE_IDS = {
 
 DEFAULT_DEV_POPULATE_TRAINS_CONFIG: PopulateTrainsConfig = {
     "savedir": "./tmp/static_gtfs",
-    "minTargetStopSequence": 5,
+    "minTargetStopSequence": 3,
     "verboseStaticDataLoader": False,
     "overwriteStaticFiles": True,
     "verboseRecruiter": True,

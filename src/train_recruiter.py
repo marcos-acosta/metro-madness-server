@@ -13,7 +13,7 @@ from interface import (
     TripStatus,
     RankingStatus,
     Game,
-    Train,
+    Route,
     TripData,
 )
 
@@ -289,7 +289,7 @@ class TrainRecruiter:
         stop_times: pd.DataFrame,
         stops_data: pd.DataFrame,
     ) -> Game:
-        trains: list[Train] = []
+        routes: list[Route] = []
         for route_id, trips in stop_time.trips_by_route.items():
             # trips is now a list of trip dicts, not a single trip
             candidate_trips = []
@@ -297,17 +297,17 @@ class TrainRecruiter:
                 trip_data = self._create_trip_data(trip, stop_times, stops_data)
                 candidate_trips.append(trip_data)
 
-            train: Train = {
+            route: Route = {
                 "route_id": route_id,
                 "candidate_trips": candidate_trips,
                 "ranking": {
                     "ranking_status": RankingStatus.RANKING_STATUS_PENDING,
                 },
             }
-            trains.append(train)
+            routes.append(route)
 
         game: Game = {
             "scheduled_arrival_time_s": stop_time.scheduled_arrival_s,
-            "trains": trains,
+            "routes": routes,
         }
         return game

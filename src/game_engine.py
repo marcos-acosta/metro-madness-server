@@ -18,7 +18,7 @@ class GameEngine:
         self.game: Game | None = None
         self.config = config
         self._setup()
-        self._select_trains()
+        self._populate_routes()
 
     def _log(
         self, message, route_id: RouteId | None = None, trip_id: str | None = None
@@ -69,9 +69,9 @@ class GameEngine:
             self.game_data_client.write_game(self.game)
             self._log("Pushed game to DynamoDB.")
 
-    def _select_trains(self):
+    def _populate_routes(self):
         if not self.game:
-            self._log("Can't select trains because there's no game to update.")
+            self._log("Can't populate routes because there's no game to update.")
             return
         route_ids = self._get_routes_for_game(self.game)
         try:
@@ -87,15 +87,15 @@ class GameEngine:
         if not self.game:
             return
         self.game["game_status"] = GameStatus.GAME_STATUS_UNDERWAY
-        for train in self.game.get("trains"):
-            route_id = train.get("route_id")
-            selected_trip = train.get("selected_trip")
-            candidate_trips = train.get("candidate_trips")
+        for route in self.game.get("routes"):
+            route_id = route.get("route_id")
+            selected_trip = route.get("selected_trip")
+            candidate_trips = route.get("candidate_trips")
 
             # Check that we have either selected_trip or candidate_trips
             if selected_trip is None and not candidate_trips:
                 self._log(
-                    "Train has neither selected_trip nor candidate_trips", route_id
+                    "Route has neither selected_trip nor candidate_trips", route_id
                 )
                 continue
 

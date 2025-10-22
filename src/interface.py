@@ -123,8 +123,8 @@ class Ranking(TypedDict):
     ranking_status: RankingStatus
 
 
-class Train(TypedDict):
-    """Complete information about a train in a game."""
+class Route(TypedDict):
+    """Complete information about a route in a game."""
 
     route_id: RouteId
     candidate_trips: NotRequired[list[TripData]]
@@ -142,7 +142,7 @@ class Game(TypedDict):
     game_variant: GameVariant
     game_status: GameStatus
     scheduled_arrival_time_s: int
-    trains: NotRequired[list[Train]]
+    routes: NotRequired[list[Route]]
     winners_from_game_ids: NotRequired[list[str]]
     start_time_s: int
     end_time_s: int
