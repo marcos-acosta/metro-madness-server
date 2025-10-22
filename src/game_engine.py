@@ -121,6 +121,8 @@ class GameEngine:
                 trip["trip_status"] = TripStatus.TRIP_STATUS_DISAPPEARED
         else:
             self._log("Realtime data fetched successfully.", route_id, trip_id_short)
+            trip["trip_status"] = TripStatus.TRIP_STATUS_UNDERWAY
+            # TODO: Update position
 
         return trip_snapshot
 

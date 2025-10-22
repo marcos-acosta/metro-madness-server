@@ -1,3 +1,4 @@
+from constants import SECONDS_PER_DAY
 from game_constants import WEEKDAY_NAMES
 from gtfs_loader import GTFSLoader
 from pathlib import Path
@@ -172,7 +173,9 @@ class TrainRecruiter:
 
     def _hhmmss_to_seconds(self, hhmmss: str) -> int:
         parts = hhmmss.split(":")
-        return int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
+        return (
+            int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
+        ) % SECONDS_PER_DAY
 
     def _add_numeric_stop_times(self, stop_times: pd.DataFrame) -> pd.DataFrame:
         stop_times["scheduled_arrival_s"] = stop_times["arrival_time"].apply(
