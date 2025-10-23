@@ -7,7 +7,7 @@ def main():
         "verbose": True,
         "refresh_rate_s": 30,
         "pull_before_push": False,
-        "minutes_before_permamently_disappeared": 5,
+        "max_num_minutes_disappeared_before_dq": 5,
     }
     game_engine = GameEngine(config)
     game_engine.run_game_loop()

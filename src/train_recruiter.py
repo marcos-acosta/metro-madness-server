@@ -10,6 +10,7 @@ import pandas as pd
 from interface import (
     PopulateTrainsConfig,
     RouteId,
+    RouteStatus,
     Stop,
     TripStatus,
     RankingStatus,
@@ -28,14 +29,14 @@ class TrainRecruiter:
         self.config = config
         save_path = Path(config.get("savedir"))
         self.gtfs_loader = GTFSLoader(
-            save_path, verbose=config.get("verboseStaticDataLoader")
+            save_path, verbose=config.get("verbose_static_data_loader")
         )
         self.gtfs_loader.fetch_static_supplemented_gtfs_data(
-            skip_if_exists=(not config.get("overwriteStaticFiles"))
+            skip_if_exists=(not config.get("overwrite_static_files"))
         )
 
     def _log(self, message: str):
-        if self.config.get("verboseRecruiter"):
+        if self.config.get("verbose_recruiter"):
             print(f"[train recruiter] {message}")
 
     def recruit_trains(self, game: Game, route_ids: list[RouteId]) -> Game:
@@ -208,7 +209,7 @@ class TrainRecruiter:
 
     def _sort_and_filter_trips_per_route(self, trips: list):
         return sorted(trips, key=lambda t: t["stop_sequence"], reverse=True)[
-            : self.config.get("maxTripsToKeep")
+            : self.config.get("max_trips_to_keep")
         ]
 
     def _get_candidate_stop_times(
@@ -222,7 +223,7 @@ class TrainRecruiter:
                 (stop_times["scheduled_arrival_s"] == scheduled_time)
                 & (
                     stop_times["stop_sequence"]
-                    >= self.config.get("minTargetStopSequence")
+                    >= self.config.get("min_target_stop_sequence")
                 )
             ]
             if len(matching_stop_times) == 0:
@@ -304,13 +305,20 @@ class TrainRecruiter:
                 "route_id": route_id,
                 "candidate_trips": candidate_trips,
                 "ranking": {
-                    "ranking_status": RankingStatus.RANKING_STATUS_PENDING,
+                    "ranking_status": RankingStatus.RANKING_STATUS_UNRANKED,
                 },
+                "route_status": RouteStatus.ROUTE_STATUS_NO_TRIP_SELECTED,
             }
             routes.append(route)
 
+        dq_time_s = (
+            stop_time.scheduled_arrival_s
+            + self.config.get("max_num_minutes_after_scheduled_arrival") * 60
+        )
+
         game: Game = {
             "scheduled_arrival_time_s": stop_time.scheduled_arrival_s,
+            "dq_time_s": dq_time_s,
             "routes": routes,
         }
         return game

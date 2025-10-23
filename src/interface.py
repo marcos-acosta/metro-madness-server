@@ -10,7 +10,6 @@ from collections import namedtuple
 class RouteId(StrEnum):
     """Route identifiers for NYC Subway lines."""
 
-    ROUTE_ID_UNSPECIFIED = ""
     ROUTE_ID_1 = "1"
     ROUTE_ID_2 = "2"
     ROUTE_ID_3 = "3"
@@ -38,7 +37,6 @@ class RouteId(StrEnum):
 class GameType(StrEnum):
     """Types of games available."""
 
-    GAME_TYPE_UNSPECIFIED = "GAME_TYPE_UNSPECIFIED"
     GAME_TYPE_IRT_SYSTEM = "GAME_TYPE_IRT_SYSTEM"  # All IRT trains
     GAME_TYPE_BMT_SYSTEM = "GAME_TYPE_BMT_SYSTEM"  # All BMT trains
     GAME_TYPE_IND_SYSTEM = "GAME_TYPE_IND_SYSTEM"  # All IND trains
@@ -51,7 +49,6 @@ class GameType(StrEnum):
 class GameVariant(StrEnum):
     """Game timing variants."""
 
-    GAME_VARIANT_UNSPECIFIED = "GAME_VARIANT_UNSPECIFIED"
     GAME_VARIANT_WEEKDAY = "GAME_VARIANT_WEEKDAY"
     GAME_VARIANT_WEEKEND = "GAME_VARIANT_WEEKEND"
 
@@ -59,7 +56,6 @@ class GameVariant(StrEnum):
 class GameStatus(StrEnum):
     """Current status of a game."""
 
-    GAME_STATUS_UNSPECIFIED = "GAME_STATUS_UNSPECIFIED"
     GAME_STATUS_NOT_STARTED = "GAME_STATUS_NOT_STARTED"
     GAME_STATUS_UNDERWAY = "GAME_STATUS_UNDERWAY"
     GAME_STATUS_FINISHED = "GAME_STATUS_FINISHED"
@@ -68,21 +64,30 @@ class GameStatus(StrEnum):
 class TripStatus(StrEnum):
     """Current status of a train trip."""
 
-    TRIP_STATUS_UNSPECIFIED = "TRIP_STATUS_UNSPECIFIED"
     TRIP_STATUS_NOT_SEEN_YET = "TRIP_STATUS_NOT_SEEN_YET"
     TRIP_STATUS_UNDERWAY = "TRIP_STATUS_UNDERWAY"
     TRIP_STATUS_DISAPPEARED = "TRIP_STATUS_DISAPPEARED"  # The trip appeared at some point, but no longer exists
-    TRIP_STATUS_PERMANENTLY_DISAPPEARED = "TRIP_STATUS_PERMANENTLY_DISAPPEARED"
-    TRIP_STATUS_REACHED_TARGET = "TRIP_STATUS_REACHED_TARGET"
+
+
+class RouteStatus(StrEnum):
+    ROUTE_STATUS_NO_TRIP_SELECTED = "ROUTE_STATUS_NO_TRIP_SELECTED"
+    ROUTE_STATUS_UNDERWAY = "ROUTE_STATUS_UNDERWAY"
+    ROUTE_STATUS_COMPLETE = "ROUTE_STATUS_REACHED_TARGET"
+    ROUTE_STATUS_DQ = "ROUTE_STATUS_DQ"
+
+
+class DqReason(StrEnum):
+    DQ_REASON_NO_CANDIDATES = "DQ_REASON_NO_CANDIDATES"
+    DQ_REASON_TRIP_NEVER_SELECTED = "DQ_REASON_TRIP_NEVER_SELECTED"
+    DQ_REASON_TOO_SLOW = "DQ_REASON_TOO_SLOW"
+    DQ_REASON_DISAPPEARED = "DQ_REASON_DISAPPEARED"
 
 
 class RankingStatus(StrEnum):
     """Status of a train's ranking in a game."""
 
-    RANKING_STATUS_UNSPECIFIED = "RANKING_STATUS_UNSPECIFIED"
-    RANKING_STATUS_PENDING = "RANKING_STATUS_PENDING"
+    RANKING_STATUS_UNRANKED = "RANKING_STATUS_UNRANKED"
     RANKING_STATUS_RANKED = "RANKING_STATUS_RANKED"
-    RANKING_STATUS_DISQUALIFIED = "RANKING_STATUS_DISQUALIFIED"
 
 
 class User(TypedDict):
@@ -114,8 +119,9 @@ class TripData(TypedDict):
     trip_status: TripStatus
     stops: list[Stop]
     target_stop: Stop
-    actual_target_arrival_time_s: int  # Duplicated from within stops for quick access
+    actual_target_arrival_time_s: int
     last_seen_timestamp: NotRequired[int]
+    must_reappear_by_s: NotRequired[int]
 
 
 class Ranking(TypedDict):
@@ -132,6 +138,8 @@ class Route(TypedDict):
     candidate_trips: NotRequired[list[TripData]]
     selected_trip: NotRequired[TripData]
     ranking: Ranking
+    route_status: RouteStatus
+    dq_reason: NotRequired[DqReason]
 
 
 class Game(TypedDict):
@@ -144,6 +152,7 @@ class Game(TypedDict):
     game_variant: GameVariant
     game_status: GameStatus
     scheduled_arrival_time_s: int
+    dq_time_s: int
     routes: NotRequired[list[Route]]
     winners_from_game_ids: NotRequired[list[str]]
     start_time_s: int
@@ -178,13 +187,14 @@ class GameEngineConfig(TypedDict):
     verbose: bool
     refresh_rate_s: int
     pull_before_push: bool
-    minutes_before_permamently_disappeared: int
+    max_num_minutes_disappeared_before_dq: int
 
 
 class PopulateTrainsConfig(TypedDict):
-    verboseStaticDataLoader: bool
-    verboseRecruiter: bool
+    verbose_static_data_loader: bool
+    verbose_recruiter: bool
     savedir: str
-    minTargetStopSequence: int
-    overwriteStaticFiles: bool
-    maxTripsToKeep: int
+    min_target_stop_sequence: int
+    overwrite_static_files: bool
+    max_trips_to_keep: int
+    max_num_minutes_after_scheduled_arrival: int

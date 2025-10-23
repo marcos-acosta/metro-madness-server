@@ -5,6 +5,7 @@ from train_recruiter import TrainRecruiter
 from game_config import DEFAULT_DEV_POPULATE_TRAINS_CONFIG, GAME_TYPE_TO_ROUTE_IDS
 from games_client import GamesClient
 from interface import (
+    DqReason,
     Game,
     GameEngineConfig,
     GameStatus,
@@ -12,6 +13,7 @@ from interface import (
     RankingStatus,
     Route,
     RouteId,
+    RouteStatus,
     TripData,
     TripStatus,
 )
@@ -102,18 +104,15 @@ class GameEngine:
         else:
             self._push_game()
 
-    def _is_trip_permanently_disappeared(self, trip: TripData):
-        return (not trip.get("last_seen_timestamp")) or get_unix_timestamp() - trip.get(
-            "last_seen_timestamp"
-        ) >= self.config.get("minutes_before_permamently_disappeared") * 60
-
     @staticmethod
     def _is_trip_final(trip: TripData):
-        return trip.get("actual_target_arrival_time_s") is not None or trip.get(
-            "trip_status"
-        ) in [
-            TripStatus.TRIP_STATUS_PERMANENTLY_DISAPPEARED,
-            TripStatus.TRIP_STATUS_REACHED_TARGET,
+        return trip.get("actual_target_arrival_time_s") is not None
+
+    @staticmethod
+    def _is_route_final(route: Route):
+        return route.get("route_status") in [
+            RouteStatus.ROUTE_STATUS_COMPLETE,
+            RouteStatus.ROUTE_STATUS_DQ,
         ]
 
     @staticmethod
@@ -127,7 +126,8 @@ class GameEngine:
 
     def _update_stop_times(
         self, trip: TripData, trip_snapshot: object, route_id: RouteId
-    ):
+    ) -> bool:
+        reached_target = False
         # Both `stops` lists should have the same stops, but this is more robust to unexpected differences
         trip_stop_id_to_index = {
             stop.get("stop_id"): i for (i, stop) in enumerate(trip.get("stops"))
@@ -162,18 +162,38 @@ class GameEngine:
                     route_id,
                     trip.get("trip_id_short"),
                 )
+                reached_target = True
                 trip["actual_target_arrival_time_s"] = actual_time
-                trip["trip_status"] = TripStatus.TRIP_STATUS_REACHED_TARGET
+        return reached_target
 
-    def _process_trip(self, route_id: RouteId, trip: TripData):
+    @staticmethod
+    def _shorthand_trip_id(trip_id: str):
+        if ".." in trip_id:
+            lefthand, righthand = trip_id.split("..")
+            return f"{lefthand}..{righthand[0]}"
+        else:
+            return None
+
+    def _process_trip(self, route: Route, trip: TripData):
         """
         Process a single trip by fetching realtime data and updating status.
         Returns the trip snapshot from transiter, or None if no data available.
         """
+        route_id = route.get("route_id")
         if self._is_trip_final(trip):
             return None
         trip_id_short = trip.get("trip_id_short")
         trip_snapshot = self.transiter_client.get_trip(route_id, trip_id_short)
+        # If there is no data and never has been, then we may need to use a shorthand version (L seems to use this)
+        # If it works, switch trip_id_short to use that instead
+        if trip_snapshot is None and route.get("selected_trip") is None:
+            shorthand_trip_id = self._shorthand_trip_id(trip_id_short)
+            if shorthand_trip_id:
+                trip_snapshot = self.transiter_client.get_trip(
+                    route_id, shorthand_trip_id
+                )
+                if trip_snapshot:
+                    trip["trip_id_short"] = shorthand_trip_id
 
         if trip_snapshot is None:
             self._log(
@@ -188,18 +208,27 @@ class GameEngine:
                     trip_id_short,
                 )
                 trip["trip_status"] = TripStatus.TRIP_STATUS_DISAPPEARED
-                if self._is_trip_permanently_disappeared(trip):
-                    self._log(
-                        "Trip marked as permanently disappeared.",
-                        route_id,
-                        trip.get("trip_id_short"),
-                    )
-                    trip["trip_status"] = TripStatus.TRIP_STATUS_PERMANENTLY_DISAPPEARED
+                trip["must_reappear_by_s"] = (
+                    get_unix_timestamp()
+                    + self.config.get("max_num_minutes_disappeared_before_dq") * 60
+                )
+            if trip.get(
+                "must_reappear_by_s"
+            ) is not None and get_unix_timestamp() > trip.get("must_reappear_by_s"):
+                route["route_status"] = RouteStatus.ROUTE_STATUS_DQ
+                route["dq_reason"] = DqReason.DQ_REASON_DISAPPEARED
+                self._log(
+                    "Route was disqualified for disappearing for too long.", route_id
+                )
         else:
             self._log("Realtime data fetched successfully.", route_id, trip_id_short)
             trip["trip_status"] = TripStatus.TRIP_STATUS_UNDERWAY
             trip["last_seen_timestamp"] = get_unix_timestamp()
-            self._update_stop_times(trip, trip_snapshot, route_id)
+            reached_target = self._update_stop_times(trip, trip_snapshot, route_id)
+            if reached_target:
+                route["route_status"] = RouteStatus.ROUTE_STATUS_COMPLETE
+            else:
+                route["route_status"] = RouteStatus.ROUTE_STATUS_UNDERWAY
 
         return trip_snapshot
 
@@ -208,6 +237,8 @@ class GameEngine:
             return
         self.game["game_status"] = GameStatus.GAME_STATUS_UNDERWAY
         for route in self.game.get("routes"):
+            if self._is_route_final(route):
+                continue
             route_id = route.get("route_id")
             selected_trip = route.get("selected_trip")
             candidate_trips = route.get("candidate_trips")
@@ -221,11 +252,11 @@ class GameEngine:
 
             # If we have a selected trip, process it
             if selected_trip is not None:
-                self._process_trip(route_id, selected_trip)
+                self._process_trip(route, selected_trip)
             else:
                 # Check candidate trips for realtime data
                 for candidate_trip in candidate_trips:
-                    trip_snapshot = self._process_trip(route_id, candidate_trip)
+                    trip_snapshot = self._process_trip(route, candidate_trip)
                     if trip_snapshot is not None:
                         self._log(
                             f"Promoting candidate trip to selected_trip.",
@@ -275,7 +306,46 @@ class GameEngine:
                     route_data["route_id"],
                 )
 
+    def _maybe_disqualify(self):
+        if not self.game:
+            return
+        for route in self.game.get("routes"):
+            if self._is_route_final(route):
+                continue
+            if route.get(
+                "selected_trip"
+            ) is None and get_current_seconds_since_midnight_est() > self.game.get(
+                "scheduled_arrival_time_s"
+            ):
+                route["route_status"] = RouteStatus.ROUTE_STATUS_DQ
+                route["dq_reason"] = DqReason.DQ_REASON_TRIP_NEVER_SELECTED
+                self._log(
+                    "Route disqualified because no trip was selelected by the target time.",
+                    route.get("route_id"),
+                )
+            elif get_current_seconds_since_midnight_est() > self.game.get("dq_time_s"):
+                route["route_status"] = RouteStatus.ROUTE_STATUS_DQ
+                route["dq_reason"] = DqReason.DQ_REASON_TOO_SLOW
+                self._log(
+                    "Route disqualified because it took too long.",
+                    route.get("route_id"),
+                )
+
+    def _maybe_end_game(self) -> bool:
+        if not self.game:
+            return False
+        game_ended = all(
+            [self._is_route_final(route) for route in self.game.get("routes")]
+        )
+        if game_ended:
+            self._log("Game ended; all routes final.")
+            self.game["game_status"] = GameStatus.GAME_STATUS_FINISHED
+        return game_ended
+
     def run_game_loop(self):
+        if not self.game:
+            self._log("No game to run loop on.")
+            return
         while True:
             now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             self._log(f"\n=== {now_str} ===\n", prefix=False)
@@ -283,5 +353,9 @@ class GameEngine:
                 self._pull_game()
             self._refresh_game_data()
             self._update_rankings()
+            self._maybe_disqualify()
+            game_ended = self._maybe_end_game()
             self._push_game()
+            if game_ended:
+                break
             time.sleep(self.config.get("refresh_rate_s"))
