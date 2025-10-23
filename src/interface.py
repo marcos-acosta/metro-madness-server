@@ -72,6 +72,7 @@ class TripStatus(StrEnum):
     TRIP_STATUS_NOT_SEEN_YET = "TRIP_STATUS_NOT_SEEN_YET"
     TRIP_STATUS_UNDERWAY = "TRIP_STATUS_UNDERWAY"
     TRIP_STATUS_DISAPPEARED = "TRIP_STATUS_DISAPPEARED"  # The trip appeared at some point, but no longer exists
+    TRIP_STATUS_PERMANENTLY_DISAPPEARED = "TRIP_STATUS_PERMANENTLY_DISAPPEARED"
     TRIP_STATUS_REACHED_TARGET = "TRIP_STATUS_REACHED_TARGET"
 
 
@@ -114,6 +115,7 @@ class TripData(TypedDict):
     stops: list[Stop]
     target_stop: Stop
     actual_target_arrival_time_s: int  # Duplicated from within stops for quick access
+    last_seen_timestamp: NotRequired[int]
 
 
 class Ranking(TypedDict):
@@ -176,6 +178,7 @@ class GameEngineConfig(TypedDict):
     verbose: bool
     refresh_rate_s: int
     pull_before_push: bool
+    minutes_before_permamently_disappeared: int
 
 
 class PopulateTrainsConfig(TypedDict):

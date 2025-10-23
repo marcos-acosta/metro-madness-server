@@ -14,7 +14,9 @@ from interface import (
     TripStatus,
 )
 from time_util import (
+    epoch_seconds_to_seconds_since_midnight_est,
     get_current_seconds_since_midnight_est,
+    get_unix_timestamp,
 )
 from transiter_client import TransiterClient
 
@@ -97,11 +99,74 @@ class GameEngine:
         else:
             self._push_game()
 
+    def _is_trip_permanently_disappeared(self, trip: TripData):
+        return (not trip.get("last_seen_timestamp")) or get_unix_timestamp() - trip.get(
+            "last_seen_timestamp"
+        ) >= self.config.get("minutes_before_permamently_disappeared") * 60
+
+    def _is_trip_finished(self, trip: TripData):
+        return trip.get("actual_target_arrival_time_s", None) is not None or trip.get(
+            "trip_status"
+        ) in [
+            TripStatus.TRIP_STATUS_PERMANENTLY_DISAPPEARED,
+            TripStatus.TRIP_STATUS_REACHED_TARGET,
+        ]
+
+    def _get_actual_time(self, transiter_stop: object):
+        if transiter_stop.get("arrival", {}).get("time"):
+            return int(transiter_stop.get("arrival", {}).get("time"))
+        elif transiter_stop.get("departure", {}).get("time"):
+            return int(transiter_stop.get("departure", {}).get("time"))
+        else:
+            return None
+
+    def _update_stop_times(
+        self, trip: TripData, trip_snapshot: object, route_id: RouteId
+    ):
+        # Both `stops` lists should have the same stops, but this is more robust to unexpected differences
+        trip_stop_id_to_index = {
+            stop.get("stop_id"): i for (i, stop) in enumerate(trip.get("stops"))
+        }
+        for stop_time in trip_snapshot.get("stopTimes", []):
+            if stop_time.get("future") == True:
+                continue
+            actual_time = epoch_seconds_to_seconds_since_midnight_est(
+                int(self._get_actual_time(stop_time))
+            )
+            stop_id = stop_time.get("stop", {}).get("id")
+            trip_index = (
+                None
+                if stop_id not in trip_stop_id_to_index
+                else trip_stop_id_to_index[stop_id]
+            )
+            if not trip_index:
+                continue
+            trip_stop = trip.get("stops")[trip_index]
+            # We don't want to ever update the actual arrival time
+            if trip_stop.get("actual_arrival_time_s"):
+                continue
+            trip_stop["actual_arrival_time_s"] = actual_time
+            self._log(
+                f"Updated arrival/destination time at {trip_stop.get('stop_name')} to {actual_time}.",
+                route_id,
+                trip.get("trip_id_short"),
+            )
+            if trip_stop.get("stop_id") == trip.get("target_stop", {}).get("stop_id"):
+                self._log(
+                    f"Reached target stop; marking as completed.",
+                    route_id,
+                    trip.get("trip_id_short"),
+                )
+                trip["actual_target_arrival_time_s"] = actual_time
+                trip["trip_status"] = TripStatus.TRIP_STATUS_REACHED_TARGET
+
     def _process_trip(self, route_id: RouteId, trip: TripData):
         """
         Process a single trip by fetching realtime data and updating status.
         Returns the trip snapshot from transiter, or None if no data available.
         """
+        if self._is_trip_finished(trip):
+            return None
         trip_id_short = trip.get("trip_id_short")
         trip_snapshot = self.transiter_client.get_trip(route_id, trip_id_short)
 
@@ -117,12 +182,19 @@ class GameEngine:
                     route_id,
                     trip_id_short,
                 )
-                # TODO: Disqualify if destination was never reached
                 trip["trip_status"] = TripStatus.TRIP_STATUS_DISAPPEARED
+                if self._is_trip_permanently_disappeared(trip):
+                    self._log(
+                        "Trip marked as permanently disappeared.",
+                        route_id,
+                        trip.get("trip_id_short"),
+                    )
+                    trip["trip_status"] = TripStatus.TRIP_STATUS_PERMANENTLY_DISAPPEARED
         else:
             self._log("Realtime data fetched successfully.", route_id, trip_id_short)
             trip["trip_status"] = TripStatus.TRIP_STATUS_UNDERWAY
-            # TODO: Update position
+            trip["last_seen_timestamp"] = get_unix_timestamp()
+            self._update_stop_times(trip, trip_snapshot, route_id)
 
         return trip_snapshot
 

@@ -3,6 +3,10 @@ from zoneinfo import ZoneInfo
 from game_constants import WEEK_1_START_DATE
 
 
+def get_unix_timestamp() -> int:
+    return int(datetime.datetime.now().timestamp())
+
+
 def get_now_est() -> datetime.datetime:
     return datetime.datetime.now(ZoneInfo("America/New_York"))
 
@@ -62,3 +66,25 @@ def get_current_week_number() -> int:
     """
     # Get current time in EST/EDT (America/New_York handles both)
     return get_week_number(get_today_est())
+
+
+def epoch_seconds_to_seconds_since_midnight_est(epoch_seconds: int) -> int:
+    """
+    Convert Unix epoch seconds to seconds since midnight in EST timezone.
+
+    Args:
+        epoch_seconds: Unix timestamp (seconds since 1970-01-01 00:00:00 UTC)
+
+    Returns:
+        Seconds since midnight (0-86399) in EST timezone
+
+    Example:
+        If epoch_seconds corresponds to 2025-10-23 15:30:45 EST,
+        returns 15*3600 + 30*60 + 45 = 55845
+    """
+    # Convert epoch seconds to datetime in EST/EDT timezone
+    dt_est = datetime.datetime.fromtimestamp(
+        epoch_seconds, ZoneInfo("America/New_York")
+    )
+    # Convert to seconds since midnight
+    return convert_datetime_to_seconds(dt_est)
