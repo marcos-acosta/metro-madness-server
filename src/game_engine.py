@@ -9,6 +9,8 @@ from interface import (
     GameEngineConfig,
     GameStatus,
     GameType,
+    RankingStatus,
+    Route,
     RouteId,
     TripData,
     TripStatus,
@@ -63,7 +65,8 @@ class GameEngine:
         else:
             self._log("No upcoming games found for today.")
 
-    def _get_routes_for_game(self, game: Game) -> list[RouteId]:
+    @staticmethod
+    def _get_routes_for_game(game: Game) -> list[RouteId]:
         route_ids = []
         if game.get("game_type") == GameType.GAME_TYPE_SYSTEM_CHAMPIONSHIP:
             # TODO: implement
@@ -104,15 +107,17 @@ class GameEngine:
             "last_seen_timestamp"
         ) >= self.config.get("minutes_before_permamently_disappeared") * 60
 
-    def _is_trip_finished(self, trip: TripData):
-        return trip.get("actual_target_arrival_time_s", None) is not None or trip.get(
+    @staticmethod
+    def _is_trip_final(trip: TripData):
+        return trip.get("actual_target_arrival_time_s") is not None or trip.get(
             "trip_status"
         ) in [
             TripStatus.TRIP_STATUS_PERMANENTLY_DISAPPEARED,
             TripStatus.TRIP_STATUS_REACHED_TARGET,
         ]
 
-    def _get_actual_time(self, transiter_stop: object):
+    @staticmethod
+    def _get_actual_time(transiter_stop: object):
         if transiter_stop.get("arrival", {}).get("time"):
             return int(transiter_stop.get("arrival", {}).get("time"))
         elif transiter_stop.get("departure", {}).get("time"):
@@ -165,7 +170,7 @@ class GameEngine:
         Process a single trip by fetching realtime data and updating status.
         Returns the trip snapshot from transiter, or None if no data available.
         """
-        if self._is_trip_finished(trip):
+        if self._is_trip_final(trip):
             return None
         trip_id_short = trip.get("trip_id_short")
         trip_snapshot = self.transiter_client.get_trip(route_id, trip_id_short)
@@ -231,6 +236,45 @@ class GameEngine:
                         del route["candidate_trips"]
                         break
 
+    def _update_rankings(self):
+        if not self.game:
+            return
+
+        # Collect all routes with actual arrival times
+        completed_routes = []
+        for route in self.game.get("routes"):
+            selected_trip = route.get("selected_trip")
+            if (
+                selected_trip
+                and selected_trip.get("actual_target_arrival_time_s") is not None
+            ):
+                actual_time = selected_trip.get("actual_target_arrival_time_s")
+                completed_routes.append(
+                    {
+                        "route": route,
+                        "actual_time": actual_time,
+                        "route_id": route.get("route_id"),
+                    }
+                )
+
+        if not completed_routes:
+            return
+
+        # Sort by actual arrival time (earliest first)
+        completed_routes.sort(key=lambda x: x["actual_time"])
+
+        # Assign rankings
+        for rank, route_data in enumerate(completed_routes, start=1):
+            route: Route = route_data["route"]
+            old_rank = route.get("ranking", {}).get("rank")
+            if old_rank != rank:
+                route["ranking"]["rank"] = rank
+                route["ranking"]["ranking_status"] = RankingStatus.RANKING_STATUS_RANKED
+                self._log(
+                    f"Updated rank to {rank} (arrival time: {route_data['actual_time']}s).",
+                    route_data["route_id"],
+                )
+
     def run_game_loop(self):
         while True:
             now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -238,5 +282,6 @@ class GameEngine:
             if self.config.get("pull_before_push"):
                 self._pull_game()
             self._refresh_game_data()
+            self._update_rankings()
             self._push_game()
             time.sleep(self.config.get("refresh_rate_s"))
